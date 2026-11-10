@@ -1,42 +1,87 @@
 {% extends "base.html" %}
-{% from "_componentes.html" import botao_excluir, form_renomear, linha_vazia %}
+{% from "_componentes.html" import botao_excluir, form_renomear, linha_vazia, selo %}
 {% block titulo %}{{ analise.nome }}{% endblock %}
 {% block conteudo %}
-<p class="trilha"><a href="/analises">Análises</a> / {{ analise.nome }}</p>
+{% set gestor = config.pode(papel, "analises") %}
+<nav class="crumb">
+  {% if gestor %}<a href="/analises">Análises</a>{% else %}<a href="/manutencoes">Manutenções</a>{% endif %}<span>/</span>{{ analise.nome }}
+</nav>
+<div class="page-head">
+  <div>
+    <h1>{{ analise.nome }}</h1>
+    <div class="meta">
+      <span>Processo {% if gestor %}<a href="/processos/{{ processo.id }}">{{ processo.nome }}</a>{% else %}<b>{{ processo.nome }}</b>{% endif %}</span>
+      <span>Série <b class="mono">{{ analise.atividade or "trace inteiro" }}</b></span>
+      <span>δ <b class="mono">{{ analise.delta }}</b></span>
+      <span><b>{{ analise.total_observacoes }}</b> observações</span>
+    </div>
+  </div>
+  {% if gestor %}{{ botao_excluir("/analises/" ~ analise.id ~ "/excluir", "Excluir a análise " ~ analise.nome ~ "?", "Excluir análise") }}{% endif %}
+</div>
 
-<section class="cartao">
-  {{ form_renomear("/analises/" ~ analise.id ~ "/renomear", analise.nome) }}
-  <p class="detalhe">Processo: <a href="/processos/{{ processo.id }}">{{ processo.nome }}</a>
-    · Série: {{ analise.atividade or "trace inteiro" }} · δ {{ analise.delta }} · {{ analise.tratamento }}
-    · {{ analise.total_observacoes }} observações</p>
-  {{ botao_excluir("/analises/" ~ analise.id ~ "/excluir", "Excluir a análise " ~ analise.nome ~ "?", "Excluir análise") }}
-</section>
+{% if gestor %}
+<section class="secao">{{ form_renomear("/analises/" ~ analise.id ~ "/renomear", analise.nome) }}</section>
+{% endif %}
 
-<section class="cartao">
-  <h2>Série analisada</h2>
-  <svg class="grafico" viewBox="0 0 {{ grafico.largura }} {{ grafico.altura }}" preserveAspectRatio="none" role="img" aria-label="Duração por trace">
-    <polyline points="{{ grafico.linha }}" />
+<section class="secao">
+  <div class="secao-head"><h2>Série analisada</h2><span class="label">{{ grafico.menor }} s – {{ grafico.maior }} s</span></div>
+  <svg class="grafico" viewBox="0 0 {{ grafico.largura }} {{ grafico.altura }}" preserveAspectRatio="none" role="img" aria-label="Duração por trace, com o início de cada desvio marcado">
+    <polyline points="{{ grafico.linha }}"/>
     {% for m in grafico.marcas %}
-      <line class="marca-drift" x1="{{ m.x }}" x2="{{ m.x }}" y1="0" y2="{{ grafico.altura }}" />
-      <text x="{{ m.x + 4 }}" y="14">{{ m.numero }}</text>
+      <line x1="{{ m.x }}" x2="{{ m.x }}" y1="0" y2="{{ grafico.altura }}"/>
+      <text x="{{ m.x + 4 }}" y="16">{{ m.numero }}</text>
     {% endfor %}
   </svg>
-  <p class="detalhe">Eixo vertical de {{ grafico.menor }} s a {{ grafico.maior }} s. Cada linha vermelha marca o início de um desvio.</p>
 </section>
 
-<section class="cartao">
-  <div class="cabecalho">
-    <h2>Desvios encontrados ({{ analise.drifts|length }})</h2>
-    {% if config.tem_recurso("notas") %}<a class="botao primario" href="/analises/{{ analise.id }}/notas">Notas dos desvios</a>{% endif %}
-  </div>
-  <table>
-    <thead><tr><th>#</th><th>Início</th><th>Detectado em</th><th>Média antes</th><th>Média depois</th><th>Resumo</th></tr></thead>
+<section class="secao">
+  <div class="secao-head"><h2>Desvios encontrados</h2><span class="badge {% if analise.drifts %}badge-drift{% endif %}">{{ analise.drifts|length }}</span></div>
+  <table class="tabela">
+    <thead><tr><th>#</th><th>INÍCIO</th><th class="opcional">MÉDIA ANTES</th><th class="opcional">MÉDIA DEPOIS</th><th>RESUMO</th>{% if config.pode(papel, "disparar_manutencao") %}<th></th>{% endif %}</tr></thead>
     <tbody>
     {% for d in analise.drifts %}
-      <tr><td>{{ d.posicao }}</td><td>{{ d.inicio_anomalia }}</td><td>{{ d.indice }}</td>
-          <td>{{ d.media_antes }}</td><td>{{ d.media_depois }}</td><td>{{ d.resumo() }}</td></tr>
+      <tr>
+        <td class="num">{{ d.posicao }}</td>
+        <td class="num">{{ d.inicio_anomalia }}</td>
+        <td class="num opcional">{{ d.media_antes }}</td>
+        <td class="num opcional">{{ d.media_depois }}</td>
+        <td>{{ d.resumo() }}</td>
+        {% if config.pode(papel, "disparar_manutencao") %}
+        <td class="acoes"><a class="btn btn-sm" href="#disparar" onclick="document.getElementById('drift_id').value='{{ d.id }}'">Disparar manutenção</a></td>
+        {% endif %}
+      </tr>
     {% else %}
       {{ linha_vazia(6, "Nenhum desvio: o processo ficou estável.") }}
+    {% endfor %}
+    </tbody>
+  </table>
+</section>
+
+{# VARIABILIDADE: só o gestor dispara manutenção #}
+{% if config.pode(papel, "disparar_manutencao") and analise.drifts %}
+<section class="secao" id="disparar">
+  <div class="secao-head"><h2>Disparar manutenção</h2></div>
+  <form method="post" action="/analises/{{ analise.id }}/manutencoes" class="form-grade">
+    <label class="campo">Desvio
+      <select class="field" name="drift_id" id="drift_id">
+        {% for d in analise.drifts %}<option value="{{ d.id }}">Desvio {{ d.posicao }}: {{ d.resumo() }}</option>{% endfor %}
+      </select>
+    </label>
+    <label class="campo">O que o técnico deve verificar<input class="field" name="descricao" placeholder="Ex.: verificar rolamento do eixo" required></label>
+    <div><button class="btn btn-primary">Disparar manutenção</button></div>
+  </form>
+</section>
+{% endif %}
+
+<section class="secao">
+  <div class="secao-head"><h2>Manutenções desta análise</h2></div>
+  <table class="tabela">
+    <thead><tr><th>DESCRIÇÃO</th><th>DESVIO</th><th>STATUS</th></tr></thead>
+    <tbody>
+    {% for m in manutencoes %}
+      <tr><td><a href="/manutencoes/{{ m.id }}">{{ m.descricao }}</a></td><td class="num">{{ m.desvio or "—" }}</td><td>{{ selo(m.status) }}</td></tr>
+    {% else %}
+      {{ linha_vazia(3, "Nenhuma manutenção disparada.") }}
     {% endfor %}
     </tbody>
   </table>

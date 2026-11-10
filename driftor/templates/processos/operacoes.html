@@ -1,25 +1,28 @@
 {% extends "base.html" %}
 {% block titulo %}Operações{% endblock %}
 {% block conteudo %}
-<p class="trilha"><a href="/processos">Processos</a> / <a href="/processos/{{ processo.id }}">{{ processo.nome }}</a> / Operações</p>
-<h1>Mapear operações para atividades</h1>
-<p class="detalhe">Cada operação do log ({{ processo.arquivo }}) precisa de uma atividade do catálogo. Um nome novo entra no catálogo ao salvar.</p>
-
+<nav class="crumb"><a href="/processos">Processos</a><span>/</span><a href="/processos/{{ processo.id }}">{{ processo.nome }}</a><span>/</span>Operações</nav>
+<div class="page-head">
+  <div><h1>Mapear operações para atividades</h1>
+  <p>Cada operação do log <span class="mono">{{ processo.arquivo }}</span> precisa de uma atividade do catálogo. Um nome novo entra no catálogo ao salvar.</p></div>
+</div>
 <form method="post" action="/processos/{{ processo.id }}/operacoes">
-  <table>
-    <thead><tr><th>Operação no log</th><th>Ocorrências</th><th>Traces</th><th>Atividade</th></tr></thead>
-    <tbody>
-    {% for op in operacoes %}
-      <tr>
-        <td>{{ op.rotulo }}</td>
-        <td>{{ op.ocorrencias }}</td>
-        <td>{{ op.casos }}</td>
-        <td><input name="op::{{ op.rotulo }}" value="{{ op.atividade }}" list="catalogo" required></td>
-      </tr>
-    {% endfor %}
-    </tbody>
-  </table>
-  <datalist id="catalogo">{% for a in catalogo %}<option value="{{ a.nome }}">{% endfor %}</datalist>
-  <button class="botao primario">Salvar mapeamento</button>
+  <section class="secao">
+    <table class="tabela">
+      <thead><tr><th>OPERAÇÃO NO LOG</th><th class="opcional">OCORRÊNCIAS</th><th class="opcional">TRACES</th><th>ATIVIDADE</th></tr></thead>
+      <tbody>
+      {% for op in operacoes %}
+        <tr>
+          <td class="mono">{{ op.rotulo }}</td>
+          <td class="num opcional">{{ op.ocorrencias }}</td>
+          <td class="num opcional">{{ op.casos }}</td>
+          <td><input class="field" aria-label="Atividade de {{ op.rotulo }}" name="op::{{ op.rotulo }}" value="{{ op.atividade }}" list="catalogo" required></td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    <datalist id="catalogo">{% for a in catalogo %}<option value="{{ a.nome }}">{% endfor %}</datalist>
+  </section>
+  <button class="btn btn-primary">Salvar mapeamento</button>
 </form>
 {% endblock %}

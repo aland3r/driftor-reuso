@@ -54,7 +54,6 @@ create table if not exists analises (
     tratamento        text not null,               -- bruto | tratado
     total_observacoes integer not null,
     total_drifts      integer not null default 0,
-    total_notas       integer not null default 0,
     serie             text not null,               -- valores analisados, em JSON, para o gráfico
     criado_em         timestamptz not null default now()
 );
@@ -71,11 +70,14 @@ create table if not exists drifts (
     variacao_pct    double precision not null
 );
 
--- CRUD de Nota de drift (Emanuelle)
-create table if not exists notas_drift (
-    id            uuid primary key,
-    drift_id      uuid not null references drifts(id) on delete cascade,
-    texto         text not null,
-    criado_em     timestamptz not null default now(),
-    atualizado_em timestamptz not null default now()
+-- CRUD de Manutenção (Emanuelle): o gestor dispara a partir de um desvio, o técnico conclui
+create table if not exists manutencoes (
+    id           uuid primary key,
+    analise_id   uuid not null references analises(id) on delete cascade,
+    drift_id     uuid references drifts(id) on delete set null,
+    descricao    text not null,
+    status       text not null default 'pendente',   -- pendente | concluida
+    observacoes  text not null default '',
+    criado_em    timestamptz not null default now(),
+    concluida_em timestamptz
 );

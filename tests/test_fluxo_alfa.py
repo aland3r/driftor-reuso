@@ -14,6 +14,7 @@ def _id_na_url(resposta) -> str:
 
 @pytest.mark.parametrize("arquivo, esperados", [("ST_20.xes", 0), ("DR_20.xes", 4), ("DR_MS_20.xes", 7), ("DR_MS_ST_20.xes", 9)])
 def test_desvios_do_artigo(cliente, arquivo, esperados):
+    cliente.post("/entrar", data={"papel": "gestor"}, follow_redirects=False)
     criado = cliente.post("/processos", data={"nome": arquivo}, follow_redirects=False)
     processo_id = _id_na_url(criado)
 
@@ -29,5 +30,5 @@ def test_desvios_do_artigo(cliente, arquivo, esperados):
                            data={"atividade": "Machine_Operating", "delta": "0.002", "tratamento": "bruto"},
                            follow_redirects=False)
     tela = cliente.get(analise.headers["location"]).text
-    assert f"Desvios encontrados ({esperados})" in tela
+    assert re.search(rf"Desvios encontrados</h2><span class=\"badge[^\"]*\">{esperados}</span>", tela)
     assert "concluída" in tela  # aviso do Observer

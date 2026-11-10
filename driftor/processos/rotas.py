@@ -6,14 +6,13 @@ from fastapi import APIRouter, Depends, File, Form, Request, UploadFile
 
 from driftor.analises.repositorio import RepositorioDeAnalises
 from driftor.atividades.repositorio import RepositorioDeAtividades
-from driftor.config import Configuracao
 from driftor.dominio import Atividade, Grafo, Operacao, Processo, Variante
 from driftor.mineracao.grafo import MineradorDeGrafo, Pm4pyMineradorAdapter
 from driftor.mineracao.leitor_log import ler_log
 from driftor.processos.repositorio import RepositorioDeProcessos
-from driftor.telas import exigir_recurso, ir_para, tela
+from driftor.telas import exigir, ir_para, tela
 
-rotas = APIRouter(dependencies=[Depends(exigir_recurso("processos"))])
+rotas = APIRouter(dependencies=[Depends(exigir("processos"))])  # só o gestor
 
 
 def minerador() -> MineradorDeGrafo:
@@ -47,8 +46,7 @@ def ver(request: Request, id: str, minerador: MineradorDeGrafo = Depends(minerad
         grafo = Grafo.montar(traces, minerador.descobrir_arestas(traces))  # Adapter em uso
         variantes = Variante.agrupar(traces)
         atividades = [no.atividade for no in grafo.nos]
-        if Configuracao().tem_recurso("analises"):
-            analises = RepositorioDeAnalises().listar_resumo(processo_id=id)
+        analises = RepositorioDeAnalises().listar_resumo(processo_id=id)
     return tela(request, "processos/detalhe.html", processo=processo, grafo=grafo,
                 variantes=variantes, analises=analises, atividades=atividades)
 

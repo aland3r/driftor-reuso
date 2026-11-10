@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% from "_componentes.html" import botao_excluir, selo %}
+{% block titulo %}Manutenção{% endblock %}
+{% block conteudo %}
+<nav class="crumb"><a href="/manutencoes">Manutenções</a><span>/</span>{{ manutencao.descricao }}</nav>
+<div class="page-head">
+  <div>
+    <h1>{{ manutencao.descricao }}</h1>
+    <div class="meta">{{ selo(manutencao.status) }}
+      <span>Análise <a href="/analises/{{ analise.id }}">{{ analise.nome }}</a></span>
+      {% if drift %}<span>Desvio <b>{{ drift.posicao }}</b>: {{ drift.resumo() }}</span>{% endif %}
+    </div>
+  </div>
+  {% if config.pode(papel, "disparar_manutencao") %}{{ botao_excluir("/manutencoes/" ~ manutencao.id ~ "/excluir", "Excluir esta manutenção?", "Excluir manutenção") }}{% endif %}
+</div>
+
+{% if manutencao.esta_pendente() %}
+  {# VARIABILIDADE: o técnico conclui; o gestor só corrige a descrição #}
+  {% if config.pode(papel, "concluir_manutencao") %}
+  <section class="secao">
+    <div class="secao-head"><h2>Concluir manutenção</h2></div>
+    <form method="post" action="/manutencoes/{{ manutencao.id }}/concluir" class="form-grade">
+      <label class="campo" style="grid-column: 1 / -1">Observações do que foi feito
+        <textarea class="field" name="observacoes" rows="4" placeholder="Ex.: rolamento trocado, folga ajustada" required></textarea></label>
+      <div><button class="btn btn-primary">Marcar como concluída</button></div>
+    </form>
+  </section>
+  {% elif config.pode(papel, "disparar_manutencao") %}
+  <section class="secao">
+    <div class="secao-head"><h2>Corrigir a descrição</h2><span class="label">aguardando o técnico</span></div>
+    <form method="post" action="/manutencoes/{{ manutencao.id }}" class="form-linha">
+      <label class="campo">Descrição<input class="field" name="descricao" value="{{ manutencao.descricao }}" required></label>
+      <button class="btn">Salvar</button>
+    </form>
+  </section>
+  {% endif %}
+{% else %}
+  <section class="secao">
+    <div class="secao-head"><h2>Observações do técnico</h2>
+      <span class="label">concluída em {{ manutencao.concluida_em|data }}</span></div>
+    <p>{{ manutencao.observacoes }}</p>
+  </section>
+{% endif %}
+{% endblock %}

@@ -1,27 +1,27 @@
 {% extends "base.html" %}
-{% from "_componentes.html" import botao_excluir, form_renomear, linha_vazia %}
+{% from "_componentes.html" import botao_excluir, linha_vazia %}
 {% block titulo %}Análises{% endblock %}
 {% block conteudo %}
-<h1>Análises de desvios</h1>
-<p class="detalhe">Para gerar uma análise, abra um processo pronto e use “Gerar análise de desvios”.</p>
-<table>
-  <thead><tr><th>Nome</th><th>Processo</th><th>Série</th><th>δ</th><th>Desvios</th><th>Notas</th><th></th></tr></thead>
-  <tbody>
-  {% for a in analises %}
-    <tr>
-      <td><a href="/analises/{{ a.id }}">{{ a.nome }}</a></td>
-      <td>{{ a.processo }}</td>
-      <td>{{ a.atividade or "trace inteiro" }}</td>
-      <td>{{ a.delta }}</td>
-      <td>{{ a.total_drifts }}</td>
-      <td>{{ a.total_notas }}</td>
-      <td class="acoes">
-        {{ botao_excluir("/analises/" ~ a.id ~ "/excluir", "Excluir a análise " ~ a.nome ~ "?") }}
-      </td>
-    </tr>
-  {% else %}
-    {{ linha_vazia(7, "Nenhuma análise ainda.") }}
-  {% endfor %}
-  </tbody>
-</table>
+<div class="page-head">
+  <div><h1>Análises de desvio</h1><p>Para gerar uma análise, abra um processo já mapeado e use “Gerar análise de desvios”.</p></div>
+</div>
+<section class="secao">
+  <table class="tabela">
+    <thead><tr><th>NOME</th><th class="opcional">PROCESSO</th><th class="opcional">SÉRIE</th><th>δ</th><th>DESVIOS</th><th></th></tr></thead>
+    <tbody>
+    {% for a in analises %}
+      <tr>
+        <td><a href="/analises/{{ a.id }}">{{ a.nome }}</a></td>
+        <td class="opcional">{{ a.processo }}</td>
+        <td class="opcional mono">{{ a.atividade or "trace inteiro" }}</td>
+        <td class="num">{{ a.delta }}</td>
+        <td><span class="badge {% if a.total_drifts %}badge-drift{% endif %}">{{ a.total_drifts }}</span></td>
+        <td class="acoes">{{ botao_excluir("/analises/" ~ a.id ~ "/excluir", "Excluir a análise " ~ a.nome ~ "?") }}</td>
+      </tr>
+    {% else %}
+      {{ linha_vazia(6, "Nenhuma análise ainda.") }}
+    {% endfor %}
+    </tbody>
+  </table>
+</section>
 {% endblock %}

@@ -1,21 +1,26 @@
-{# COMPACTAÇÃO DE CÓDIGO: pedaços de tela que se repetiam nos quatro CRUDs. #}
+{# COMPACTAÇÃO DE CÓDIGO: pedaços de tela que se repetiam nos CRUDs. #}
 
-{# Botão vermelho que pede confirmação antes de excluir #}
+{# Botão que pede confirmação antes de excluir #}
 {% macro botao_excluir(url, pergunta, rotulo="Excluir") %}
-<form method="post" action="{{ url }}" onsubmit="return confirm({{ pergunta|tojson|forceescape }})">
-  <button class="botao perigo">{{ rotulo }}</button>
+<form class="inline" method="post" action="{{ url }}" onsubmit="return confirm({{ pergunta|tojson|forceescape }})">
+  <button class="btn btn-sm">{{ rotulo }}</button>
 </form>
 {% endmacro %}
 
 {# Campo com o nome atual e o botão Renomear (Update) #}
 {% macro form_renomear(url, nome) %}
-<form method="post" action="{{ url }}" class="linha">
-  <input name="nome" value="{{ nome }}" required>
-  <button class="botao">Renomear</button>
+<form method="post" action="{{ url }}" class="form-linha">
+  <label class="campo">Nome<input class="field" name="nome" value="{{ nome }}" required></label>
+  <button class="btn">Renomear</button>
 </form>
 {% endmacro %}
 
 {# Linha que aparece quando a tabela não tem nada #}
 {% macro linha_vazia(colunas, texto) %}
 <tr><td colspan="{{ colunas }}" class="vazio">{{ texto }}</td></tr>
+{% endmacro %}
+
+{# Selo de status (processo ou manutenção) #}
+{% macro selo(status) %}
+<span class="badge {{ {'pronto': 'badge-ok', 'concluida': 'badge-ok', 'mapeando': 'badge-warn', 'pendente': 'badge-warn'}.get(status, '') }}">{{ {'concluida': 'concluída'}.get(status, status) }}</span>
 {% endmacro %}

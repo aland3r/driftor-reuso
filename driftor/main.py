@@ -8,17 +8,17 @@ from pathlib import Path
 from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 
+from driftor import acesso
 from driftor.analises import rotas as analises
 from driftor.analises.eventos import AtualizadorDoProcesso, publicador_de_analise
 from driftor.atividades import rotas as atividades
 from driftor.banco import BancoDeDados
-from driftor.config import Configuracao
 from driftor.dominio import ErroDeNegocio
-from driftor.notas import rotas as notas
-from driftor.notas.eventos import ContadorDeNotas, publicador_de_notas
-from driftor.observador import aviso_na_tela
+from driftor.manutencoes import rotas as manutencoes
+from driftor.manutencoes.eventos import publicador_de_manutencao
+from driftor.observador import avisos_por_papel
 from driftor.processos import rotas as processos
-from driftor.telas import ir_para, tela
+from driftor.telas import PrecisaEntrar, SemPermissao, ir_para, tela
 
 
 @asynccontextmanager
@@ -32,23 +32,30 @@ app.mount("/static", StaticFiles(directory=Path(__file__).with_name("static")), 
 
 # OBSERVER: quem reage a cada evento é decidido aqui, não dentro de quem publica.
 publicador_de_analise.inscrever(AtualizadorDoProcesso())
-publicador_de_analise.inscrever(aviso_na_tela)
-publicador_de_notas.inscrever(ContadorDeNotas())
-publicador_de_notas.inscrever(aviso_na_tela)
+publicador_de_analise.inscrever(avisos_por_papel["gestor"])
+publicador_de_manutencao.inscrever(avisos_por_papel["tecnico"])  # recebe "manutencao_disparada"
+publicador_de_manutencao.inscrever(avisos_por_papel["gestor"])   # recebe "manutencao_concluida"
 
-# VARIABILIDADE: as rotas de todos os recursos existem, mas cada uma confere a edição.
-for modulo in (processos, atividades, analises, notas):
+# VARIABILIDADE: todas as rotas existem; cada uma confere o papel de quem entrou (telas.exigir).
+for modulo in (acesso, processos, atividades, analises, manutencoes):
     app.include_router(modulo.rotas)
-
-
-@app.get("/")
-def inicio():
-    return ir_para("/processos")
 
 
 @app.get("/saude")
 def saude():
-    return {"ok": True, "edicao": Configuracao().edicao}
+    return {"ok": True}
+
+
+@app.exception_handler(PrecisaEntrar)
+def precisa_entrar(_request: Request, _erro: PrecisaEntrar):
+    return ir_para("/entrar")
+
+
+@app.exception_handler(SemPermissao)
+def sem_permissao(request: Request, _erro: SemPermissao):
+    resposta = tela(request, "erro.html", mensagem="Este perfil não tem acesso a esta tela.", voltar="/")
+    resposta.status_code = 403
+    return resposta
 
 
 @app.exception_handler(ErroDeNegocio)

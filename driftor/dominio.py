@@ -2,7 +2,7 @@
 
 Aqui ficam só as regras do negócio: nenhuma classe sabe de banco, tela ou biblioteca.
 São 13 classes: Processo, Evento, Trace, Atividade, Operacao, Variante, No,
-Aresta, Grafo, PontoDaSerie, Analise, Drift e NotaDeDrift.
+Aresta, Grafo, PontoDaSerie, Analise, Drift e Manutencao.
 """
 
 from __future__ import annotations
@@ -322,20 +322,43 @@ class Analise:
 
 
 @dataclass
-class NotaDeDrift:
+class Manutencao:
+    """Ordem de manutenção que o gestor dispara a partir de um desvio e o técnico conclui."""
+
     id: str
-    drift_id: str
-    texto: str
+    analise_id: str
+    drift_id: str | None
+    descricao: str
+    status: str = "pendente"       # pendente -> concluida
+    observacoes: str = ""
+    criado_em: datetime | None = None
+    concluida_em: datetime | None = None
 
     @staticmethod
-    def criar(drift_id: str, texto: str) -> NotaDeDrift:
-        texto = (texto or "").strip()
-        if not texto:
-            raise ErroDeNegocio("Escreva a nota antes de salvar.")
-        return NotaDeDrift(novo_id(), drift_id, texto)
+    def disparar(analise: Analise, drift_id: str | None, descricao: str) -> Manutencao:
+        if drift_id and drift_id not in {d.id for d in analise.drifts}:
+            raise ErroDeNegocio("Este desvio não pertence à análise.")
+        descricao = (descricao or "").strip()
+        if not descricao:
+            raise ErroDeNegocio("Descreva o que o técnico deve verificar.")
+        return Manutencao(novo_id(), analise.id, drift_id or None, descricao)
 
-    def editar(self, texto: str) -> None:
-        texto = (texto or "").strip()
-        if not texto:
-            raise ErroDeNegocio("A nota não pode ficar vazia.")
-        self.texto = texto
+    def esta_pendente(self) -> bool:
+        return self.status == "pendente"
+
+    def editar(self, descricao: str) -> None:
+        if not self.esta_pendente():
+            raise ErroDeNegocio("Uma manutenção concluída não pode mais ser alterada.")
+        descricao = (descricao or "").strip()
+        if not descricao:
+            raise ErroDeNegocio("A descrição não pode ficar vazia.")
+        self.descricao = descricao
+
+    def concluir(self, observacoes: str) -> None:
+        if not self.esta_pendente():
+            raise ErroDeNegocio("Esta manutenção já foi concluída.")
+        observacoes = (observacoes or "").strip()
+        if not observacoes:
+            raise ErroDeNegocio("Escreva as observações do que foi feito.")
+        self.status = "concluida"
+        self.observacoes = observacoes

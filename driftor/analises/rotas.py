@@ -9,9 +9,11 @@ from driftor.analises.repositorio import RepositorioDeAnalises
 from driftor.dominio import Analise, ErroDeNegocio, PontoDaSerie
 from driftor.mineracao.detector import DetectorDeDrift, RiverAdwinAdapter, suavizar
 from driftor.processos.repositorio import RepositorioDeProcessos
-from driftor.telas import exigir_recurso, ir_para, tela
+from driftor.manutencoes.repositorio import RepositorioDeManutencoes
+from driftor.telas import exigir, ir_para, tela
 
-rotas = APIRouter(dependencies=[Depends(exigir_recurso("analises"))])
+rotas = APIRouter()
+so_gestor = [Depends(exigir("analises"))]
 
 
 def detector() -> DetectorDeDrift:
@@ -19,13 +21,13 @@ def detector() -> DetectorDeDrift:
 
 
 # ---- Read: todas as análises
-@rotas.get("/analises")
+@rotas.get("/analises", dependencies=so_gestor)
 def listar(request: Request):
     return tela(request, "analises/lista.html", analises=RepositorioDeAnalises().listar_resumo())
 
 
 # ---- Create: botão "Gerar análise de desvios" na página do processo
-@rotas.post("/processos/{processo_id}/analises")
+@rotas.post("/processos/{processo_id}/analises", dependencies=so_gestor)
 def criar(
     processo_id: str,
     nome: str = Form(""),
@@ -54,18 +56,19 @@ def criar(
     return ir_para(f"/analises/{analise.id}")
 
 
-# ---- Read: detalhe com gráfico e desvios
-@rotas.get("/analises/{id}")
+# ---- Read: detalhe com gráfico e desvios (o técnico também vê, sem editar)
+@rotas.get("/analises/{id}", dependencies=[Depends(exigir("ver_analise"))])
 def ver(request: Request, id: str):
     repo = RepositorioDeAnalises()
     analise = repo.obter_ou_erro(id)
     processo = RepositorioDeProcessos().obter(analise.processo_id)
-    return tela(request, "analises/detalhe.html", analise=analise, processo=processo,
+    manutencoes = RepositorioDeManutencoes().listar_resumo(analise_id=id)
+    return tela(request, "analises/detalhe.html", analise=analise, processo=processo, manutencoes=manutencoes,
                 grafico=desenhar_grafico(repo.serie(id), [d.inicio_anomalia for d in analise.drifts]))
 
 
 # ---- Update: renomear
-@rotas.post("/analises/{id}/renomear")
+@rotas.post("/analises/{id}/renomear", dependencies=so_gestor)
 def renomear(id: str, nome: str = Form("")):
     repo = RepositorioDeAnalises()
     analise = repo.obter_ou_erro(id)
@@ -75,7 +78,7 @@ def renomear(id: str, nome: str = Form("")):
 
 
 # ---- Delete
-@rotas.post("/analises/{id}/excluir")
+@rotas.post("/analises/{id}/excluir", dependencies=so_gestor)
 def excluir(id: str):
     repo = RepositorioDeAnalises()
     analise = repo.obter_ou_erro(id)

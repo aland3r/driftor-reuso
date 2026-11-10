@@ -1,10 +1,5 @@
-# Um só código, duas edições (variabilidade): este arquivo sobe a Completa.
-# A Essencial é o mesmo deploy com -a driftor-reuso-essencial e EDICAO=essencial (ver .github/workflows/ci.yml).
 app = "driftor-reuso"
 primary_region = "gru"
-
-[env]
-  EDICAO = "completa"
 
 [http_service]
   internal_port = 8080

@@ -32,7 +32,7 @@ class RepositorioDeAnalises(RepositorioBase[Analise]):
         filtro = "where a.processo_id = :processo_id" if processo_id else ""
         return self.banco.consultar(
             f"""select a.id, a.nome, a.atividade, a.delta, a.tratamento, a.total_observacoes,
-                       a.total_drifts, a.total_notas, a.criado_em, p.nome as processo
+                       a.total_drifts, a.criado_em, p.nome as processo
                 from analises a join processos p on p.id = a.processo_id
                 {filtro} order by a.criado_em desc""",
             processo_id=processo_id,
@@ -63,4 +63,4 @@ class RepositorioDeAnalises(RepositorioBase[Analise]):
     def renomear(self, analise: Analise) -> None:
         self.banco.executar("update analises set nome = :nome where id = :id", id=analise.id, nome=analise.nome)
 
-    # ---- Delete: herdado; drifts e notas caem junto (on delete cascade)
+    # ---- Delete: herdado; drifts e manutenções caem junto (on delete cascade)

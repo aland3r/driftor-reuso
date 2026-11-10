@@ -38,13 +38,6 @@ jobs:
     needs: test
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        include:
-          - app: driftor-reuso
-            edicao: completa
-          - app: driftor-reuso-essencial
-            edicao: essencial
     steps:
       - uses: actions/checkout@v4
       - name: verifica secrets
@@ -56,17 +49,28 @@ jobs:
         if: steps.fly.outputs.ok == 'true'
       - name: cria o app (primeira vez)
         if: steps.fly.outputs.ok == 'true'
-        run: flyctl apps create ${{ matrix.app }} || true
+        run: flyctl apps create driftor-reuso || true
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
       - name: endereço do banco
         if: steps.fly.outputs.ok == 'true' && steps.fly.outputs.banco == 'true'
-        run: flyctl secrets set --stage -a ${{ matrix.app }} DATABASE_URL="$DATABASE_URL"
+        run: flyctl secrets set --stage -a driftor-reuso DATABASE_URL="$DATABASE_URL"
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
-      - name: deploy da edição ${{ matrix.edicao }}
+      - name: deploy
         if: steps.fly.outputs.ok == 'true'
-        run: flyctl deploy --remote-only -a ${{ matrix.app }} -e EDICAO=${{ matrix.edicao }} --ha=false
+        run: flyctl deploy --remote-only -a driftor-reuso --ha=false
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+      - name: acorda o app e confere o banco
+        if: steps.fly.outputs.ok == 'true'
+        run: |
+          for i in 1 2 3 4 5 6; do
+            curl -fsS https://driftor-reuso.fly.dev/saude && exit 0
+            sleep 10
+          done
+          flyctl logs -a driftor-reuso --no-tail | tail -60
+          exit 1
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}

@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 {% block titulo %}Editar atividade{% endblock %}
 {% block conteudo %}
-<p class="trilha"><a href="/atividades">Atividades</a> / {{ atividade.nome }}</p>
-<section class="cartao">
-  <h1>Editar atividade</h1>
-  <form method="post" action="/atividades/{{ atividade.id }}" class="grade">
-    <label>Nome <input name="nome" value="{{ atividade.nome }}" required></label>
-    <label>Descrição <input name="descricao" value="{{ atividade.descricao }}"></label>
-    <button class="botao primario">Salvar</button>
+<nav class="crumb"><a href="/atividades">Atividades</a><span>/</span>{{ atividade.nome }}</nav>
+<div class="page-head"><h1>Editar atividade</h1></div>
+<section class="secao">
+  <form method="post" action="/atividades/{{ atividade.id }}" class="form-grade">
+    <label class="campo">Nome<input class="field" name="nome" value="{{ atividade.nome }}" required></label>
+    <label class="campo">Descrição<input class="field" name="descricao" value="{{ atividade.descricao }}"></label>
+    <div><button class="btn btn-primary">Salvar</button></div>
   </form>
 </section>
 {% endblock %}

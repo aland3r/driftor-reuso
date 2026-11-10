@@ -33,13 +33,18 @@ class Sujeito:
 
 
 class AvisoNaTela(Observador):
-    """Observador comum aos dois exemplos: guarda a mensagem que aparece no topo da próxima tela."""
+    """Guarda o aviso que aparece no topo da próxima tela de um papel (gestor ou técnico).
 
-    def __init__(self) -> None:
+    Cada caixa só aceita os eventos que interessam ao seu papel.
+    """
+
+    def __init__(self, eventos: set[str]) -> None:
+        self.eventos = eventos
         self._mensagens: deque[str] = deque(maxlen=5)
 
     def atualizar(self, evento: str, dados: dict) -> None:
-        self._mensagens.append(dados["mensagem"])
+        if evento in self.eventos:
+            self._mensagens.append(dados["mensagem"])
 
     def retirar_mensagens(self) -> list[str]:
         mensagens = list(self._mensagens)
@@ -47,4 +52,7 @@ class AvisoNaTela(Observador):
         return mensagens
 
 
-aviso_na_tela = AvisoNaTela()
+avisos_por_papel = {
+    "gestor": AvisoNaTela({"analise_concluida", "manutencao_concluida"}),
+    "tecnico": AvisoNaTela({"manutencao_disparada"}),
+}

@@ -6,9 +6,9 @@ from fastapi import APIRouter, Depends, Form, Request
 
 from driftor.atividades.repositorio import RepositorioDeAtividades
 from driftor.dominio import Atividade
-from driftor.telas import exigir_recurso, ir_para, tela
+from driftor.telas import exigir, ir_para, tela
 
-rotas = APIRouter(dependencies=[Depends(exigir_recurso("atividades"))])
+rotas = APIRouter(dependencies=[Depends(exigir("atividades"))])  # só o gestor
 
 
 # ---- Read
