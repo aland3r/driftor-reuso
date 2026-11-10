@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% from "_componentes.html" import botao_excluir, form_renomear, linha_vazia %}
 {% block titulo %}Atividades{% endblock %}
 {% block conteudo %}
 <h1>Atividades</h1>
@@ -21,13 +22,11 @@
       <td>{{ a.descricao or "—" }}</td>
       <td class="acoes">
         <a class="botao" href="/atividades/{{ a.id }}/editar">Editar</a>
-        <form method="post" action="/atividades/{{ a.id }}/excluir" onsubmit="return confirm('Excluir a atividade {{ a.nome }}?')">
-          <button class="botao perigo">Excluir</button>
-        </form>
+        {{ botao_excluir("/atividades/" ~ a.id ~ "/excluir", "Excluir a atividade " ~ a.nome ~ "?") }}
       </td>
     </tr>
   {% else %}
-    <tr><td colspan="3" class="vazio">O catálogo está vazio.</td></tr>
+    {{ linha_vazia(3, "O catálogo está vazio.") }}
   {% endfor %}
   </tbody>
 </table>

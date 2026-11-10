@@ -20,19 +20,10 @@ def _analise_do_drift(drift_id: str) -> str:
     return str(linha["analise_id"])
 
 
-def _nota_ou_erro(repo: RepositorioDeNotas, id: str) -> NotaDeDrift:
-    nota = repo.obter(id)
-    if nota is None:
-        raise ErroDeNegocio("Nota não encontrada.")
-    return nota
-
-
 # ---- Read: notas de todos os desvios de uma análise
 @rotas.get("/analises/{analise_id}/notas")
 def listar(request: Request, analise_id: str):
-    analise = RepositorioDeAnalises().obter(analise_id)
-    if analise is None:
-        raise ErroDeNegocio("Análise não encontrada.")
+    analise = RepositorioDeAnalises().obter_ou_erro(analise_id)
     return tela(request, "notas/lista.html", analise=analise,
                 notas=RepositorioDeNotas().listar_da_analise(analise_id))
 
@@ -50,14 +41,14 @@ def criar(drift_id: str = Form(""), texto: str = Form("")):
 # ---- Update
 @rotas.get("/notas/{id}/editar")
 def editar(request: Request, id: str):
-    nota = _nota_ou_erro(RepositorioDeNotas(), id)
+    nota = RepositorioDeNotas().obter_ou_erro(id)
     return tela(request, "notas/editar.html", nota=nota, analise_id=_analise_do_drift(nota.drift_id))
 
 
 @rotas.post("/notas/{id}")
 def salvar(id: str, texto: str = Form("")):
     repo = RepositorioDeNotas()
-    nota = _nota_ou_erro(repo, id)
+    nota = repo.obter_ou_erro(id)
     nota.editar(texto)
     repo.atualizar(nota)
     return ir_para(f"/analises/{_analise_do_drift(nota.drift_id)}/notas")
@@ -67,7 +58,7 @@ def salvar(id: str, texto: str = Form("")):
 @rotas.post("/notas/{id}/excluir")
 def excluir(id: str):
     repo = RepositorioDeNotas()
-    nota = _nota_ou_erro(repo, id)
+    nota = repo.obter_ou_erro(id)
     analise_id = _analise_do_drift(nota.drift_id)
     repo.excluir(id)
     publicador_de_notas.notificar("nota_excluida", {"analise_id": analise_id, "mensagem": "Nota excluída."})  # Observer

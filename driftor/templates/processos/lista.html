@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% from "_componentes.html" import botao_excluir, form_renomear, linha_vazia %}
 {% block titulo %}Processos{% endblock %}
 {% block conteudo %}
 <h1>Processos</h1>
@@ -21,13 +22,11 @@
       <td>{{ p.arquivo or "—" }}</td>
       <td>{{ p.total_traces }}</td>
       <td class="acoes">
-        <form method="post" action="/processos/{{ p.id }}/excluir" onsubmit="return confirm('Excluir o processo {{ p.nome }}? As análises dele também serão apagadas.')">
-          <button class="botao perigo">Excluir</button>
-        </form>
+        {{ botao_excluir("/processos/" ~ p.id ~ "/excluir", "Excluir o processo " ~ p.nome ~ "? As análises dele também serão apagadas.") }}
       </td>
     </tr>
   {% else %}
-    <tr><td colspan="5" class="vazio">Nenhum processo ainda. Crie o primeiro acima.</td></tr>
+    {{ linha_vazia(5, "Nenhum processo ainda. Crie o primeiro acima.") }}
   {% endfor %}
   </tbody>
 </table>

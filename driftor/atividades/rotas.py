@@ -5,17 +5,10 @@ from __future__ import annotations
 from fastapi import APIRouter, Depends, Form, Request
 
 from driftor.atividades.repositorio import RepositorioDeAtividades
-from driftor.dominio import Atividade, ErroDeNegocio
+from driftor.dominio import Atividade
 from driftor.telas import exigir_recurso, ir_para, tela
 
 rotas = APIRouter(dependencies=[Depends(exigir_recurso("atividades"))])
-
-
-def _atividade_ou_erro(repo: RepositorioDeAtividades, id: str) -> Atividade:
-    atividade = repo.obter(id)
-    if atividade is None:
-        raise ErroDeNegocio("Atividade não encontrada.")
-    return atividade
 
 
 # ---- Read
@@ -34,14 +27,14 @@ def criar(nome: str = Form(""), descricao: str = Form("")):
 # ---- Update
 @rotas.get("/atividades/{id}/editar")
 def editar(request: Request, id: str):
-    atividade = _atividade_ou_erro(RepositorioDeAtividades(), id)
+    atividade = RepositorioDeAtividades().obter_ou_erro(id)
     return tela(request, "atividades/editar.html", atividade=atividade)
 
 
 @rotas.post("/atividades/{id}")
 def salvar(id: str, nome: str = Form(""), descricao: str = Form("")):
     repo = RepositorioDeAtividades()
-    atividade = _atividade_ou_erro(repo, id)
+    atividade = repo.obter_ou_erro(id)
     atividade.editar(nome, descricao)
     repo.atualizar(atividade)
     return ir_para("/atividades")

@@ -2,28 +2,19 @@
 
 from __future__ import annotations
 
-from driftor.banco import BancoDeDados
 from driftor.dominio import Evento, Operacao, Processo, Trace
-
-CAMPOS = "id, nome, status, arquivo, formato, total_traces, total_eventos, criado_em"
-
-
-def _para_processo(linha: dict) -> Processo:
-    return Processo(**{**linha, "id": str(linha["id"])})
+from driftor.repositorio_base import RepositorioBase
 
 
-class RepositorioDeProcessos:
-    def __init__(self) -> None:
-        self.banco = BancoDeDados()
+class RepositorioDeProcessos(RepositorioBase[Processo]):
+    # listar, obter, obter_ou_erro e excluir vêm de RepositorioBase
+    tabela = "processos"
+    colunas = "id, nome, status, arquivo, formato, total_traces, total_eventos, criado_em"
+    ordem = "atualizado_em desc"
+    nome_no_singular = "processo"
 
-    # ---- Read
-    def listar(self) -> list[Processo]:
-        linhas = self.banco.consultar(f"select {CAMPOS} from processos order by atualizado_em desc")
-        return [_para_processo(linha) for linha in linhas]
-
-    def obter(self, id: str) -> Processo | None:
-        linha = self.banco.consultar_um(f"select {CAMPOS} from processos where id = :id", id=id)
-        return _para_processo(linha) if linha else None
+    def criar_objeto(self, linha: dict) -> Processo:
+        return Processo(**{**linha, "id": str(linha["id"])})
 
     # ---- Create
     def inserir(self, processo: Processo) -> None:
@@ -41,9 +32,7 @@ class RepositorioDeProcessos:
             formato=processo.formato, total_traces=processo.total_traces, total_eventos=processo.total_eventos,
         )
 
-    # ---- Delete (eventos, operações e análises caem junto: on delete cascade)
-    def excluir(self, id: str) -> None:
-        self.banco.executar("delete from processos where id = :id", id=id)
+    # ---- Delete: herdado; eventos, operações e análises caem junto (on delete cascade)
 
     # ---- Log de eventos
     def substituir_log(self, processo: Processo, traces: list[Trace], operacoes: list[Operacao]) -> None:

@@ -4,32 +4,26 @@ from __future__ import annotations
 
 from sqlalchemy.exc import IntegrityError
 
-from driftor.banco import BancoDeDados
 from driftor.dominio import Atividade, ErroDeNegocio
+from driftor.repositorio_base import RepositorioBase
 
 
-def _para_atividade(linha: dict) -> Atividade:
-    return Atividade(id=str(linha["id"]), nome=linha["nome"], descricao=linha["descricao"])
+class RepositorioDeAtividades(RepositorioBase[Atividade]):
+    # listar, obter e obter_ou_erro vêm de RepositorioBase
+    tabela = "atividades"
+    colunas = "id, nome, descricao"
+    ordem = "nome"
+    nome_no_singular = "atividade"
 
-
-class RepositorioDeAtividades:
-    def __init__(self) -> None:
-        self.banco = BancoDeDados()
+    def criar_objeto(self, linha: dict) -> Atividade:
+        return Atividade(id=str(linha["id"]), nome=linha["nome"], descricao=linha["descricao"])
 
     # ---- Read
-    def listar(self) -> list[Atividade]:
-        linhas = self.banco.consultar("select id, nome, descricao from atividades order by nome")
-        return [_para_atividade(linha) for linha in linhas]
-
-    def obter(self, id: str) -> Atividade | None:
-        linha = self.banco.consultar_um("select id, nome, descricao from atividades where id = :id", id=id)
-        return _para_atividade(linha) if linha else None
-
     def obter_por_nome(self, nome: str) -> Atividade | None:
         linha = self.banco.consultar_um(
-            "select id, nome, descricao from atividades where lower(nome) = lower(:nome)", nome=nome
+            f"select {self.colunas} from atividades where lower(nome) = lower(:nome)", nome=nome
         )
-        return _para_atividade(linha) if linha else None
+        return self.criar_objeto(linha) if linha else None
 
     # ---- Create
     def inserir(self, atividade: Atividade) -> None:
@@ -54,6 +48,6 @@ class RepositorioDeAtividades:
     # ---- Delete (o banco recusa se algum processo usa a atividade: on delete restrict)
     def excluir(self, id: str) -> None:
         try:
-            self.banco.executar("delete from atividades where id = :id", id=id)
+            super().excluir(id)
         except IntegrityError as erro:
             raise ErroDeNegocio("Esta atividade está mapeada em um processo e não pode ser excluída.") from erro

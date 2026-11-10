@@ -4,16 +4,31 @@ from __future__ import annotations
 
 import json
 
-from driftor.banco import BancoDeDados
 from driftor.dominio import Analise, Drift
+from driftor.repositorio_base import RepositorioBase
 
 
-class RepositorioDeAnalises:
-    def __init__(self) -> None:
-        self.banco = BancoDeDados()
+class RepositorioDeAnalises(RepositorioBase[Analise]):
+    # obter, obter_ou_erro e excluir vêm de RepositorioBase
+    tabela = "analises"
+    colunas = "id, processo_id, nome, delta, tratamento, atividade, total_observacoes"
+    nome_no_singular = "análise"
+
+    def criar_objeto(self, linha: dict) -> Analise:
+        """A análise vem com os seus desvios (tabela drifts)."""
+        analise = Analise(**{**linha, "id": str(linha["id"]), "processo_id": str(linha["processo_id"])})
+        analise.drifts = [
+            Drift(**{**d, "id": str(d["id"])})
+            for d in self.banco.consultar(
+                """select id, posicao, indice, inicio_anomalia, media_antes, media_depois, variacao_pct
+                   from drifts where analise_id = :id order by posicao""",
+                id=analise.id,
+            )
+        ]
+        return analise
 
     # ---- Read
-    def listar(self, processo_id: str | None = None) -> list[dict]:
+    def listar_resumo(self, processo_id: str | None = None) -> list[dict]:
         filtro = "where a.processo_id = :processo_id" if processo_id else ""
         return self.banco.consultar(
             f"""select a.id, a.nome, a.atividade, a.delta, a.tratamento, a.total_observacoes,
@@ -22,25 +37,6 @@ class RepositorioDeAnalises:
                 {filtro} order by a.criado_em desc""",
             processo_id=processo_id,
         )
-
-    def obter(self, id: str) -> Analise | None:
-        linha = self.banco.consultar_um(
-            """select id, processo_id, nome, delta, tratamento, atividade, total_observacoes
-               from analises where id = :id""",
-            id=id,
-        )
-        if not linha:
-            return None
-        analise = Analise(**{**linha, "id": str(linha["id"]), "processo_id": str(linha["processo_id"])})
-        analise.drifts = [
-            Drift(**{**d, "id": str(d["id"])})
-            for d in self.banco.consultar(
-                """select id, posicao, indice, inicio_anomalia, media_antes, media_depois, variacao_pct
-                   from drifts where analise_id = :id order by posicao""",
-                id=id,
-            )
-        ]
-        return analise
 
     def serie(self, id: str) -> list[float]:
         linha = self.banco.consultar_um("select serie from analises where id = :id", id=id)
@@ -67,6 +63,4 @@ class RepositorioDeAnalises:
     def renomear(self, analise: Analise) -> None:
         self.banco.executar("update analises set nome = :nome where id = :id", id=analise.id, nome=analise.nome)
 
-    # ---- Delete (drifts e notas caem junto: on delete cascade)
-    def excluir(self, id: str) -> None:
-        self.banco.executar("delete from analises where id = :id", id=id)
+    # ---- Delete: herdado; drifts e notas caem junto (on delete cascade)

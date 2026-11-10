@@ -1,18 +1,14 @@
 {% extends "base.html" %}
+{% from "_componentes.html" import botao_excluir, form_renomear, linha_vazia %}
 {% block titulo %}{{ processo.nome }}{% endblock %}
 {% block conteudo %}
 <p class="trilha"><a href="/processos">Processos</a> / {{ processo.nome }}</p>
 
 <section class="cartao">
-  <form method="post" action="/processos/{{ processo.id }}/renomear" class="linha">
-    <input name="nome" value="{{ processo.nome }}" required>
-    <button class="botao">Renomear</button>
-  </form>
+  {{ form_renomear("/processos/" ~ processo.id ~ "/renomear", processo.nome) }}
   <p class="detalhe">Status: <span class="status {{ processo.status }}">{{ processo.status }}</span>
     {% if processo.arquivo %} · Log: {{ processo.arquivo }} · {{ processo.total_traces }} traces · {{ processo.total_eventos }} eventos{% endif %}</p>
-  <form method="post" action="/processos/{{ processo.id }}/excluir" onsubmit="return confirm('Excluir o processo {{ processo.nome }}? As análises dele também serão apagadas.')">
-    <button class="botao perigo">Excluir processo</button>
-  </form>
+  {{ botao_excluir("/processos/" ~ processo.id ~ "/excluir", "Excluir o processo " ~ processo.nome ~ "? As análises dele também serão apagadas.", "Excluir processo") }}
 </section>
 
 <section class="cartao">
@@ -72,13 +68,11 @@
         <td>{{ a.total_drifts }}</td>
         <td>{{ a.total_notas }}</td>
         <td class="acoes">
-          <form method="post" action="/analises/{{ a.id }}/excluir" onsubmit="return confirm('Excluir a análise {{ a.nome }}?')">
-            <button class="botao perigo">Excluir</button>
-          </form>
+          {{ botao_excluir("/analises/" ~ a.id ~ "/excluir", "Excluir a análise " ~ a.nome ~ "?") }}
         </td>
       </tr>
     {% else %}
-      <tr><td colspan="4" class="vazio">Nenhuma análise ainda.</td></tr>
+      {{ linha_vazia(4, "Nenhuma análise ainda.") }}
     {% endfor %}
     </tbody>
   </table>

@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% from "_componentes.html" import botao_excluir, form_renomear, linha_vazia %}
 {% block titulo %}Análises{% endblock %}
 {% block conteudo %}
 <h1>Análises de desvios</h1>
@@ -15,13 +16,11 @@
       <td>{{ a.total_drifts }}</td>
       <td>{{ a.total_notas }}</td>
       <td class="acoes">
-        <form method="post" action="/analises/{{ a.id }}/excluir" onsubmit="return confirm('Excluir a análise {{ a.nome }}?')">
-          <button class="botao perigo">Excluir</button>
-        </form>
+        {{ botao_excluir("/analises/" ~ a.id ~ "/excluir", "Excluir a análise " ~ a.nome ~ "?") }}
       </td>
     </tr>
   {% else %}
-    <tr><td colspan="7" class="vazio">Nenhuma análise ainda.</td></tr>
+    {{ linha_vazia(7, "Nenhuma análise ainda.") }}
   {% endfor %}
   </tbody>
 </table>

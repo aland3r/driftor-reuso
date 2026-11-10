@@ -1,0 +1,21 @@
+{# COMPACTAÇÃO DE CÓDIGO: pedaços de tela que se repetiam nos quatro CRUDs. #}
+
+{# Botão vermelho que pede confirmação antes de excluir #}
+{% macro botao_excluir(url, pergunta, rotulo="Excluir") %}
+<form method="post" action="{{ url }}" onsubmit="return confirm({{ pergunta|tojson|forceescape }})">
+  <button class="botao perigo">{{ rotulo }}</button>
+</form>
+{% endmacro %}
+
+{# Campo com o nome atual e o botão Renomear (Update) #}
+{% macro form_renomear(url, nome) %}
+<form method="post" action="{{ url }}" class="linha">
+  <input name="nome" value="{{ nome }}" required>
+  <button class="botao">Renomear</button>
+</form>
+{% endmacro %}
+
+{# Linha que aparece quando a tabela não tem nada #}
+{% macro linha_vazia(colunas, texto) %}
+<tr><td colspan="{{ colunas }}" class="vazio">{{ texto }}</td></tr>
+{% endmacro %}

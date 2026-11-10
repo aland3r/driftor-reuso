@@ -18,17 +18,10 @@ def detector() -> DetectorDeDrift:
     return RiverAdwinAdapter()
 
 
-def _analise_ou_erro(repo: RepositorioDeAnalises, id: str) -> Analise:
-    analise = repo.obter(id)
-    if analise is None:
-        raise ErroDeNegocio("Análise não encontrada.")
-    return analise
-
-
 # ---- Read: todas as análises
 @rotas.get("/analises")
 def listar(request: Request):
-    return tela(request, "analises/lista.html", analises=RepositorioDeAnalises().listar())
+    return tela(request, "analises/lista.html", analises=RepositorioDeAnalises().listar_resumo())
 
 
 # ---- Create: botão "Gerar análise de desvios" na página do processo
@@ -42,9 +35,7 @@ def criar(
     detector: DetectorDeDrift = Depends(detector),
 ):
     processos = RepositorioDeProcessos()
-    processo = processos.obter(processo_id)
-    if processo is None:
-        raise ErroDeNegocio("Processo não encontrado.")
+    processo = processos.obter_ou_erro(processo_id)
     analise = Analise.criar(processo, nome, delta, tratamento, atividade)
 
     pontos = PontoDaSerie.serie_de_duracao(processos.traces(processo_id), analise.atividade)
@@ -67,7 +58,7 @@ def criar(
 @rotas.get("/analises/{id}")
 def ver(request: Request, id: str):
     repo = RepositorioDeAnalises()
-    analise = _analise_ou_erro(repo, id)
+    analise = repo.obter_ou_erro(id)
     processo = RepositorioDeProcessos().obter(analise.processo_id)
     return tela(request, "analises/detalhe.html", analise=analise, processo=processo,
                 grafico=desenhar_grafico(repo.serie(id), [d.inicio_anomalia for d in analise.drifts]))
@@ -77,7 +68,7 @@ def ver(request: Request, id: str):
 @rotas.post("/analises/{id}/renomear")
 def renomear(id: str, nome: str = Form("")):
     repo = RepositorioDeAnalises()
-    analise = _analise_ou_erro(repo, id)
+    analise = repo.obter_ou_erro(id)
     analise.renomear(nome)
     repo.renomear(analise)
     return ir_para(f"/analises/{id}")
@@ -87,7 +78,7 @@ def renomear(id: str, nome: str = Form("")):
 @rotas.post("/analises/{id}/excluir")
 def excluir(id: str):
     repo = RepositorioDeAnalises()
-    analise = _analise_ou_erro(repo, id)
+    analise = repo.obter_ou_erro(id)
     repo.excluir(id)
     return ir_para(f"/processos/{analise.processo_id}")
 

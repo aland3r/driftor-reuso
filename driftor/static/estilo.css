@@ -30,8 +30,8 @@ input, select, textarea { font: inherit; color: var(--texto); background: var(--
 table { width: 100%; border-collapse: collapse; background: var(--cartao); border: 1px solid var(--borda); border-radius: 10px; overflow: hidden; margin-bottom: 16px; }
 th, td { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--borda); vertical-align: middle; }
 th { font-size: 12px; color: var(--suave); font-weight: 600; text-transform: uppercase; letter-spacing: .4px; }
-.acoes { display: flex; gap: 8px; justify-content: flex-end; }
-.acoes form { margin: 0; }
+.acoes { text-align: right; white-space: nowrap; }
+.acoes > * { display: inline-block; margin: 0 0 0 8px; vertical-align: middle; }
 .vazio { color: var(--suave); text-align: center; padding: 24px; }
 .trilha, .detalhe { color: var(--suave); font-size: 14px; }
 .status { font-size: 12px; padding: 1px 8px; border-radius: 99px; border: 1px solid var(--borda); }
@@ -43,4 +43,4 @@ th { font-size: 12px; color: var(--suave); font-weight: 600; text-transform: upp
 .grafico .marca-drift { stroke: var(--perigo); stroke-width: 2; vector-effect: non-scaling-stroke; }
 .grafico text { fill: var(--perigo); font-size: 12px; }
 .mermaid { background: transparent; overflow-x: auto; }
-@media (max-width: 640px) { .acoes { flex-direction: column; } th:nth-child(3), td:nth-child(3) { display: none; } }
+@media (max-width: 640px) { .acoes { white-space: normal; } th:nth-child(3), td:nth-child(3) { display: none; } }

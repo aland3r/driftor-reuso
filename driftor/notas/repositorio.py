@@ -2,13 +2,18 @@
 
 from __future__ import annotations
 
-from driftor.banco import BancoDeDados
 from driftor.dominio import NotaDeDrift
+from driftor.repositorio_base import RepositorioBase
 
 
-class RepositorioDeNotas:
-    def __init__(self) -> None:
-        self.banco = BancoDeDados()
+class RepositorioDeNotas(RepositorioBase[NotaDeDrift]):
+    # obter, obter_ou_erro e excluir vêm de RepositorioBase
+    tabela = "notas_drift"
+    colunas = "id, drift_id, texto"
+    nome_no_singular = "nota"
+
+    def criar_objeto(self, linha: dict) -> NotaDeDrift:
+        return NotaDeDrift(str(linha["id"]), str(linha["drift_id"]), linha["texto"])
 
     # ---- Read
     def listar_da_analise(self, analise_id: str) -> list[dict]:
@@ -18,10 +23,6 @@ class RepositorioDeNotas:
                where d.analise_id = :analise_id order by d.posicao, n.criado_em""",
             analise_id=analise_id,
         )
-
-    def obter(self, id: str) -> NotaDeDrift | None:
-        linha = self.banco.consultar_um("select id, drift_id, texto from notas_drift where id = :id", id=id)
-        return NotaDeDrift(str(linha["id"]), str(linha["drift_id"]), linha["texto"]) if linha else None
 
     # ---- Create
     def inserir(self, nota: NotaDeDrift) -> None:
@@ -37,6 +38,4 @@ class RepositorioDeNotas:
             id=nota.id, texto=nota.texto,
         )
 
-    # ---- Delete
-    def excluir(self, id: str) -> None:
-        self.banco.executar("delete from notas_drift where id = :id", id=id)
+    # ---- Delete: herdado de RepositorioBase
