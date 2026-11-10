@@ -1,0 +1,70 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: driftor_reuso
+          POSTGRES_PASSWORD: local
+          POSTGRES_DB: driftor
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U driftor_reuso" --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      DATABASE_URL: postgresql://driftor_reuso:local@localhost:5432/driftor
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements-dev.txt
+      - name: schema próprio, como no supabase
+        run: |
+          PGPASSWORD=local psql -h localhost -U driftor_reuso -d driftor \
+            -c "create schema driftor_reuso" -c "alter role driftor_reuso set search_path = driftor_reuso"
+      - run: pytest -q -p no:warnings
+
+  deploy:
+    needs: test
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - app: driftor-reuso
+            edicao: completa
+          - app: driftor-reuso-essencial
+            edicao: essencial
+    steps:
+      - uses: actions/checkout@v4
+      - name: verifica token do fly
+        id: fly
+        run: echo "ok=${{ secrets.FLY_API_TOKEN != '' }}" >> "$GITHUB_OUTPUT"
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+        if: steps.fly.outputs.ok == 'true'
+      - name: cria o app (primeira vez)
+        if: steps.fly.outputs.ok == 'true'
+        run: flyctl apps create ${{ matrix.app }} || true
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+      - name: endereço do banco
+        if: steps.fly.outputs.ok == 'true' && env.DATABASE_URL != ''
+        run: flyctl secrets set --stage -a ${{ matrix.app }} DATABASE_URL="$DATABASE_URL"
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      - name: deploy da edição ${{ matrix.edicao }}
+        if: steps.fly.outputs.ok == 'true'
+        run: flyctl deploy --remote-only -a ${{ matrix.app }} -e EDICAO=${{ matrix.edicao }} --ha=false
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}

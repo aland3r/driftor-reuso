@@ -1,0 +1,25 @@
+# Um só código, duas edições (variabilidade): este arquivo sobe a Completa.
+# A Essencial é o mesmo deploy com -a driftor-reuso-essencial e EDICAO=essencial (ver .github/workflows/ci.yml).
+app = "driftor-reuso"
+primary_region = "gru"
+
+[env]
+  EDICAO = "completa"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  min_machines_running = 0
+
+  [[http_service.checks]]
+    grace_period = "30s"
+    interval = "30s"
+    method = "GET"
+    path = "/saude"
+    timeout = "5s"
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "1gb"
