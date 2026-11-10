@@ -1,4 +1,4 @@
-"""Telas do CRUD de Análise (Emanuelle): gerar a análise de desvios, ver, renomear e excluir."""
+"""Telas do CRUD de Análise: gerar a análise de desvios, ver, renomear e excluir."""
 
 from __future__ import annotations
 

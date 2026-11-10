@@ -4,6 +4,10 @@ Versão simplificada do Driftor para a disciplina de **Desenvolvimento Orientado
 
 **Grupo:** Alander Menezes Arantes de Ávila e Emanuelle Skolut Jose.
 
+**Divisão dos CRUDs:** Alander, Processo e Atividade; Emanuelle, Análise e Manutenção. Os dois respondem por todos.
+
+**Defesa:** o mapa por tema está em [`defesa/README.md`](defesa/README.md).
+
 ## O que o produto faz
 
 1. Cria um **processo** só com o nome.
@@ -21,17 +25,17 @@ Versão simplificada do Driftor para a disciplina de **Desenvolvimento Orientado
 | `frontend/` | front-end: `templates/` (HTML com Jinja) e `static/` (CSS) |
 | `tests/` | testes dos CRUDs, do fluxo gestor → técnico e da variabilidade |
 | `exemplos/` | os quatro logs sintéticos da Alfa |
-| `defesa/` | roteiros da defesa |
+| `defesa/` | material da defesa, por tema (CRUDs, padrões, variabilidade, classes e tabelas, compactação) |
 
 ## Onde está cada item da avaliação
 
 | Item | Onde |
 |---|---|
 | 13 classes principais com atributos e métodos | `backend/driftor/dominio.py` |
-| CRUD de Processo (Alander) | `backend/driftor/processos/` (rotas + repositório) e `frontend/templates/processos/` |
-| CRUD de Atividade (Alander) | `backend/driftor/atividades/` e `frontend/templates/atividades/` |
-| CRUD de Análise (Emanuelle) | `backend/driftor/analises/` e `frontend/templates/analises/` |
-| CRUD de Manutenção (Emanuelle) | `backend/driftor/manutencoes/` e `frontend/templates/manutencoes/` |
+| CRUD de Processo | `backend/driftor/processos/` (rotas + repositório) e `frontend/templates/processos/` |
+| CRUD de Atividade | `backend/driftor/atividades/` e `frontend/templates/atividades/` |
+| CRUD de Análise | `backend/driftor/analises/` e `frontend/templates/analises/` |
+| CRUD de Manutenção | `backend/driftor/manutencoes/` e `frontend/templates/manutencoes/` |
 | 7 tabelas | `backend/driftor/schema.sql` |
 | Singleton 1: `Configuracao` | `backend/driftor/config.py` |
 | Singleton 2: `BancoDeDados` | `backend/driftor/banco.py` |

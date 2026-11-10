@@ -1,4 +1,4 @@
-"""Telas do CRUD de Manutenção (Emanuelle).
+"""Telas do CRUD de Manutenção.
 
 O gestor dispara (Create) a partir de um desvio, edita e exclui.
 O técnico vê a lista e conclui (Update) escrevendo as observações.

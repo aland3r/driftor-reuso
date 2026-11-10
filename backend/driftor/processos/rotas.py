@@ -1,4 +1,4 @@
-"""Telas do CRUD de Processo (Alander): criar, ver, carregar log, mapear, renomear e excluir."""
+"""Telas do CRUD de Processo: criar, ver, carregar log, mapear, renomear e excluir."""
 
 from __future__ import annotations
 

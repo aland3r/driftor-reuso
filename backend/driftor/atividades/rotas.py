@@ -1,4 +1,4 @@
-"""Telas do CRUD de Atividade (Alander): o catálogo usado no mapeamento dos logs."""
+"""Telas do CRUD de Atividade: o catálogo usado no mapeamento dos logs."""
 
 from __future__ import annotations
 

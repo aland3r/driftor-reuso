@@ -1,7 +1,7 @@
 -- Banco do Driftor (Reuso): 7 tabelas no schema driftor_reuso.
 -- O app aplica este arquivo ao subir (BancoDeDados.aplicar_schema); "if not exists" deixa rodar de novo sem erro.
 
--- CRUD de Processo (Alander)
+-- CRUD de Processo
 create table if not exists processos (
     id            uuid primary key,
     nome          text not null,
@@ -26,7 +26,7 @@ create table if not exists eventos (
 );
 create index if not exists eventos_processo on eventos(processo_id, case_id, ordem);
 
--- CRUD de Atividade (Alander): catálogo de atividades
+-- CRUD de Atividade: catálogo de atividades
 create table if not exists atividades (
     id        uuid primary key,
     nome      text not null,
@@ -44,7 +44,7 @@ create table if not exists operacoes (
     primary key (processo_id, rotulo)
 );
 
--- CRUD de Análise (Emanuelle)
+-- CRUD de Análise
 create table if not exists analises (
     id                uuid primary key,
     processo_id       uuid not null references processos(id) on delete cascade,
@@ -70,7 +70,7 @@ create table if not exists drifts (
     variacao_pct    double precision not null
 );
 
--- CRUD de Manutenção (Emanuelle): o gestor dispara a partir de um desvio, o técnico conclui
+-- CRUD de Manutenção: o gestor dispara a partir de um desvio, o técnico conclui
 create table if not exists manutencoes (
     id           uuid primary key,
     analise_id   uuid not null references analises(id) on delete cascade,
