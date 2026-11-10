@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block titulo %}Atividades{% endblock %}
+{% block conteudo %}
+<h1>Atividades</h1>
+
+<section class="cartao">
+  <h2>Nova atividade</h2>
+  <form method="post" action="/atividades" class="linha">
+    <input name="nome" placeholder="Nome, ex.: Machine_Operating" required>
+    <input name="descricao" placeholder="Descrição (opcional)">
+    <button class="botao primario">Criar atividade</button>
+  </form>
+</section>
+
+<table>
+  <thead><tr><th>Nome</th><th>Descrição</th><th></th></tr></thead>
+  <tbody>
+  {% for a in atividades %}
+    <tr>
+      <td>{{ a.nome }}</td>
+      <td>{{ a.descricao or "—" }}</td>
+      <td class="acoes">
+        <a class="botao" href="/atividades/{{ a.id }}/editar">Editar</a>
+        <form method="post" action="/atividades/{{ a.id }}/excluir" onsubmit="return confirm('Excluir a atividade {{ a.nome }}?')">
+          <button class="botao perigo">Excluir</button>
+        </form>
+      </td>
+    </tr>
+  {% else %}
+    <tr><td colspan="3" class="vazio">O catálogo está vazio.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

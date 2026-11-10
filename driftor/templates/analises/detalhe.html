@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block titulo %}{{ analise.nome }}{% endblock %}
+{% block conteudo %}
+<p class="trilha"><a href="/analises">Análises</a> / {{ analise.nome }}</p>
+
+<section class="cartao">
+  <form method="post" action="/analises/{{ analise.id }}/renomear" class="linha">
+    <input name="nome" value="{{ analise.nome }}" required>
+    <button class="botao">Renomear</button>
+  </form>
+  <p class="detalhe">Processo: <a href="/processos/{{ processo.id }}">{{ processo.nome }}</a>
+    · Série: {{ analise.atividade or "trace inteiro" }} · δ {{ analise.delta }} · {{ analise.tratamento }}
+    · {{ analise.total_observacoes }} observações</p>
+  <form method="post" action="/analises/{{ analise.id }}/excluir" onsubmit="return confirm('Excluir a análise {{ analise.nome }}?')">
+    <button class="botao perigo">Excluir análise</button>
+  </form>
+</section>
+
+<section class="cartao">
+  <h2>Série analisada</h2>
+  <svg class="grafico" viewBox="0 0 {{ grafico.largura }} {{ grafico.altura }}" preserveAspectRatio="none" role="img" aria-label="Duração por trace">
+    <polyline points="{{ grafico.linha }}" />
+    {% for m in grafico.marcas %}
+      <line class="marca-drift" x1="{{ m.x }}" x2="{{ m.x }}" y1="0" y2="{{ grafico.altura }}" />
+      <text x="{{ m.x + 4 }}" y="14">{{ m.numero }}</text>
+    {% endfor %}
+  </svg>
+  <p class="detalhe">Eixo vertical de {{ grafico.menor }} s a {{ grafico.maior }} s. Cada linha vermelha marca o início de um desvio.</p>
+</section>
+
+<section class="cartao">
+  <div class="cabecalho">
+    <h2>Desvios encontrados ({{ analise.drifts|length }})</h2>
+    {% if config.tem_recurso("notas") %}<a class="botao primario" href="/analises/{{ analise.id }}/notas">Notas dos desvios</a>{% endif %}
+  </div>
+  <table>
+    <thead><tr><th>#</th><th>Início</th><th>Detectado em</th><th>Média antes</th><th>Média depois</th><th>Resumo</th></tr></thead>
+    <tbody>
+    {% for d in analise.drifts %}
+      <tr><td>{{ d.posicao }}</td><td>{{ d.inicio_anomalia }}</td><td>{{ d.indice }}</td>
+          <td>{{ d.media_antes }}</td><td>{{ d.media_depois }}</td><td>{{ d.resumo() }}</td></tr>
+    {% else %}
+      <tr><td colspan="6" class="vazio">Nenhum desvio: o processo ficou estável.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}

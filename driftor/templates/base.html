@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block titulo %}Driftor{% endblock %} · Driftor</title>
+  <link rel="stylesheet" href="/static/estilo.css">
+</head>
+<body>
+  <header class="topo">
+    <a class="marca" href="/processos">Driftor</a>
+    <nav>
+      {% if config.tem_recurso("processos") %}<a href="/processos">Processos</a>{% endif %}
+      {% if config.tem_recurso("atividades") %}<a href="/atividades">Atividades</a>{% endif %}
+      {% if config.tem_recurso("analises") %}<a href="/analises">Análises</a>{% endif %}
+    </nav>
+    <span class="edicao" title="Variabilidade: edição definida pela variável EDICAO">Edição {{ config.nome_da_edicao() }}</span>
+  </header>
+  <main>
+    {% for aviso in avisos %}<div class="aviso">{{ aviso }}</div>{% endfor %}
+    {% block conteudo %}{% endblock %}
+  </main>
+</body>
+</html>

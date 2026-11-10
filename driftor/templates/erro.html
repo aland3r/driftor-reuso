@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block titulo %}Atenção{% endblock %}
+{% block conteudo %}
+<section class="cartao">
+  <h1>Não deu certo</h1>
+  <p>{{ mensagem }}</p>
+  <a class="botao" href="{{ voltar }}">Voltar</a>
+</section>
+{% endblock %}

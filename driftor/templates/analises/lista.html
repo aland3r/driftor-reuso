@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block titulo %}Análises{% endblock %}
+{% block conteudo %}
+<h1>Análises de desvios</h1>
+<p class="detalhe">Para gerar uma análise, abra um processo pronto e use “Gerar análise de desvios”.</p>
+<table>
+  <thead><tr><th>Nome</th><th>Processo</th><th>Série</th><th>δ</th><th>Desvios</th><th>Notas</th><th></th></tr></thead>
+  <tbody>
+  {% for a in analises %}
+    <tr>
+      <td><a href="/analises/{{ a.id }}">{{ a.nome }}</a></td>
+      <td>{{ a.processo }}</td>
+      <td>{{ a.atividade or "trace inteiro" }}</td>
+      <td>{{ a.delta }}</td>
+      <td>{{ a.total_drifts }}</td>
+      <td>{{ a.total_notas }}</td>
+      <td class="acoes">
+        <form method="post" action="/analises/{{ a.id }}/excluir" onsubmit="return confirm('Excluir a análise {{ a.nome }}?')">
+          <button class="botao perigo">Excluir</button>
+        </form>
+      </td>
+    </tr>
+  {% else %}
+    <tr><td colspan="7" class="vazio">Nenhuma análise ainda.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

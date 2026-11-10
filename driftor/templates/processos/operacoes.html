@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block titulo %}Operações{% endblock %}
+{% block conteudo %}
+<p class="trilha"><a href="/processos">Processos</a> / <a href="/processos/{{ processo.id }}">{{ processo.nome }}</a> / Operações</p>
+<h1>Mapear operações para atividades</h1>
+<p class="detalhe">Cada operação do log ({{ processo.arquivo }}) precisa de uma atividade do catálogo. Um nome novo entra no catálogo ao salvar.</p>
+
+<form method="post" action="/processos/{{ processo.id }}/operacoes">
+  <table>
+    <thead><tr><th>Operação no log</th><th>Ocorrências</th><th>Traces</th><th>Atividade</th></tr></thead>
+    <tbody>
+    {% for op in operacoes %}
+      <tr>
+        <td>{{ op.rotulo }}</td>
+        <td>{{ op.ocorrencias }}</td>
+        <td>{{ op.casos }}</td>
+        <td><input name="op::{{ op.rotulo }}" value="{{ op.atividade }}" list="catalogo" required></td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  <datalist id="catalogo">{% for a in catalogo %}<option value="{{ a.nome }}">{% endfor %}</datalist>
+  <button class="botao primario">Salvar mapeamento</button>
+</form>
+{% endblock %}

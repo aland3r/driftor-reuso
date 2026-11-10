@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block titulo %}Processos{% endblock %}
+{% block conteudo %}
+<h1>Processos</h1>
+
+<section class="cartao">
+  <h2>Novo processo</h2>
+  <form method="post" action="/processos" class="linha">
+    <input name="nome" placeholder="Nome do processo, ex.: Torno 02" required>
+    <button class="botao primario">Criar processo</button>
+  </form>
+</section>
+
+<table>
+  <thead><tr><th>Nome</th><th>Status</th><th>Log</th><th>Traces</th><th></th></tr></thead>
+  <tbody>
+  {% for p in processos %}
+    <tr>
+      <td><a href="/processos/{{ p.id }}">{{ p.nome }}</a></td>
+      <td><span class="status {{ p.status }}">{{ p.status }}</span></td>
+      <td>{{ p.arquivo or "—" }}</td>
+      <td>{{ p.total_traces }}</td>
+      <td class="acoes">
+        <form method="post" action="/processos/{{ p.id }}/excluir" onsubmit="return confirm('Excluir o processo {{ p.nome }}? As análises dele também serão apagadas.')">
+          <button class="botao perigo">Excluir</button>
+        </form>
+      </td>
+    </tr>
+  {% else %}
+    <tr><td colspan="5" class="vazio">Nenhum processo ainda. Crie o primeiro acima.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
