@@ -1,6 +1,6 @@
 # Os três padrões de projeto (Opção 02: 3 padrões, 2 exemplos de cada)
 
-Os dois integrantes precisam saber este arquivo inteiro. Para cada padrão: primeiro a ideia em poucas linhas, depois o desenho com as classes reais e, por fim, o código. Os links apontam para o commit `2a5e9c6`.
+Os dois integrantes precisam saber este arquivo inteiro. Para cada padrão: primeiro a ideia em poucas linhas, depois o desenho com as classes reais e, por fim, o código. Os links apontam para o commit `6448b13`.
 
 | Padrão | Família | Exemplo 1 | Exemplo 2 |
 |---|---|---|---|
@@ -39,7 +39,7 @@ classDiagram
 
 Lê o endereço do banco e as regras dos papéis uma vez só. Por isso todas as telas seguem as mesmas regras de acesso.
 
-📍 `driftor/config.py` · linhas 29–37 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/config.py#L29-L37)
+📍 `backend/driftor/config.py` · linhas 29–37 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/6448b13/backend/driftor/config.py#L29-L37)
 
 ```python
 class Configuracao:
@@ -57,7 +57,7 @@ class Configuracao:
 
 Abre uma conexão (pool) para o app inteiro. Todos os repositórios recebem o mesmo objeto.
 
-📍 `driftor/banco.py` · linhas 20–28 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/banco.py#L20-L28)
+📍 `backend/driftor/banco.py` · linhas 20–28 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/6448b13/backend/driftor/banco.py#L20-L28)
 
 ```python
 class BancoDeDados:
@@ -113,7 +113,7 @@ classDiagram
 
 O PM4Py quer uma tabela do pandas e devolve um dicionário `{(origem, destino): frequência}`. O app quer passar `Trace` e receber `Aresta`.
 
-📍 `driftor/mineracao/grafo.py` · linhas 18–48 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/mineracao/grafo.py#L18-L48)
+📍 `backend/driftor/mineracao/grafo.py` · linhas 18–48 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/6448b13/backend/driftor/mineracao/grafo.py#L18-L48)
 
 ```python
 class MineradorDeGrafo(ABC):
@@ -151,7 +151,7 @@ class Pm4pyMineradorAdapter(MineradorDeGrafo):
 
 Onde o cliente usa (só conhece a interface):
 
-📍 `driftor/processos/rotas.py` · linhas 46–46 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/processos/rotas.py#L46-L46)
+📍 `backend/driftor/processos/rotas.py` · linhas 46–46 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/6448b13/backend/driftor/processos/rotas.py#L46-L46)
 
 ```python
         grafo = Grafo.montar(traces, minerador.descobrir_arestas(traces))  # Adapter em uso
@@ -161,7 +161,7 @@ Onde o cliente usa (só conhece a interface):
 
 O ADWIN recebe um valor por vez em `update()` e liga a flag `drift_detected`. O app quer passar a série inteira e receber a lista de desvios.
 
-📍 `driftor/mineracao/detector.py` · linhas 16–36 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/mineracao/detector.py#L16-L36)
+📍 `backend/driftor/mineracao/detector.py` · linhas 16–36 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/6448b13/backend/driftor/mineracao/detector.py#L16-L36)
 
 ```python
 class DetectorDeDrift(ABC):
@@ -189,7 +189,7 @@ class RiverAdwinAdapter(DetectorDeDrift):
 
 Onde o cliente usa:
 
-📍 `driftor/analises/rotas.py` · linhas 49–49 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/analises/rotas.py#L49-L49)
+📍 `backend/driftor/analises/rotas.py` · linhas 49–49 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/6448b13/backend/driftor/analises/rotas.py#L49-L49)
 
 ```python
     analise.registrar_resultado(valores, detector.detectar(valores, delta))  # Adapter em uso
@@ -225,7 +225,7 @@ classDiagram
 
 ### 3.1 A base
 
-📍 `driftor/observador.py` · linhas 14–32 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/observador.py#L14-L32)
+📍 `backend/driftor/observador.py` · linhas 14–32 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/6448b13/backend/driftor/observador.py#L14-L32)
 
 ```python
 class Observador(ABC):
@@ -251,7 +251,7 @@ class Sujeito:
 
 ### 3.2 As inscrições (quem observa o quê)
 
-📍 `driftor/main.py` · linhas 37–41 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/main.py#L37-L41)
+📍 `backend/driftor/main.py` · linhas 36–40 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/6448b13/backend/driftor/main.py#L36-L40)
 
 ```python
 # OBSERVER: quem reage a cada evento é decidido aqui, não dentro de quem publica.
@@ -265,7 +265,7 @@ publicador_de_manutencao.inscrever(avisos_por_papel["gestor"])   # recebe "manut
 
 Sujeito: `publicador_de_analise`. Observadores: `AtualizadorDoProcesso` (o processo sobe na lista) e a caixa de avisos do gestor (o aviso amarelo no topo).
 
-📍 `driftor/analises/eventos.py` · linhas 12–22 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/analises/eventos.py#L12-L22)
+📍 `backend/driftor/analises/eventos.py` · linhas 12–22 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/6448b13/backend/driftor/analises/eventos.py#L12-L22)
 
 ```python
 publicador_de_analise = Sujeito()
@@ -283,7 +283,7 @@ class AtualizadorDoProcesso(Observador):
 
 Quem publica:
 
-📍 `driftor/analises/rotas.py` · linhas 52–55 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/analises/rotas.py#L52-L55)
+📍 `backend/driftor/analises/rotas.py` · linhas 52–55 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/6448b13/backend/driftor/analises/rotas.py#L52-L55)
 
 ```python
     publicador_de_analise.notificar("analise_concluida", {  # Observer em uso
@@ -296,7 +296,7 @@ Quem publica:
 
 Sujeito: `publicador_de_manutencao`. Observadores: as duas caixas de `AvisoNaTela`, uma por papel. A do técnico só aceita `manutencao_disparada`, e a do gestor aceita `manutencao_concluida`.
 
-📍 `driftor/observador.py` · linhas 35–58 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/observador.py#L35-L58)
+📍 `backend/driftor/observador.py` · linhas 35–58 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/6448b13/backend/driftor/observador.py#L35-L58)
 
 ```python
 class AvisoNaTela(Observador):
@@ -327,7 +327,7 @@ avisos_por_papel = {
 
 Quem publica, ao disparar (gestor) e ao concluir (técnico):
 
-📍 `driftor/manutencoes/rotas.py` · linhas 32–34 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/manutencoes/rotas.py#L32-L34)
+📍 `backend/driftor/manutencoes/rotas.py` · linhas 32–34 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/6448b13/backend/driftor/manutencoes/rotas.py#L32-L34)
 
 ```python
     publicador_de_manutencao.notificar("manutencao_disparada", {  # Observer: avisa o técnico
@@ -335,7 +335,7 @@ Quem publica, ao disparar (gestor) e ao concluir (técnico):
     })
 ```
 
-📍 `driftor/manutencoes/rotas.py` · linhas 54–56 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/manutencoes/rotas.py#L54-L56)
+📍 `backend/driftor/manutencoes/rotas.py` · linhas 54–56 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/6448b13/backend/driftor/manutencoes/rotas.py#L54-L56)
 
 ```python
     publicador_de_manutencao.notificar("manutencao_concluida", {  # Observer: avisa o gestor
@@ -347,7 +347,7 @@ Quem publica, ao disparar (gestor) e ao concluir (técnico):
 
 ## 4. As 13 classes principais
 
-Ficam em `driftor/dominio.py`, cada uma com atributos e métodos:
+Ficam em `backend/driftor/dominio.py`, cada uma com atributos e métodos:
 
 | Classe | Atributos principais | Métodos |
 |---|---|---|
@@ -381,7 +381,7 @@ Além delas: `Configuracao`, `BancoDeDados`, os quatro repositórios, `Repositor
 
 **Onde estão as regras** (o Singleton `Configuracao` guarda o dicionário):
 
-📍 `driftor/config.py` · linhas 13–26 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/config.py#L13-L26)
+📍 `backend/driftor/config.py` · linhas 13–26 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/6448b13/backend/driftor/config.py#L13-L26)
 
 ```python
 PAPEIS = {
@@ -402,7 +402,7 @@ PAPEIS = {
 
 **A entrada** grava o papel escolhido:
 
-📍 `driftor/acesso.py` · linhas 28–34 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/acesso.py#L28-L34)
+📍 `backend/driftor/acesso.py` · linhas 28–34 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/6448b13/backend/driftor/acesso.py#L28-L34)
 
 ```python
 @rotas.post("/entrar")
@@ -416,7 +416,7 @@ def entrar(papel: str = Form("")):
 
 **A trava** em cada rota (`dependencies=[Depends(exigir("..."))]`):
 
-📍 `driftor/telas.py` · linhas 48–59 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/telas.py#L48-L59)
+📍 `backend/driftor/telas.py` · linhas 49–60 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/6448b13/backend/driftor/telas.py#L49-L60)
 
 ```python
 def exigir(permissao: str):
@@ -435,7 +435,7 @@ def exigir(permissao: str):
 
 **O menu** só mostra o que o papel pode:
 
-📍 `driftor/templates/base.html` · linhas 25–31 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/templates/base.html#L25-L31)
+📍 `frontend/templates/base.html` · linhas 25–31 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/6448b13/frontend/templates/base.html#L25-L31)
 
 ```jinja
     <nav class="app-nav" aria-label="Principal">

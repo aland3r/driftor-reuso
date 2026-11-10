@@ -1,8 +1,15 @@
 # Roteiro da Emanuelle: Análise e Manutenção
 
-Prova de autoria da recuperação de Reuso (13/11). Os links apontam para o commit `2a5e9c6` do repositório `driftor-reuso`.
+Prova de autoria da recuperação de Reuso (13/11). Os links apontam para o commit `6448b13` do repositório `driftor-reuso`.
 
 ## Antes de começar: o mapa do código
+
+**Duas pastas no repositório:**
+
+| Pasta | O que tem | O professor olha? |
+|---|---|---|
+| `backend/driftor/` | classes, regras, SQL, padrões de projeto e rotas | sim, é aqui que está tudo da avaliação |
+| `frontend/` | `templates/` (HTML das telas) e `static/` (CSS) | não: só desenha a tela |
 
 O Driftor é **um programa só** (monólito) em Python. Cada CRUD é **uma pasta** com dois arquivos:
 
@@ -11,9 +18,9 @@ O Driftor é **um programa só** (monólito) em Python. Cada CRUD é **uma pasta
 | `rotas.py` | recebe o clique da tela e devolve a próxima tela | "onde está o Create/Read/Update/Delete?" |
 | `repositorio.py` | escreve o SQL no banco | "onde conecta com o banco?" |
 
-As regras ficam nas classes de `driftor/dominio.py`. As telas ficam em `driftor/templates/<pasta>/`.
+As regras ficam nas classes de `backend/driftor/dominio.py`. As telas ficam em `frontend/templates/<pasta>/`.
 
-**Meus dois CRUDs:** `driftor/analises/` (Análise) e `driftor/manutencoes/` (Manutenção).
+**Meus dois CRUDs:** `backend/driftor/analises/` (Análise) e `backend/driftor/manutencoes/` (Manutenção).
 **Minhas tabelas:** `analises`, `drifts` e `manutencoes`.
 
 ```mermaid
@@ -29,7 +36,7 @@ flowchart LR
 
 ## 1. As minhas tabelas
 
-📍 `driftor/schema.sql` · linhas 47–83 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/schema.sql#L47-L83)
+📍 `backend/driftor/schema.sql` · linhas 47–83 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/6448b13/backend/driftor/schema.sql#L47-L83)
 
 ```sql
 -- CRUD de Análise (Emanuelle)
@@ -99,7 +106,7 @@ sequenceDiagram
 
 > **Fala:** "No menu, clico em Análises. A tela lista as análises com o processo, a série e o total de desvios."
 
-📍 `driftor/analises/rotas.py` · linhas 23–26 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/analises/rotas.py#L23-L26)
+📍 `backend/driftor/analises/rotas.py` · linhas 23–26 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/6448b13/backend/driftor/analises/rotas.py#L23-L26)
 
 ```python
 # ---- Read: todas as análises
@@ -108,7 +115,7 @@ def listar(request: Request):
     return tela(request, "analises/lista.html", analises=RepositorioDeAnalises().listar_resumo())
 ```
 
-📍 `driftor/analises/repositorio.py` · linhas 31–39 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/analises/repositorio.py#L31-L39)
+📍 `backend/driftor/analises/repositorio.py` · linhas 31–39 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/6448b13/backend/driftor/analises/repositorio.py#L31-L39)
 
 ```python
     def listar_resumo(self, processo_id: str | None = None) -> list[dict]:
@@ -126,7 +133,7 @@ def listar(request: Request):
 
 > **Fala:** "Na página do processo Torno 02, escolho a série Duração de Machine_Operating, δ 0,002, tratamento Bruto, e clico em Gerar análise de desvios. A tela da análise abre com 9 desvios e o aviso amarelo no topo."
 
-📍 `driftor/analises/rotas.py` · linhas 29–56 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/analises/rotas.py#L29-L56)
+📍 `backend/driftor/analises/rotas.py` · linhas 29–56 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/6448b13/backend/driftor/analises/rotas.py#L29-L56)
 
 ```python
 # ---- Create: botão "Gerar análise de desvios" na página do processo
@@ -163,7 +170,7 @@ Em ordem: valida o processo e o δ, monta a série (uma duração por trace), ch
 
 O INSERT nas duas tabelas:
 
-📍 `driftor/analises/repositorio.py` · linhas 45–60 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/analises/repositorio.py#L45-L60)
+📍 `backend/driftor/analises/repositorio.py` · linhas 45–60 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/6448b13/backend/driftor/analises/repositorio.py#L45-L60)
 
 ```python
     # ---- Create
@@ -186,7 +193,7 @@ O INSERT nas duas tabelas:
 
 As regras da classe `Analise`:
 
-📍 `driftor/dominio.py` · linhas 281–320 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/dominio.py#L281-L320)
+📍 `backend/driftor/dominio.py` · linhas 281–320 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/6448b13/backend/driftor/dominio.py#L281-L320)
 
 ```python
 class Analise:
@@ -235,7 +242,7 @@ class Analise:
 
 > **Fala:** "O gráfico é a duração de Machine_Operating em cada trace, e cada linha vermelha é o início de um desvio. A tabela mostra a média antes e depois de cada desvio. Embaixo ficam o formulário de disparar manutenção e as manutenções desta análise."
 
-📍 `driftor/analises/rotas.py` · linhas 59–67 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/analises/rotas.py#L59-L67)
+📍 `backend/driftor/analises/rotas.py` · linhas 59–67 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/6448b13/backend/driftor/analises/rotas.py#L59-L67)
 
 ```python
 # ---- Read: detalhe com gráfico e desvios (o técnico também vê, sem editar)
@@ -251,7 +258,7 @@ def ver(request: Request, id: str):
 
 O `obter_ou_erro` vem da classe `RepositorioBase` (compactação). A análise já chega com os desvios:
 
-📍 `driftor/analises/repositorio.py` · linhas 17–28 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/analises/repositorio.py#L17-L28)
+📍 `backend/driftor/analises/repositorio.py` · linhas 17–28 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/6448b13/backend/driftor/analises/repositorio.py#L17-L28)
 
 ```python
     def criar_objeto(self, linha: dict) -> Analise:
@@ -272,7 +279,7 @@ O `obter_ou_erro` vem da classe `RepositorioBase` (compactação). A análise j�
 
 > **Fala:** "Troco o nome no campo do topo e clico em Renomear."
 
-📍 `driftor/analises/rotas.py` · linhas 70–77 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/analises/rotas.py#L70-L77)
+📍 `backend/driftor/analises/rotas.py` · linhas 70–77 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/6448b13/backend/driftor/analises/rotas.py#L70-L77)
 
 ```python
 # ---- Update: renomear
@@ -285,7 +292,7 @@ def renomear(id: str, nome: str = Form("")):
     return ir_para(f"/analises/{id}")
 ```
 
-📍 `driftor/analises/repositorio.py` · linhas 62–63 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/analises/repositorio.py#L62-L63)
+📍 `backend/driftor/analises/repositorio.py` · linhas 62–63 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/6448b13/backend/driftor/analises/repositorio.py#L62-L63)
 
 ```python
     # ---- Update
@@ -296,7 +303,7 @@ def renomear(id: str, nome: str = Form("")):
 
 > **Fala:** "Clico em Excluir análise e confirmo. Volto para o processo e a análise sumiu. Os desvios e as manutenções dela foram apagados junto, pelo `on delete cascade`."
 
-📍 `driftor/analises/rotas.py` · linhas 80–86 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/analises/rotas.py#L80-L86)
+📍 `backend/driftor/analises/rotas.py` · linhas 80–86 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/6448b13/backend/driftor/analises/rotas.py#L80-L86)
 
 ```python
 # ---- Delete
@@ -310,7 +317,7 @@ def excluir(id: str):
 
 O `repo.excluir` é herdado de `RepositorioBase`:
 
-📍 `driftor/repositorio_base.py` · linhas 45–47 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/repositorio_base.py#L45-L47)
+📍 `backend/driftor/repositorio_base.py` · linhas 45–47 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/6448b13/backend/driftor/repositorio_base.py#L45-L47)
 
 ```python
     # ---- Delete
@@ -344,7 +351,7 @@ sequenceDiagram
 
 > **Fala:** "Ainda como Gestor, na análise, escolho o Desvio 1, escrevo 'Verificar rolamento do eixo' e clico em Disparar manutenção. Ela aparece embaixo, em Manutenções desta análise, como pendente."
 
-📍 `driftor/manutencoes/rotas.py` · linhas 26–35 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/manutencoes/rotas.py#L26-L35)
+📍 `backend/driftor/manutencoes/rotas.py` · linhas 26–35 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/6448b13/backend/driftor/manutencoes/rotas.py#L26-L35)
 
 ```python
 # ---- Create: o gestor dispara a manutenção na tela da análise
@@ -361,7 +368,7 @@ def disparar(analise_id: str, drift_id: str = Form(""), descricao: str = Form(""
 
 A regra fica na classe `Manutencao`: o desvio precisa ser desta análise e a descrição não pode ser vazia.
 
-📍 `driftor/dominio.py` · linhas 325–344 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/dominio.py#L325-L344)
+📍 `backend/driftor/dominio.py` · linhas 325–344 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/6448b13/backend/driftor/dominio.py#L325-L344)
 
 ```python
 class Manutencao:
@@ -386,7 +393,7 @@ class Manutencao:
         return Manutencao(novo_id(), analise.id, drift_id or None, descricao)
 ```
 
-📍 `driftor/manutencoes/repositorio.py` · linhas 41–48 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/manutencoes/repositorio.py#L41-L48)
+📍 `backend/driftor/manutencoes/repositorio.py` · linhas 41–48 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/6448b13/backend/driftor/manutencoes/repositorio.py#L41-L48)
 
 ```python
     # ---- Create
@@ -403,7 +410,7 @@ class Manutencao:
 
 > **Fala:** "Clico em Trocar perfil e entro como Técnico de manutenção. O menu agora só tem Manutenções, e o aviso 'Nova manutenção: Verificar rolamento do eixo' aparece no topo. A lista mostra a manutenção pendente."
 
-📍 `driftor/manutencoes/rotas.py` · linhas 20–23 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/manutencoes/rotas.py#L20-L23)
+📍 `backend/driftor/manutencoes/rotas.py` · linhas 20–23 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/6448b13/backend/driftor/manutencoes/rotas.py#L20-L23)
 
 ```python
 # ---- Read: lista (gestor e técnico)
@@ -412,7 +419,7 @@ def listar(request: Request):
     return tela(request, "manutencoes/lista.html", manutencoes=RepositorioDeManutencoes().listar_resumo())
 ```
 
-📍 `driftor/manutencoes/repositorio.py` · linhas 23–36 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/manutencoes/repositorio.py#L23-L36)
+📍 `backend/driftor/manutencoes/repositorio.py` · linhas 23–36 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/6448b13/backend/driftor/manutencoes/repositorio.py#L23-L36)
 
 ```python
     # ---- Read: a lista com o nome da análise, do processo e o número do desvio
@@ -433,7 +440,7 @@ def listar(request: Request):
 
 > **Fala:** "Clico em Executar. A tela mostra o desvio que motivou a manutenção e o link para a análise de origem."
 
-📍 `driftor/manutencoes/rotas.py` · linhas 38–44 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/manutencoes/rotas.py#L38-L44)
+📍 `backend/driftor/manutencoes/rotas.py` · linhas 38–44 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/6448b13/backend/driftor/manutencoes/rotas.py#L38-L44)
 
 ```python
 # ---- Read: detalhe (gestor e técnico)
@@ -449,7 +456,7 @@ def ver(request: Request, id: str):
 
 > **Fala:** "Escrevo 'Rolamento trocado e folga ajustada' e clico em Concluir manutenção. Na lista, o status muda para concluída."
 
-📍 `driftor/manutencoes/rotas.py` · linhas 47–57 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/manutencoes/rotas.py#L47-L57)
+📍 `backend/driftor/manutencoes/rotas.py` · linhas 47–57 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/6448b13/backend/driftor/manutencoes/rotas.py#L47-L57)
 
 ```python
 # ---- Update pelo técnico: concluir com observações
@@ -465,7 +472,7 @@ def concluir(id: str, observacoes: str = Form("")):
     return ir_para("/manutencoes")
 ```
 
-📍 `driftor/dominio.py` · linhas 357–364 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/dominio.py#L357-L364)
+📍 `backend/driftor/dominio.py` · linhas 357–364 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/6448b13/backend/driftor/dominio.py#L357-L364)
 
 ```python
     def concluir(self, observacoes: str) -> None:
@@ -478,7 +485,7 @@ def concluir(id: str, observacoes: str = Form("")):
         self.observacoes = observacoes
 ```
 
-📍 `driftor/manutencoes/repositorio.py` · linhas 50–58 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/manutencoes/repositorio.py#L50-L58)
+📍 `backend/driftor/manutencoes/repositorio.py` · linhas 50–58 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/6448b13/backend/driftor/manutencoes/repositorio.py#L50-L58)
 
 ```python
     # ---- Update (o gestor edita a descrição; o técnico conclui com observações)
@@ -494,7 +501,7 @@ def concluir(id: str, observacoes: str = Form("")):
 
 O gestor também tem um Update: ele corrige a descrição enquanto a manutenção está pendente.
 
-📍 `driftor/manutencoes/rotas.py` · linhas 60–67 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/manutencoes/rotas.py#L60-L67)
+📍 `backend/driftor/manutencoes/rotas.py` · linhas 60–67 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/6448b13/backend/driftor/manutencoes/rotas.py#L60-L67)
 
 ```python
 # ---- Update pelo gestor: corrigir a descrição enquanto está pendente
@@ -511,7 +518,7 @@ def editar(id: str, descricao: str = Form("")):
 
 > **Fala:** "Volto como Gestor. O aviso 'Manutenção concluída pelo técnico' aparece no topo. Em Manutenções, abro uma manutenção e clico em Excluir. O técnico não tem esse botão."
 
-📍 `driftor/manutencoes/rotas.py` · linhas 70–74 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/manutencoes/rotas.py#L70-L74)
+📍 `backend/driftor/manutencoes/rotas.py` · linhas 70–74 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/6448b13/backend/driftor/manutencoes/rotas.py#L70-L74)
 
 ```python
 # ---- Delete pelo gestor
@@ -532,7 +539,7 @@ A mesma tela de manutenção muda conforme o papel. Cada rota diz qual permissã
 | Concluir com observações | `concluir_manutencao` | não | sim |
 | Ver a análise de origem | `ver_analise` | sim | sim, sem renomear, excluir nem disparar |
 
-📍 `driftor/config.py` · linhas 13–26 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/config.py#L13-L26)
+📍 `backend/driftor/config.py` · linhas 13–26 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/6448b13/backend/driftor/config.py#L13-L26)
 
 ```python
 PAPEIS = {
@@ -565,9 +572,9 @@ Todos os padrões estão explicados em `defesa/padroes-de-projeto.md`. Estes apa
 
 ## 6. Perguntas prováveis
 
-**Onde está o Create da manutenção?** Em `driftor/manutencoes/rotas.py`, na função `disparar`. Ela usa a regra `Manutencao.disparar` (em `dominio.py`) e grava pelo `RepositorioDeManutencoes.inserir`.
+**Onde está o Create da manutenção?** Em `backend/driftor/manutencoes/rotas.py`, na função `disparar`. Ela usa a regra `Manutencao.disparar` (em `dominio.py`) e grava pelo `RepositorioDeManutencoes.inserir`.
 
-**Onde conecta com o banco?** Em `driftor/banco.py`, na classe `BancoDeDados`. Os repositórios só chamam `consultar` e `executar` com o SQL.
+**Onde conecta com o banco?** Em `backend/driftor/banco.py`, na classe `BancoDeDados`. Os repositórios só chamam `consultar` e `executar` com o SQL.
 
 **Por que o `BancoDeDados` é um Singleton?** Para o app inteiro usar uma conexão só (um pool). Toda vez que alguém escreve `BancoDeDados()`, o `__new__` devolve o mesmo objeto.
 
@@ -575,9 +582,9 @@ Todos os padrões estão explicados em `defesa/padroes-de-projeto.md`. Estes apa
 
 **Como o técnico fica sabendo da manutenção?** Pelo Observer. Quando o gestor dispara, a rota chama `publicador_de_manutencao.notificar("manutencao_disparada", ...)`. Em `main.py`, a caixa de avisos do técnico está inscrita nesse publicador. Ela guarda a mensagem, e a próxima tela do técnico mostra o aviso no topo. Quem dispara não sabe quem vai receber.
 
-**Por que o gestor não recebe o aviso de "Nova manutenção"?** Cada `AvisoNaTela` só aceita os eventos do seu papel: a do técnico aceita `manutencao_disparada`, e a do gestor aceita `analise_concluida` e `manutencao_concluida`. Está em `driftor/observador.py`, no `avisos_por_papel`.
+**Por que o gestor não recebe o aviso de "Nova manutenção"?** Cada `AvisoNaTela` só aceita os eventos do seu papel: a do técnico aceita `manutencao_disparada`, e a do gestor aceita `analise_concluida` e `manutencao_concluida`. Está em `backend/driftor/observador.py`, no `avisos_por_papel`.
 
-**Onde está a variabilidade?** No papel. `PAPEIS`, em `driftor/config.py`, lista as permissões do Gestor e do Técnico. Cada rota tem `exigir("...")`, de `driftor/telas.py`. Se o técnico tentar abrir `/analises` pelo endereço, recebe 403.
+**Onde está a variabilidade?** No papel. `PAPEIS`, em `backend/driftor/config.py`, lista as permissões do Gestor e do Técnico. Cada rota tem `exigir("...")`, de `backend/driftor/telas.py`. Se o técnico tentar abrir `/analises` pelo endereço, recebe 403.
 
 **O que acontece com as manutenções se eu excluir a análise?** O banco apaga os desvios e as manutenções junto, por causa do `on delete cascade`.
 
