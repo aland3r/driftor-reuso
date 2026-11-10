@@ -1,5 +1,7 @@
 # Driftor (Reuso)
 
+**🌐 Site em produção: [driftor-reuso.fly.dev](https://driftor-reuso.fly.dev)**. Entre como Gestor ou Técnico de manutenção, sem senha. Cada commit na `main` publica uma nova versão automaticamente.
+
 Versão simplificada do Driftor para a disciplina de **Desenvolvimento Orientado a Reuso**. É um monólito em Python: o mesmo programa tem as telas (HTML com Jinja), as regras e o acesso ao banco (Postgres no Supabase, schema `driftor_reuso`). Não há login de verdade: a entrada só escolhe o perfil (Gestor ou Técnico de manutenção).
 
 **Grupo:** Alander Menezes Arantes de Ávila e Emanuelle Skolut Jose.
