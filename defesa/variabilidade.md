@@ -1,6 +1,6 @@
 # Variabilidade
 
-Links fixos no commit `dfa0e7f`.
+Links fixos no commit `420f1db`.
 
 **Exemplo escolhido: variabilidade por papel.** O mesmo código atende dois perfis, Gestor e Técnico de manutenção. A entrada é simulada (sem senha): a pessoa escolhe o perfil, o papel vai para um cookie, e cada rota confere se aquele papel tem a permissão que ela exige.
 
@@ -16,7 +16,7 @@ Links fixos no commit `dfa0e7f`.
 
 O dicionário `PAPEIS` lista as permissões de cada papel. Mudar o que um papel pode é mudar só este dicionário.
 
-📍 `backend/driftor/config.py` · linhas 13–26 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/config.py#L13-L26)
+📍 `backend/driftor/config.py` · linhas 13–26 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/config.py#L13-L26)
 
 ```python
 PAPEIS = {
@@ -37,7 +37,7 @@ PAPEIS = {
 
 A pergunta "este papel tem esta permissão?" fica no Singleton `Configuracao`:
 
-📍 `backend/driftor/config.py` · linhas 45–47 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/config.py#L45-L47)
+📍 `backend/driftor/config.py` · linhas 45–47 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/config.py#L45-L47)
 
 ```python
     def pode(self, papel: str | None, permissao: str) -> bool:
@@ -47,7 +47,7 @@ A pergunta "este papel tem esta permissão?" fica no Singleton `Configuracao`:
 
 ## 2. Onde o papel é escolhido
 
-📍 `backend/driftor/acesso.py` · linhas 28–34 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/acesso.py#L28-L34)
+📍 `backend/driftor/acesso.py` · linhas 28–34 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/acesso.py#L28-L34)
 
 ```python
 @rotas.post("/entrar")
@@ -59,7 +59,7 @@ def entrar(papel: str = Form("")):
     return resposta
 ```
 
-📍 `backend/driftor/telas.py` · linhas 28–30 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/telas.py#L28-L30)
+📍 `backend/driftor/telas.py` · linhas 28–30 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/telas.py#L28-L30)
 
 ```python
 def papel_atual(request: Request) -> str | None:
@@ -71,7 +71,7 @@ def papel_atual(request: Request) -> str | None:
 
 A função `exigir` vira uma dependência da rota. Sem papel, manda para a entrada; com um papel sem permissão, devolve 403.
 
-📍 `backend/driftor/telas.py` · linhas 49–60 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/telas.py#L49-L60)
+📍 `backend/driftor/telas.py` · linhas 49–60 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/telas.py#L49-L60)
 
 ```python
 def exigir(permissao: str):
@@ -92,16 +92,16 @@ Uso nas rotas:
 
 | Onde | Permissão |
 |---|---|
-| [`rotas.py:15`](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/processos/rotas.py#L15) | `processos`, no roteador inteiro |
-| [`rotas.py:11`](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/atividades/rotas.py#L11) | `atividades`, no roteador inteiro |
-| [`rotas.py:16`](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/analises/rotas.py#L16) | `analises` (lista, criar, renomear, excluir) |
-| [`rotas.py:60`](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/analises/rotas.py#L60) | `ver_analise` (detalhe) |
-| [`rotas.py:27`](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/manutencoes/rotas.py#L27) | `disparar_manutencao` (criar, editar, excluir) |
-| [`rotas.py:48`](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/manutencoes/rotas.py#L48) | `concluir_manutencao` (concluir) |
+| [`rotas.py:15`](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/processos/rotas.py#L15) | `processos`, no roteador inteiro |
+| [`rotas.py:11`](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/atividades/rotas.py#L11) | `atividades`, no roteador inteiro |
+| [`rotas.py:16`](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/analises/rotas.py#L16) | `analises` (lista, criar, renomear, excluir) |
+| [`rotas.py:60`](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/analises/rotas.py#L60) | `ver_analise` (detalhe) |
+| [`rotas.py:27`](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/manutencoes/rotas.py#L27) | `disparar_manutencao` (criar, editar, excluir) |
+| [`rotas.py:48`](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/manutencoes/rotas.py#L48) | `concluir_manutencao` (concluir) |
 
 A resposta 403:
 
-📍 `backend/driftor/main.py` · linhas 67–71 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/main.py#L67-L71)
+📍 `backend/driftor/main.py` · linhas 67–71 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/main.py#L67-L71)
 
 ```python
 @app.exception_handler(SemPermissao)
@@ -115,7 +115,7 @@ def sem_permissao(request: Request, _erro: SemPermissao):
 
 Cada papel tem a sua caixa de avisos, e cada caixa só aceita os eventos do papel:
 
-📍 `backend/driftor/observador.py` · linhas 55–58 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/observador.py#L55-L58)
+📍 `backend/driftor/observador.py` · linhas 55–58 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/observador.py#L55-L58)
 
 ```python
 avisos_por_papel = {
@@ -126,7 +126,7 @@ avisos_por_papel = {
 
 ## 5. Teste que prova
 
-📍 `tests/test_cruds.py` · linhas 71–85 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/tests/test_cruds.py#L71-L85)
+📍 `tests/test_cruds.py` · linhas 71–85 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/420f1db/tests/test_cruds.py#L71-L85)
 
 ```python
 def test_variabilidade_por_papel(cliente):

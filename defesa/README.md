@@ -1,6 +1,6 @@
 # Defesa: mapa rápido
 
-Driftor (Reuso). Monólito em Python (FastAPI) com Postgres. Links fixos no commit `dfa0e7f`.
+Driftor (Reuso). Monólito em Python (FastAPI) com Postgres. Links fixos no commit `420f1db`.
 
 | Tema | Arquivo |
 |---|---|
@@ -9,6 +9,7 @@ Driftor (Reuso). Monólito em Python (FastAPI) com Postgres. Links fixos no comm
 | A variabilidade (Gestor e Técnico) | [variabilidade.md](variabilidade.md) |
 | As classes e as tabelas | [classes-e-tabelas.md](classes-e-tabelas.md) |
 | Compactação de código (roteiro do vídeo) | [roteiro-video-compactacao.md](roteiro-video-compactacao.md) |
+| Guia de estudo completo (PDF) | [guia-de-estudo.pdf](guia-de-estudo.pdf) |
 
 ## Estrutura do código
 
@@ -39,13 +40,13 @@ Caminho de toda operação: **botão → `rotas.py` → classe de `dominio.py` �
 | Pergunta | Resposta |
 |---|---|
 | Onde está o Create/Read/Update/Delete de X? | `<pasta>/rotas.py`, marcado com `# ---- Create`, `# ---- Read`…; o SQL fica em `<pasta>/repositorio.py`. Ver [cruds.md](cruds.md). |
-| Onde conecta no banco? | `BancoDeDados`, [`banco.py:20`](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/banco.py#L20) |
-| Onde estão as tabelas? | [`schema.sql:5`](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/schema.sql#L5) |
-| Onde estão as classes? | [`dominio.py:33`](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/dominio.py#L33) em diante |
-| Singleton 1 e 2 | `Configuracao` [`config.py:29`](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/config.py#L29), `BancoDeDados` [`banco.py:20`](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/banco.py#L20) |
-| Adapter 1 e 2 | `Pm4pyMineradorAdapter` [`grafo.py:25`](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/mineracao/grafo.py#L25), `RiverAdwinAdapter` [`detector.py:23`](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/mineracao/detector.py#L23) |
-| Observer: base e inscrições | [`observador.py:14`](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/observador.py#L14), [`main.py:36`](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/main.py#L36) |
-| Observer 1 e 2 | [`rotas.py:52`](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/analises/rotas.py#L52), [`rotas.py:32`](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/manutencoes/rotas.py#L32) |
-| Variabilidade | `PAPEIS` [`config.py:13`](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/config.py#L13), `exigir` [`telas.py:49`](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/telas.py#L49) |
-| Compactação | `RepositorioBase` [`repositorio_base.py:18`](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/repositorio_base.py#L18); antes `1f77872`, depois `c13a62b` |
+| Onde conecta no banco? | `BancoDeDados`, [`banco.py:20`](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/banco.py#L20) |
+| Onde estão as tabelas? | [`schema.sql:5`](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/schema.sql#L5) |
+| Onde estão as classes? | [`dominio.py:33`](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/dominio.py#L33) em diante |
+| Singleton 1 e 2 | `Configuracao` [`config.py:29`](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/config.py#L29), `BancoDeDados` [`banco.py:20`](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/banco.py#L20) |
+| Adapter 1 e 2 | `Pm4pyMineradorAdapter` [`grafo.py:25`](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/mineracao/grafo.py#L25), `RiverAdwinAdapter` [`detector.py:23`](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/mineracao/detector.py#L23) |
+| Observer: base e inscrições | [`observador.py:14`](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/observador.py#L14), [`main.py:36`](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/main.py#L36) |
+| Observer 1 e 2 | [`rotas.py:52`](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/analises/rotas.py#L52), [`rotas.py:32`](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/manutencoes/rotas.py#L32) |
+| Variabilidade | `PAPEIS` [`config.py:13`](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/config.py#L13), `exigir` [`telas.py:49`](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/telas.py#L49) |
+| Compactação | `RepositorioBase` [`repositorio_base.py:18`](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/repositorio_base.py#L18); antes `1f77872`, depois `c13a62b` |
 | Testes | `tests/test_cruds.py` e `tests/test_fluxo_alfa.py` (9 testes) |

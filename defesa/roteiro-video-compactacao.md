@@ -20,7 +20,7 @@ Abrir lado a lado `driftor/atividades/repositorio.py` e `driftor/notas/repositor
 
 > **Fala:** "Criamos a classe `RepositorioBase`. Cada repositório só diz a sua tabela, as suas colunas e como transformar uma linha do banco em objeto. Listar, obter, obter-ou-erro e excluir são herdados."
 
-📍 `backend/driftor/repositorio_base.py` · linhas 18–47 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/repositorio_base.py#L18-L47)
+📍 `backend/driftor/repositorio_base.py` · linhas 18–47 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/repositorio_base.py#L18-L47)
 
 ```python
 class RepositorioBase(Generic[T]):
@@ -59,7 +59,7 @@ class RepositorioBase(Generic[T]):
 
 > **Fala:** "O repositório de atividades agora só declara a tabela e as colunas. O `obter` e o `listar` sumiram daqui, porque vêm da base."
 
-📍 `backend/driftor/atividades/repositorio.py` · linhas 11–19 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/atividades/repositorio.py#L11-L19)
+📍 `backend/driftor/atividades/repositorio.py` · linhas 11–19 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/atividades/repositorio.py#L11-L19)
 
 ```python
 class RepositorioDeAtividades(RepositorioBase[Atividade]):
@@ -77,7 +77,7 @@ class RepositorioDeAtividades(RepositorioBase[Atividade]):
 
 > **Fala:** "O mesmo nas telas: o botão de excluir, o campo de renomear e a linha vazia viraram macros em `_componentes.html`. Cada tela importa e chama a macro numa linha."
 
-📍 `frontend/templates/_componentes.html` · linhas 4–8 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/frontend/templates/_componentes.html#L4-L8)
+📍 `frontend/templates/_componentes.html` · linhas 4–8 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/420f1db/frontend/templates/_componentes.html#L4-L8)
 
 ```jinja
 {% macro botao_excluir(url, pergunta, rotulo="Excluir") %}
@@ -89,7 +89,7 @@ class RepositorioDeAtividades(RepositorioBase[Atividade]):
 
 Mostrar uma tela usando a macro:
 
-📍 `frontend/templates/atividades/lista.html` · linhas 23–23 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/frontend/templates/atividades/lista.html#L23-L23)
+📍 `frontend/templates/atividades/lista.html` · linhas 23–23 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/420f1db/frontend/templates/atividades/lista.html#L23-L23)
 
 ```jinja
         <td class="acoes"><a class="btn btn-sm" href="/atividades/{{ a.id }}/editar">Editar</a>{{ botao_excluir("/atividades/" ~ a.id ~ "/excluir", "Excluir a atividade " ~ a.nome ~ "?") }}</td>
@@ -99,7 +99,7 @@ Mostrar uma tela usando a macro:
 
 > **Fala:** "Rodamos os testes depois da compactação e todos continuam passando. A prova de que a técnica funciona veio depois: o CRUD de Manutenção foi criado já herdando de `RepositorioBase`, e o repositório dele só tem a tabela, as colunas e o SQL próprio."
 
-📍 `backend/driftor/manutencoes/repositorio.py` · linhas 9–15 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/manutencoes/repositorio.py#L9-L15)
+📍 `backend/driftor/manutencoes/repositorio.py` · linhas 9–15 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/manutencoes/repositorio.py#L9-L15)
 
 ```python
 class RepositorioDeManutencoes(RepositorioBase[Manutencao]):

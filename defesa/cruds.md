@@ -1,6 +1,6 @@
 # CRUDs
 
-Links fixos no commit `dfa0e7f`. Todo CRUD segue o mesmo caminho:
+Links fixos no commit `420f1db`. Todo CRUD segue o mesmo caminho:
 
 ```
 botão (formulário) → rota em rotas.py → classe de dominio.py (regra) → repositorio.py (SQL) → BancoDeDados → Postgres
@@ -19,7 +19,7 @@ Em cada pasta: `rotas.py` recebe a requisição e `repositorio.py` tem o SQL. As
 
 **O que vem de `RepositorioBase` (herdado por todos):** `listar`, `obter`, `obter_ou_erro` e `excluir`. Por isso alguns Read e Delete não têm SQL no repositório do próprio CRUD.
 
-📍 `backend/driftor/repositorio_base.py` · linhas 30–47 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/repositorio_base.py#L30-L47)
+📍 `backend/driftor/repositorio_base.py` · linhas 30–47 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/repositorio_base.py#L30-L47)
 
 ```python
     # ---- Read
@@ -59,7 +59,7 @@ Em cada pasta: `rotas.py` recebe a requisição e `repositorio.py` tem o SQL. As
 
 ### Create
 
-📍 `backend/driftor/processos/rotas.py` · linhas 28–33 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/processos/rotas.py#L28-L33)
+📍 `backend/driftor/processos/rotas.py` · linhas 28–33 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/processos/rotas.py#L28-L33)
 
 ```python
 # ---- Create: só o nome; o log vem depois, na página do processo
@@ -70,7 +70,7 @@ def criar(nome: str = Form("")):
     return ir_para(f"/processos/{processo.id}")
 ```
 
-📍 `backend/driftor/processos/repositorio.py` · linhas 19–23 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/processos/repositorio.py#L19-L23)
+📍 `backend/driftor/processos/repositorio.py` · linhas 19–23 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/processos/repositorio.py#L19-L23)
 
 ```python
     # ---- Create
@@ -82,7 +82,7 @@ def criar(nome: str = Form("")):
 
 ### Read
 
-📍 `backend/driftor/processos/rotas.py` · linhas 22–25 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/processos/rotas.py#L22-L25)
+📍 `backend/driftor/processos/rotas.py` · linhas 22–25 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/processos/rotas.py#L22-L25)
 
 ```python
 # ---- Read: lista de processos (tela inicial)
@@ -91,7 +91,7 @@ def listar(request: Request):
     return tela(request, "processos/lista.html", processos=RepositorioDeProcessos().listar())
 ```
 
-📍 `backend/driftor/processos/rotas.py` · linhas 36–51 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/processos/rotas.py#L36-L51)
+📍 `backend/driftor/processos/rotas.py` · linhas 36–51 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/processos/rotas.py#L36-L51)
 
 ```python
 # ---- Read: detalhe do processo (grafo, variantes e análises)
@@ -114,7 +114,7 @@ def ver(request: Request, id: str, minerador: MineradorDeGrafo = Depends(minerad
 
 ### Update
 
-📍 `backend/driftor/processos/rotas.py` · linhas 54–62 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/processos/rotas.py#L54-L62)
+📍 `backend/driftor/processos/rotas.py` · linhas 54–62 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/processos/rotas.py#L54-L62)
 
 ```python
 # ---- Update: carregar o log de eventos no processo
@@ -128,7 +128,7 @@ async def carregar_log(id: str, arquivo: UploadFile = File(...)):
     return ir_para(f"/processos/{id}/operacoes")
 ```
 
-📍 `backend/driftor/processos/rotas.py` · linhas 77–94 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/processos/rotas.py#L77-L94)
+📍 `backend/driftor/processos/rotas.py` · linhas 77–94 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/processos/rotas.py#L77-L94)
 
 ```python
 @rotas.post("/processos/{id}/operacoes")
@@ -151,7 +151,7 @@ async def salvar_operacoes(request: Request, id: str):
     return ir_para(f"/processos/{id}")
 ```
 
-📍 `backend/driftor/processos/rotas.py` · linhas 97–104 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/processos/rotas.py#L97-L104)
+📍 `backend/driftor/processos/rotas.py` · linhas 97–104 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/processos/rotas.py#L97-L104)
 
 ```python
 # ---- Update: renomear
@@ -164,7 +164,7 @@ def renomear(id: str, nome: str = Form("")):
     return ir_para(f"/processos/{id}")
 ```
 
-📍 `backend/driftor/processos/repositorio.py` · linhas 25–33 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/processos/repositorio.py#L25-L33)
+📍 `backend/driftor/processos/repositorio.py` · linhas 25–33 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/processos/repositorio.py#L25-L33)
 
 ```python
     # ---- Update
@@ -182,7 +182,7 @@ def renomear(id: str, nome: str = Form("")):
 
 `on delete cascade`: eventos, operações e análises do processo saem junto.
 
-📍 `backend/driftor/processos/rotas.py` · linhas 107–111 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/processos/rotas.py#L107-L111)
+📍 `backend/driftor/processos/rotas.py` · linhas 107–111 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/processos/rotas.py#L107-L111)
 
 ```python
 # ---- Delete
@@ -206,7 +206,7 @@ def excluir(id: str):
 
 ### Create
 
-📍 `backend/driftor/atividades/rotas.py` · linhas 20–24 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/atividades/rotas.py#L20-L24)
+📍 `backend/driftor/atividades/rotas.py` · linhas 20–24 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/atividades/rotas.py#L20-L24)
 
 ```python
 # ---- Create
@@ -216,7 +216,7 @@ def criar(nome: str = Form(""), descricao: str = Form("")):
     return ir_para("/atividades")
 ```
 
-📍 `backend/driftor/atividades/repositorio.py` · linhas 28–36 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/atividades/repositorio.py#L28-L36)
+📍 `backend/driftor/atividades/repositorio.py` · linhas 28–36 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/atividades/repositorio.py#L28-L36)
 
 ```python
     # ---- Create
@@ -232,7 +232,7 @@ def criar(nome: str = Form(""), descricao: str = Form("")):
 
 ### Read
 
-📍 `backend/driftor/atividades/rotas.py` · linhas 14–17 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/atividades/rotas.py#L14-L17)
+📍 `backend/driftor/atividades/rotas.py` · linhas 14–17 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/atividades/rotas.py#L14-L17)
 
 ```python
 # ---- Read
@@ -243,7 +243,7 @@ def listar(request: Request):
 
 ### Update
 
-📍 `backend/driftor/atividades/rotas.py` · linhas 34–40 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/atividades/rotas.py#L34-L40)
+📍 `backend/driftor/atividades/rotas.py` · linhas 34–40 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/atividades/rotas.py#L34-L40)
 
 ```python
 @rotas.post("/atividades/{id}")
@@ -255,7 +255,7 @@ def salvar(id: str, nome: str = Form(""), descricao: str = Form("")):
     return ir_para("/atividades")
 ```
 
-📍 `backend/driftor/atividades/repositorio.py` · linhas 38–46 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/atividades/repositorio.py#L38-L46)
+📍 `backend/driftor/atividades/repositorio.py` · linhas 38–46 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/atividades/repositorio.py#L38-L46)
 
 ```python
     # ---- Update
@@ -273,7 +273,7 @@ def salvar(id: str, nome: str = Form(""), descricao: str = Form("")):
 
 `on delete restrict`: o banco recusa excluir uma atividade que algum processo usa, e o repositório transforma o erro em mensagem.
 
-📍 `backend/driftor/atividades/rotas.py` · linhas 43–47 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/atividades/rotas.py#L43-L47)
+📍 `backend/driftor/atividades/rotas.py` · linhas 43–47 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/atividades/rotas.py#L43-L47)
 
 ```python
 # ---- Delete
@@ -283,7 +283,7 @@ def excluir(id: str):
     return ir_para("/atividades")
 ```
 
-📍 `backend/driftor/atividades/repositorio.py` · linhas 48–53 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/atividades/repositorio.py#L48-L53)
+📍 `backend/driftor/atividades/repositorio.py` · linhas 48–53 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/atividades/repositorio.py#L48-L53)
 
 ```python
     # ---- Delete (o banco recusa se algum processo usa a atividade: on delete restrict)
@@ -309,7 +309,7 @@ def excluir(id: str):
 
 ### Create
 
-📍 `backend/driftor/analises/rotas.py` · linhas 29–56 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/analises/rotas.py#L29-L56)
+📍 `backend/driftor/analises/rotas.py` · linhas 29–56 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/analises/rotas.py#L29-L56)
 
 ```python
 # ---- Create: botão "Gerar análise de desvios" na página do processo
@@ -342,7 +342,7 @@ def criar(
     return ir_para(f"/analises/{analise.id}")
 ```
 
-📍 `backend/driftor/analises/repositorio.py` · linhas 45–60 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/analises/repositorio.py#L45-L60)
+📍 `backend/driftor/analises/repositorio.py` · linhas 45–60 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/analises/repositorio.py#L45-L60)
 
 ```python
     # ---- Create
@@ -365,7 +365,7 @@ def criar(
 
 ### Read
 
-📍 `backend/driftor/analises/rotas.py` · linhas 23–26 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/analises/rotas.py#L23-L26)
+📍 `backend/driftor/analises/rotas.py` · linhas 23–26 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/analises/rotas.py#L23-L26)
 
 ```python
 # ---- Read: todas as análises
@@ -374,7 +374,7 @@ def listar(request: Request):
     return tela(request, "analises/lista.html", analises=RepositorioDeAnalises().listar_resumo())
 ```
 
-📍 `backend/driftor/analises/repositorio.py` · linhas 30–39 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/analises/repositorio.py#L30-L39)
+📍 `backend/driftor/analises/repositorio.py` · linhas 30–39 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/analises/repositorio.py#L30-L39)
 
 ```python
     # ---- Read
@@ -389,7 +389,7 @@ def listar(request: Request):
         )
 ```
 
-📍 `backend/driftor/analises/rotas.py` · linhas 59–67 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/analises/rotas.py#L59-L67)
+📍 `backend/driftor/analises/rotas.py` · linhas 59–67 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/analises/rotas.py#L59-L67)
 
 ```python
 # ---- Read: detalhe com gráfico e desvios (o técnico também vê, sem editar)
@@ -405,7 +405,7 @@ def ver(request: Request, id: str):
 
 ### Update
 
-📍 `backend/driftor/analises/rotas.py` · linhas 70–77 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/analises/rotas.py#L70-L77)
+📍 `backend/driftor/analises/rotas.py` · linhas 70–77 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/analises/rotas.py#L70-L77)
 
 ```python
 # ---- Update: renomear
@@ -418,7 +418,7 @@ def renomear(id: str, nome: str = Form("")):
     return ir_para(f"/analises/{id}")
 ```
 
-📍 `backend/driftor/analises/repositorio.py` · linhas 62–64 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/analises/repositorio.py#L62-L64)
+📍 `backend/driftor/analises/repositorio.py` · linhas 62–64 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/analises/repositorio.py#L62-L64)
 
 ```python
     # ---- Update
@@ -430,7 +430,7 @@ def renomear(id: str, nome: str = Form("")):
 
 `on delete cascade`: os drifts e as manutenções da análise saem junto.
 
-📍 `backend/driftor/analises/rotas.py` · linhas 80–86 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/analises/rotas.py#L80-L86)
+📍 `backend/driftor/analises/rotas.py` · linhas 80–86 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/analises/rotas.py#L80-L86)
 
 ```python
 # ---- Delete
@@ -458,7 +458,7 @@ def excluir(id: str):
 
 ### Create
 
-📍 `backend/driftor/manutencoes/rotas.py` · linhas 26–35 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/manutencoes/rotas.py#L26-L35)
+📍 `backend/driftor/manutencoes/rotas.py` · linhas 26–35 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/manutencoes/rotas.py#L26-L35)
 
 ```python
 # ---- Create: o gestor dispara a manutenção na tela da análise
@@ -473,7 +473,7 @@ def disparar(analise_id: str, drift_id: str = Form(""), descricao: str = Form(""
     return ir_para(f"/analises/{analise_id}")
 ```
 
-📍 `backend/driftor/manutencoes/repositorio.py` · linhas 41–48 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/manutencoes/repositorio.py#L41-L48)
+📍 `backend/driftor/manutencoes/repositorio.py` · linhas 41–48 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/manutencoes/repositorio.py#L41-L48)
 
 ```python
     # ---- Create
@@ -488,7 +488,7 @@ def disparar(analise_id: str, drift_id: str = Form(""), descricao: str = Form(""
 
 ### Read
 
-📍 `backend/driftor/manutencoes/rotas.py` · linhas 20–23 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/manutencoes/rotas.py#L20-L23)
+📍 `backend/driftor/manutencoes/rotas.py` · linhas 20–23 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/manutencoes/rotas.py#L20-L23)
 
 ```python
 # ---- Read: lista (gestor e técnico)
@@ -497,7 +497,7 @@ def listar(request: Request):
     return tela(request, "manutencoes/lista.html", manutencoes=RepositorioDeManutencoes().listar_resumo())
 ```
 
-📍 `backend/driftor/manutencoes/repositorio.py` · linhas 23–36 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/manutencoes/repositorio.py#L23-L36)
+📍 `backend/driftor/manutencoes/repositorio.py` · linhas 23–36 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/manutencoes/repositorio.py#L23-L36)
 
 ```python
     # ---- Read: a lista com o nome da análise, do processo e o número do desvio
@@ -516,7 +516,7 @@ def listar(request: Request):
         )
 ```
 
-📍 `backend/driftor/manutencoes/rotas.py` · linhas 38–44 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/manutencoes/rotas.py#L38-L44)
+📍 `backend/driftor/manutencoes/rotas.py` · linhas 38–44 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/manutencoes/rotas.py#L38-L44)
 
 ```python
 # ---- Read: detalhe (gestor e técnico)
@@ -530,7 +530,7 @@ def ver(request: Request, id: str):
 
 ### Update
 
-📍 `backend/driftor/manutencoes/rotas.py` · linhas 47–57 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/manutencoes/rotas.py#L47-L57)
+📍 `backend/driftor/manutencoes/rotas.py` · linhas 47–57 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/manutencoes/rotas.py#L47-L57)
 
 ```python
 # ---- Update pelo técnico: concluir com observações
@@ -546,7 +546,7 @@ def concluir(id: str, observacoes: str = Form("")):
     return ir_para("/manutencoes")
 ```
 
-📍 `backend/driftor/manutencoes/rotas.py` · linhas 60–67 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/manutencoes/rotas.py#L60-L67)
+📍 `backend/driftor/manutencoes/rotas.py` · linhas 60–67 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/manutencoes/rotas.py#L60-L67)
 
 ```python
 # ---- Update pelo gestor: corrigir a descrição enquanto está pendente
@@ -559,7 +559,7 @@ def editar(id: str, descricao: str = Form("")):
     return ir_para(f"/manutencoes/{id}")
 ```
 
-📍 `backend/driftor/manutencoes/repositorio.py` · linhas 50–58 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/manutencoes/repositorio.py#L50-L58)
+📍 `backend/driftor/manutencoes/repositorio.py` · linhas 50–58 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/manutencoes/repositorio.py#L50-L58)
 
 ```python
     # ---- Update (o gestor edita a descrição; o técnico conclui com observações)
@@ -575,7 +575,7 @@ def editar(id: str, descricao: str = Form("")):
 
 ### Delete
 
-📍 `backend/driftor/manutencoes/rotas.py` · linhas 70–74 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/manutencoes/rotas.py#L70-L74)
+📍 `backend/driftor/manutencoes/rotas.py` · linhas 70–74 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/manutencoes/rotas.py#L70-L74)
 
 ```python
 # ---- Delete pelo gestor
@@ -591,7 +591,7 @@ def excluir(id: str):
 
 Os repositórios só montam o SQL. Quem executa é o `BancoDeDados` (Singleton): `consultar` para SELECT e `executar` para INSERT, UPDATE e DELETE.
 
-📍 `backend/driftor/banco.py` · linhas 30–42 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/banco.py#L30-L42)
+📍 `backend/driftor/banco.py` · linhas 30–42 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/banco.py#L30-L42)
 
 ```python
     def consultar(self, sql: str, **parametros) -> list[dict]:

@@ -1,6 +1,6 @@
 # Classes e tabelas
 
-Links fixos no commit `dfa0e7f`.
+Links fixos no commit `420f1db`.
 
 ## 1. As 13 classes de domínio
 
@@ -8,40 +8,40 @@ Todas em `backend/driftor/dominio.py`. O link ao lado do nome abre a linha da cl
 
 | Classe | Atributos | Métodos |
 |---|---|---|
-| `Processo` [`dominio.py:33`](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/dominio.py#L33) | nome, status, arquivo, formato, total_traces, total_eventos | `criar`, `renomear`, `carregar_log`, `marcar_pronto`, `pode_analisar` |
-| `Evento` [`dominio.py:76`](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/dominio.py#L76) | rotulo, inicio, duracao_s, atividade | `nome_no_grafo` |
-| `Trace` [`dominio.py:87`](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/dominio.py#L87) | case_id, eventos | `inicio`, `sequencia`, `duracao` |
-| `Atividade` [`dominio.py:110`](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/dominio.py#L110) | nome, descricao | `criar`, `editar` |
-| `Operacao` [`dominio.py:131`](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/dominio.py#L131) | rotulo, ocorrencias, casos, atividade | `contar`, `sugerir_atividade`, `mapear` |
-| `Variante` [`dominio.py:170`](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/dominio.py#L170) | numero, sequencia, total_traces | `agrupar`, `descricao` |
-| `No` [`dominio.py:192`](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/dominio.py#L192) | atividade, frequencia, duracao_media_s | `rotulo` |
-| `Aresta` [`dominio.py:202`](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/dominio.py#L202) | origem, destino, frequencia | (só dados) |
-| `Grafo` [`dominio.py:209`](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/dominio.py#L209) | nos, arestas | `montar`, `para_mermaid` |
-| `PontoDaSerie` [`dominio.py:244`](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/dominio.py#L244) | posicao, case_id, valor | `serie_de_duracao` |
-| `Drift` [`dominio.py:263`](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/dominio.py#L263) | posicao, indice, inicio_anomalia, media_antes, media_depois, variacao_pct | `aumentou`, `resumo` |
-| `Analise` [`dominio.py:281`](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/dominio.py#L281) | nome, atividade, delta, tratamento, total_observacoes, drifts | `criar`, `renomear`, `registrar_resultado` |
-| `Manutencao` [`dominio.py:325`](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/dominio.py#L325) | analise_id, drift_id, descricao, status, observacoes, concluida_em | `disparar`, `esta_pendente`, `editar`, `concluir` |
+| `Processo` [`dominio.py:33`](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/dominio.py#L33) | nome, status, arquivo, formato, total_traces, total_eventos | `criar`, `renomear`, `carregar_log`, `marcar_pronto`, `pode_analisar` |
+| `Evento` [`dominio.py:76`](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/dominio.py#L76) | rotulo, inicio, duracao_s, atividade | `nome_no_grafo` |
+| `Trace` [`dominio.py:87`](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/dominio.py#L87) | case_id, eventos | `inicio`, `sequencia`, `duracao` |
+| `Atividade` [`dominio.py:110`](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/dominio.py#L110) | nome, descricao | `criar`, `editar` |
+| `Operacao` [`dominio.py:131`](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/dominio.py#L131) | rotulo, ocorrencias, casos, atividade | `contar`, `sugerir_atividade`, `mapear` |
+| `Variante` [`dominio.py:170`](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/dominio.py#L170) | numero, sequencia, total_traces | `agrupar`, `descricao` |
+| `No` [`dominio.py:192`](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/dominio.py#L192) | atividade, frequencia, duracao_media_s | `rotulo` |
+| `Aresta` [`dominio.py:202`](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/dominio.py#L202) | origem, destino, frequencia | (só dados) |
+| `Grafo` [`dominio.py:209`](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/dominio.py#L209) | nos, arestas | `montar`, `para_mermaid` |
+| `PontoDaSerie` [`dominio.py:244`](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/dominio.py#L244) | posicao, case_id, valor | `serie_de_duracao` |
+| `Drift` [`dominio.py:263`](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/dominio.py#L263) | posicao, indice, inicio_anomalia, media_antes, media_depois, variacao_pct | `aumentou`, `resumo` |
+| `Analise` [`dominio.py:281`](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/dominio.py#L281) | nome, atividade, delta, tratamento, total_observacoes, drifts | `criar`, `renomear`, `registrar_resultado` |
+| `Manutencao` [`dominio.py:325`](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/dominio.py#L325) | analise_id, drift_id, descricao, status, observacoes, concluida_em | `disparar`, `esta_pendente`, `editar`, `concluir` |
 
 
 ## 2. As outras classes
 
 | Classe | Linha | Papel |
 |---|---|---|
-| `Configuracao` | [`config.py:29`](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/config.py#L29) | Singleton com as regras dos papéis |
-| `BancoDeDados` | [`banco.py:20`](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/banco.py#L20) | Singleton que executa o SQL |
-| `RepositorioBase` | [`repositorio_base.py:18`](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/repositorio_base.py#L18) | superclasse dos repositórios (compactação) |
-| `RepositorioDeProcessos` | [`repositorio.py:9`](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/processos/repositorio.py#L9) | SQL do Processo |
-| `RepositorioDeAtividades` | [`repositorio.py:11`](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/atividades/repositorio.py#L11) | SQL da Atividade |
-| `RepositorioDeAnalises` | [`repositorio.py:11`](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/analises/repositorio.py#L11) | SQL da Análise |
-| `RepositorioDeManutencoes` | [`repositorio.py:9`](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/manutencoes/repositorio.py#L9) | SQL da Manutenção |
-| `Pm4pyMineradorAdapter` | [`grafo.py:18`](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/mineracao/grafo.py#L18) | Adapter 1 |
-| `RiverAdwinAdapter` | [`detector.py:16`](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/mineracao/detector.py#L16) | Adapter 2 |
-| `Sujeito`, `Observador`, `AvisoNaTela` | [`observador.py:14`](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/observador.py#L14) | Observer |
-| `AtualizadorDoProcesso` | [`eventos.py:15`](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/analises/eventos.py#L15) | Observer da análise |
+| `Configuracao` | [`config.py:29`](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/config.py#L29) | Singleton com as regras dos papéis |
+| `BancoDeDados` | [`banco.py:20`](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/banco.py#L20) | Singleton que executa o SQL |
+| `RepositorioBase` | [`repositorio_base.py:18`](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/repositorio_base.py#L18) | superclasse dos repositórios (compactação) |
+| `RepositorioDeProcessos` | [`repositorio.py:9`](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/processos/repositorio.py#L9) | SQL do Processo |
+| `RepositorioDeAtividades` | [`repositorio.py:11`](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/atividades/repositorio.py#L11) | SQL da Atividade |
+| `RepositorioDeAnalises` | [`repositorio.py:11`](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/analises/repositorio.py#L11) | SQL da Análise |
+| `RepositorioDeManutencoes` | [`repositorio.py:9`](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/manutencoes/repositorio.py#L9) | SQL da Manutenção |
+| `Pm4pyMineradorAdapter` | [`grafo.py:18`](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/mineracao/grafo.py#L18) | Adapter 1 |
+| `RiverAdwinAdapter` | [`detector.py:16`](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/mineracao/detector.py#L16) | Adapter 2 |
+| `Sujeito`, `Observador`, `AvisoNaTela` | [`observador.py:14`](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/observador.py#L14) | Observer |
+| `AtualizadorDoProcesso` | [`eventos.py:15`](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/analises/eventos.py#L15) | Observer da análise |
 
 ## 3. Exemplo de classe completa
 
-📍 `backend/driftor/dominio.py` · linhas 325–364 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/dominio.py#L325-L364)
+📍 `backend/driftor/dominio.py` · linhas 325–364 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/dominio.py#L325-L364)
 
 ```python
 class Manutencao:
@@ -111,7 +111,7 @@ erDiagram
     drifts |o--o{ manutencoes : motiva
 ```
 
-📍 `backend/driftor/schema.sql` · linhas 5–83 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/dfa0e7f/backend/driftor/schema.sql#L5-L83)
+📍 `backend/driftor/schema.sql` · linhas 5–83 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/420f1db/backend/driftor/schema.sql#L5-L83)
 
 ```sql
 create table if not exists processos (
