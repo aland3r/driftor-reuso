@@ -6,6 +6,7 @@ from contextlib import asynccontextmanager
 from pathlib import Path
 
 from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 
 from driftor import acesso
@@ -23,7 +24,10 @@ from driftor.telas import PrecisaEntrar, SemPermissao, ir_para, tela
 
 @asynccontextmanager
 async def ao_subir(_app: FastAPI):
-    BancoDeDados().aplicar_schema()  # cria as tabelas do schema.sql, se ainda não existem
+    try:
+        BancoDeDados().aplicar_schema()  # cria as tabelas do schema.sql, se ainda não existem
+    except Exception as erro:  # o app sobe mesmo assim; /saude/banco mostra o motivo
+        print(f"banco indisponível ao subir: {type(erro).__name__}: {erro}", flush=True)
     yield
 
 
@@ -44,6 +48,16 @@ for modulo in (acesso, processos, atividades, analises, manutencoes):
 @app.get("/saude")
 def saude():
     return {"ok": True}
+
+
+@app.get("/saude/banco")
+def saude_do_banco():
+    try:
+        BancoDeDados().aplicar_schema()
+        return {"ok": True, "tabelas": BancoDeDados().consultar_um(
+            "select count(*) as n from pg_tables where schemaname = current_schema()")["n"]}
+    except Exception as erro:
+        return JSONResponse({"ok": False, "erro": f"{type(erro).__name__}: {erro}"[:500]}, status_code=503)
 
 
 @app.exception_handler(PrecisaEntrar)

@@ -24,7 +24,7 @@ class BancoDeDados:
         if cls._instancia is None:
             cls._instancia = super().__new__(cls)
             url = Configuracao().url_do_banco.replace("postgresql://", "postgresql+psycopg://", 1)
-            cls._instancia.engine: Engine = create_engine(url, pool_pre_ping=True)
+            cls._instancia.engine: Engine = create_engine(url, pool_pre_ping=True, connect_args={"connect_timeout": 10})
         return cls._instancia
 
     def consultar(self, sql: str, **parametros) -> list[dict]:
