@@ -12,7 +12,8 @@ from fastapi.templating import Jinja2Templates
 from driftor.config import PAPEIS, Configuracao
 from driftor.observador import avisos_por_papel
 
-templates = Jinja2Templates(directory=Path(__file__).with_name("templates"))
+FRONTEND = Path(__file__).resolve().parents[2] / "frontend"  # as telas ficam fora do back-end
+templates = Jinja2Templates(directory=FRONTEND / "templates")
 templates.env.filters["data"] = lambda d: d.astimezone(ZoneInfo("America/Sao_Paulo")).strftime("%d/%m/%Y %H:%M") if d else ""
 
 

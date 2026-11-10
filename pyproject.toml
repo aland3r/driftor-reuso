@@ -5,5 +5,5 @@ description = "Driftor simplificado para a disciplina de Desenvolvimento Orienta
 requires-python = ">=3.12"
 
 [tool.pytest.ini_options]
-pythonpath = ["."]
+pythonpath = ["backend"]
 testpaths = ["tests"]

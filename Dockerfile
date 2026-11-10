@@ -1,12 +1,13 @@
 FROM python:3.12-slim
 
-ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 PORT=8080
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 PORT=8080 PYTHONPATH=/srv/backend
 WORKDIR /srv
 
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY driftor ./driftor
+COPY backend ./backend
+COPY frontend ./frontend
 COPY exemplos ./exemplos
 
 RUN useradd --create-home driftor

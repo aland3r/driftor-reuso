@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 from contextlib import asynccontextmanager
-from pathlib import Path
 
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
@@ -19,7 +18,7 @@ from driftor.manutencoes import rotas as manutencoes
 from driftor.manutencoes.eventos import publicador_de_manutencao
 from driftor.observador import avisos_por_papel
 from driftor.processos import rotas as processos
-from driftor.telas import PrecisaEntrar, SemPermissao, ir_para, tela
+from driftor.telas import FRONTEND, PrecisaEntrar, SemPermissao, ir_para, tela
 
 
 @asynccontextmanager
@@ -32,7 +31,7 @@ async def ao_subir(_app: FastAPI):
 
 
 app = FastAPI(title="Driftor", lifespan=ao_subir)
-app.mount("/static", StaticFiles(directory=Path(__file__).with_name("static")), name="static")
+app.mount("/static", StaticFiles(directory=FRONTEND / "static"), name="static")
 
 # OBSERVER: quem reage a cada evento é decidido aqui, não dentro de quem publica.
 publicador_de_analise.inscrever(AtualizadorDoProcesso())

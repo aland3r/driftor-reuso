@@ -13,26 +13,36 @@ Versão simplificada do Driftor para a disciplina de **Desenvolvimento Orientado
 5. O gestor **dispara uma manutenção** a partir de um desvio da análise.
 6. O técnico vê a manutenção notificada, executa e marca como **concluída** com as observações.
 
+## Estrutura
+
+| Pasta | Conteúdo |
+|---|---|
+| `backend/driftor/` | back-end: domínio (`dominio.py`), um pacote por CRUD (`rotas.py` + `repositorio.py`), banco, padrões de projeto |
+| `frontend/` | front-end: `templates/` (HTML com Jinja) e `static/` (CSS) |
+| `tests/` | testes dos CRUDs, do fluxo gestor → técnico e da variabilidade |
+| `exemplos/` | os quatro logs sintéticos da Alfa |
+| `defesa/` | roteiros da defesa |
+
 ## Onde está cada item da avaliação
 
 | Item | Onde |
 |---|---|
-| 13 classes principais com atributos e métodos | `driftor/dominio.py` |
-| CRUD de Processo (Alander) | `driftor/processos/` (rotas + repositório) e `templates/processos/` |
-| CRUD de Atividade (Alander) | `driftor/atividades/` e `templates/atividades/` |
-| CRUD de Análise (Emanuelle) | `driftor/analises/` e `templates/analises/` |
-| CRUD de Manutenção (Emanuelle) | `driftor/manutencoes/` e `templates/manutencoes/` |
-| 7 tabelas | `driftor/schema.sql` |
-| Singleton 1: `Configuracao` | `driftor/config.py` |
-| Singleton 2: `BancoDeDados` | `driftor/banco.py` |
-| Adapter 1: `Pm4pyMineradorAdapter` → `MineradorDeGrafo` | `driftor/mineracao/grafo.py` |
-| Adapter 2: `RiverAdwinAdapter` → `DetectorDeDrift` | `driftor/mineracao/detector.py` |
-| Observer (base `Sujeito` e `Observador`) | `driftor/observador.py` |
-| Observer 1: análise concluída | `driftor/analises/eventos.py` |
-| Observer 2: manutenção disparada ou concluída | `driftor/manutencoes/eventos.py` |
-| Inscrição dos observadores | `driftor/main.py` |
-| Variabilidade por perfil: Gestor e Técnico | `driftor/config.py` (`PAPEIS`), `driftor/telas.py` (`exigir`) e `driftor/acesso.py` |
-| Compactação de código | `driftor/repositorio_base.py` e `templates/_componentes.html` (antes: commit `1f77872`, depois: `c13a62b`) |
+| 13 classes principais com atributos e métodos | `backend/driftor/dominio.py` |
+| CRUD de Processo (Alander) | `backend/driftor/processos/` (rotas + repositório) e `frontend/templates/processos/` |
+| CRUD de Atividade (Alander) | `backend/driftor/atividades/` e `frontend/templates/atividades/` |
+| CRUD de Análise (Emanuelle) | `backend/driftor/analises/` e `frontend/templates/analises/` |
+| CRUD de Manutenção (Emanuelle) | `backend/driftor/manutencoes/` e `frontend/templates/manutencoes/` |
+| 7 tabelas | `backend/driftor/schema.sql` |
+| Singleton 1: `Configuracao` | `backend/driftor/config.py` |
+| Singleton 2: `BancoDeDados` | `backend/driftor/banco.py` |
+| Adapter 1: `Pm4pyMineradorAdapter` → `MineradorDeGrafo` | `backend/driftor/mineracao/grafo.py` |
+| Adapter 2: `RiverAdwinAdapter` → `DetectorDeDrift` | `backend/driftor/mineracao/detector.py` |
+| Observer (base `Sujeito` e `Observador`) | `backend/driftor/observador.py` |
+| Observer 1: análise concluída | `backend/driftor/analises/eventos.py` |
+| Observer 2: manutenção disparada ou concluída | `backend/driftor/manutencoes/eventos.py` |
+| Inscrição dos observadores | `backend/driftor/main.py` |
+| Variabilidade por perfil: Gestor e Técnico | `backend/driftor/config.py` (`PAPEIS`), `backend/driftor/telas.py` (`exigir`) e `backend/driftor/acesso.py` |
+| Compactação de código | `backend/driftor/repositorio_base.py` e `frontend/templates/_componentes.html` (antes: commit `1f77872`, depois: `c13a62b`) |
 
 ## Variabilidade
 
@@ -52,7 +62,7 @@ python -m venv .venv && . .venv/bin/activate
 pip install -r requirements-dev.txt
 cp .env.example .env   # preencha DATABASE_URL
 export $(cat .env | xargs)
-uvicorn driftor.main:app --reload
+PYTHONPATH=backend uvicorn driftor.main:app --reload
 ```
 
 As tabelas são criadas sozinhas na primeira vez que o app sobe. A pasta `exemplos/` tem os quatro logs sintéticos da Alfa. Com a série `Machine_Operating`, δ 0,002 e tratamento bruto, eles dão 0, 4, 7 e 9 desvios.
