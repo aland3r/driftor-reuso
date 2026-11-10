@@ -10,7 +10,7 @@ Vídeo da equipe, não listado no YouTube. Duração alvo de 3 a 4 minutos. Most
 
 ## Passo 1: mostrar a repetição (commit antes)
 
-> **Fala:** "No primeiro commit, os quatro repositórios (processos, atividades, análises e notas) tinham o mesmo código para buscar um registro pelo id, listar e excluir. As quatro rotas também tinham uma função igual, `_xxx_ou_erro`, para dar erro quando o registro não existe."
+> **Fala:** "No primeiro commit, os quatro repositórios (processos, atividades, análises e notas de drift, que depois virou o CRUD de manutenção) tinham o mesmo código para buscar um registro pelo id, listar e excluir. As quatro rotas também tinham uma função igual, `_xxx_ou_erro`, para dar erro quando o registro não existe."
 
 Abrir lado a lado `driftor/atividades/repositorio.py` e `driftor/notas/repositorio.py` no commit `1f77872`. Apontar os métodos `obter` e `excluir`, que são iguais e só mudam o nome da tabela.
 
@@ -20,7 +20,7 @@ Abrir lado a lado `driftor/atividades/repositorio.py` e `driftor/notas/repositor
 
 > **Fala:** "Criamos a classe `RepositorioBase`. Cada repositório só diz a sua tabela, as suas colunas e como transformar uma linha do banco em objeto. Listar, obter, obter-ou-erro e excluir são herdados."
 
-📍 `driftor/repositorio_base.py` · linhas 18–47 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/48c729e/driftor/repositorio_base.py#L18-L47)
+📍 `driftor/repositorio_base.py` · linhas 18–47 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/repositorio_base.py#L18-L47)
 
 ```python
 class RepositorioBase(Generic[T]):
@@ -59,7 +59,7 @@ class RepositorioBase(Generic[T]):
 
 > **Fala:** "O repositório de atividades agora só declara a tabela e as colunas. O `obter` e o `listar` sumiram daqui, porque vêm da base."
 
-📍 `driftor/atividades/repositorio.py` · linhas 11–19 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/48c729e/driftor/atividades/repositorio.py#L11-L19)
+📍 `driftor/atividades/repositorio.py` · linhas 11–19 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/atividades/repositorio.py#L11-L19)
 
 ```python
 class RepositorioDeAtividades(RepositorioBase[Atividade]):
@@ -77,26 +77,38 @@ class RepositorioDeAtividades(RepositorioBase[Atividade]):
 
 > **Fala:** "O mesmo nas telas: o botão de excluir, o campo de renomear e a linha vazia viraram macros em `_componentes.html`. Cada tela importa e chama a macro numa linha."
 
-📍 `driftor/templates/_componentes.html` · linhas 4–8 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/48c729e/driftor/templates/_componentes.html#L4-L8)
+📍 `driftor/templates/_componentes.html` · linhas 4–8 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/templates/_componentes.html#L4-L8)
 
 ```jinja
 {% macro botao_excluir(url, pergunta, rotulo="Excluir") %}
-<form method="post" action="{{ url }}" onsubmit="return confirm({{ pergunta|tojson|forceescape }})">
-  <button class="botao perigo">{{ rotulo }}</button>
+<form class="inline" method="post" action="{{ url }}" onsubmit="return confirm({{ pergunta|tojson|forceescape }})">
+  <button class="btn btn-sm">{{ rotulo }}</button>
 </form>
 {% endmacro %}
 ```
 
 Mostrar uma tela usando a macro:
 
-📍 `driftor/templates/atividades/lista.html` · linhas 25–25 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/48c729e/driftor/templates/atividades/lista.html#L25-L25)
+📍 `driftor/templates/atividades/lista.html` · linhas 23–23 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/templates/atividades/lista.html#L23-L23)
 
 ```jinja
-        {{ botao_excluir("/atividades/" ~ a.id ~ "/excluir", "Excluir a atividade " ~ a.nome ~ "?") }}
+        <td class="acoes"><a class="btn btn-sm" href="/atividades/{{ a.id }}/editar">Editar</a>{{ botao_excluir("/atividades/" ~ a.id ~ "/excluir", "Excluir a atividade " ~ a.nome ~ "?") }}</td>
 ```
 
 ## Passo 5: provar que nada quebrou
 
-> **Fala:** "Rodamos os testes depois da compactação e os oito continuam passando. Agora, para criar um quinto CRUD, basta herdar de `RepositorioBase` e usar as macros."
+> **Fala:** "Rodamos os testes depois da compactação e todos continuam passando. A prova de que a técnica funciona veio depois: o CRUD de Manutenção foi criado já herdando de `RepositorioBase`, e o repositório dele só tem a tabela, as colunas e o SQL próprio."
+
+📍 `driftor/manutencoes/repositorio.py` · linhas 9–15 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/manutencoes/repositorio.py#L9-L15)
+
+```python
+class RepositorioDeManutencoes(RepositorioBase[Manutencao]):
+    # obter, obter_ou_erro e excluir vêm de RepositorioBase
+    tabela = "manutencoes"
+    colunas = "id, analise_id, drift_id, descricao, status, observacoes, criado_em, concluida_em"
+    nome_no_singular = "manutenção"
+
+    def criar_objeto(self, linha: dict) -> Manutencao:
+```
 
 Mostrar `pytest -q` passando, ou a aba Actions do GitHub verde.

@@ -1,6 +1,6 @@
 # Roteiro do Alander: Processo e Atividade
 
-Prova de autoria da recuperação de Reuso (13/11). Os links apontam para o commit `48c729e` do repositório `driftor-reuso`.
+Prova de autoria da recuperação de Reuso (13/11). Os links apontam para o commit `2a5e9c6` do repositório `driftor-reuso`.
 
 ## Antes de começar: o mapa do código
 
@@ -9,11 +9,11 @@ O Driftor é **um programa só** (monólito) em Python. Cada CRUD é uma pasta c
 **Meus dois CRUDs:** `driftor/processos/` (Processo) e `driftor/atividades/` (Atividade).
 **Minhas tabelas:** `processos`, `eventos`, `atividades` e `operacoes`.
 
-**Percurso na tela.** Abrir **Processos**, criar o processo, carregar o `DR_MS_ST_20.xes` (pasta `exemplos/`), mapear as operações e ver o grafo. Depois, **Atividades** no menu. Em cada CRUD, a ordem é Read, Create, Update e Delete.
+**Percurso na tela.** Na tela de entrada, clicar em **Gestor** (o técnico não vê processos nem atividades). Abrir **Processos**, criar o processo, carregar o `DR_MS_ST_20.xes` (pasta `exemplos/`), mapear as operações e ver o grafo. Depois, **Atividades** no menu. Em cada CRUD, a ordem é Read, Create, Update e Delete.
 
 ## 1. As minhas tabelas
 
-📍 `driftor/schema.sql` · linhas 4–44 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/48c729e/driftor/schema.sql#L4-L44)
+📍 `driftor/schema.sql` · linhas 4–44 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/schema.sql#L4-L44)
 
 ```sql
 -- CRUD de Processo (Alander)
@@ -87,7 +87,7 @@ sequenceDiagram
 
 > **Fala:** "A tela inicial é a lista de processos, com o status e o log de cada um."
 
-📍 `driftor/processos/rotas.py` · linhas 23–26 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/48c729e/driftor/processos/rotas.py#L23-L26)
+📍 `driftor/processos/rotas.py` · linhas 22–25 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/processos/rotas.py#L22-L25)
 
 ```python
 # ---- Read: lista de processos (tela inicial)
@@ -98,7 +98,7 @@ def listar(request: Request):
 
 O `listar` é herdado de `RepositorioBase` (compactação):
 
-📍 `driftor/repositorio_base.py` · linhas 30–33 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/48c729e/driftor/repositorio_base.py#L30-L33)
+📍 `driftor/repositorio_base.py` · linhas 30–33 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/repositorio_base.py#L30-L33)
 
 ```python
     # ---- Read
@@ -111,7 +111,7 @@ O `listar` é herdado de `RepositorioBase` (compactação):
 
 > **Fala:** "Escrevo 'Torno 02' e clico em Criar processo. Abre a página do processo, ainda vazio, pedindo o log."
 
-📍 `driftor/processos/rotas.py` · linhas 29–34 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/48c729e/driftor/processos/rotas.py#L29-L34)
+📍 `driftor/processos/rotas.py` · linhas 28–33 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/processos/rotas.py#L28-L33)
 
 ```python
 # ---- Create: só o nome; o log vem depois, na página do processo
@@ -122,7 +122,7 @@ def criar(nome: str = Form("")):
     return ir_para(f"/processos/{processo.id}")
 ```
 
-📍 `driftor/processos/repositorio.py` · linhas 19–23 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/48c729e/driftor/processos/repositorio.py#L19-L23)
+📍 `driftor/processos/repositorio.py` · linhas 19–23 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/processos/repositorio.py#L19-L23)
 
 ```python
     # ---- Create
@@ -136,7 +136,7 @@ def criar(nome: str = Form("")):
 
 > **Fala:** "Escolho o DR_MS_ST_20.xes e clico em Carregar. A tela de operações mostra os seis rótulos do log, já com a atividade sugerida. Clico em Salvar mapeamento."
 
-📍 `driftor/processos/rotas.py` · linhas 56–64 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/48c729e/driftor/processos/rotas.py#L56-L64)
+📍 `driftor/processos/rotas.py` · linhas 54–62 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/processos/rotas.py#L54-L62)
 
 ```python
 # ---- Update: carregar o log de eventos no processo
@@ -150,7 +150,7 @@ async def carregar_log(id: str, arquivo: UploadFile = File(...)):
     return ir_para(f"/processos/{id}/operacoes")
 ```
 
-📍 `driftor/processos/rotas.py` · linhas 79–96 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/48c729e/driftor/processos/rotas.py#L79-L96)
+📍 `driftor/processos/rotas.py` · linhas 77–94 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/processos/rotas.py#L77-L94)
 
 ```python
 @rotas.post("/processos/{id}/operacoes")
@@ -177,7 +177,7 @@ async def salvar_operacoes(request: Request, id: str):
 
 > **Fala:** "O processo agora está pronto. O grafo mostra as seis atividades e quantas vezes cada passagem acontece. Embaixo, as duas variantes."
 
-📍 `driftor/processos/rotas.py` · linhas 37–53 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/48c729e/driftor/processos/rotas.py#L37-L53)
+📍 `driftor/processos/rotas.py` · linhas 36–51 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/processos/rotas.py#L36-L51)
 
 ```python
 # ---- Read: detalhe do processo (grafo, variantes e análises)
@@ -193,15 +193,14 @@ def ver(request: Request, id: str, minerador: MineradorDeGrafo = Depends(minerad
         grafo = Grafo.montar(traces, minerador.descobrir_arestas(traces))  # Adapter em uso
         variantes = Variante.agrupar(traces)
         atividades = [no.atividade for no in grafo.nos]
-        if Configuracao().tem_recurso("analises"):
-            analises = RepositorioDeAnalises().listar_resumo(processo_id=id)
+        analises = RepositorioDeAnalises().listar_resumo(processo_id=id)
     return tela(request, "processos/detalhe.html", processo=processo, grafo=grafo,
                 variantes=variantes, analises=analises, atividades=atividades)
 ```
 
 ### 2.5 Update: renomear
 
-📍 `driftor/processos/rotas.py` · linhas 99–106 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/48c729e/driftor/processos/rotas.py#L99-L106)
+📍 `driftor/processos/rotas.py` · linhas 97–104 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/processos/rotas.py#L97-L104)
 
 ```python
 # ---- Update: renomear
@@ -218,7 +217,7 @@ def renomear(id: str, nome: str = Form("")):
 
 > **Fala:** "Clico em Excluir processo e confirmo. Os eventos, as operações e as análises dele somem junto, pelo `on delete cascade`."
 
-📍 `driftor/processos/rotas.py` · linhas 109–113 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/48c729e/driftor/processos/rotas.py#L109-L113)
+📍 `driftor/processos/rotas.py` · linhas 107–111 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/processos/rotas.py#L107-L111)
 
 ```python
 # ---- Delete
@@ -234,7 +233,7 @@ def excluir(id: str):
 
 > **Fala:** "No menu, Atividades. As seis atividades entraram no catálogo durante o mapeamento."
 
-📍 `driftor/atividades/rotas.py` · linhas 14–17 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/48c729e/driftor/atividades/rotas.py#L14-L17)
+📍 `driftor/atividades/rotas.py` · linhas 14–17 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/atividades/rotas.py#L14-L17)
 
 ```python
 # ---- Read
@@ -247,7 +246,7 @@ def listar(request: Request):
 
 > **Fala:** "Crio a atividade 'Troca de ferramenta' com uma descrição."
 
-📍 `driftor/atividades/rotas.py` · linhas 20–24 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/48c729e/driftor/atividades/rotas.py#L20-L24)
+📍 `driftor/atividades/rotas.py` · linhas 20–24 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/atividades/rotas.py#L20-L24)
 
 ```python
 # ---- Create
@@ -257,7 +256,7 @@ def criar(nome: str = Form(""), descricao: str = Form("")):
     return ir_para("/atividades")
 ```
 
-📍 `driftor/atividades/repositorio.py` · linhas 28–36 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/48c729e/driftor/atividades/repositorio.py#L28-L36)
+📍 `driftor/atividades/repositorio.py` · linhas 28–36 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/atividades/repositorio.py#L28-L36)
 
 ```python
     # ---- Create
@@ -275,7 +274,7 @@ def criar(nome: str = Form(""), descricao: str = Form("")):
 
 > **Fala:** "Clico em Editar, mudo a descrição e salvo."
 
-📍 `driftor/atividades/rotas.py` · linhas 27–40 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/48c729e/driftor/atividades/rotas.py#L27-L40)
+📍 `driftor/atividades/rotas.py` · linhas 27–40 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/atividades/rotas.py#L27-L40)
 
 ```python
 # ---- Update
@@ -298,7 +297,7 @@ def salvar(id: str, nome: str = Form(""), descricao: str = Form("")):
 
 > **Fala:** "Excluo a 'Troca de ferramenta', que não é usada por nenhum processo. Depois tento excluir 'Machine_Operating': o banco recusa, porque o Torno 02 usa essa atividade."
 
-📍 `driftor/atividades/repositorio.py` · linhas 48–53 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/48c729e/driftor/atividades/repositorio.py#L48-L53)
+📍 `driftor/atividades/repositorio.py` · linhas 48–53 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/atividades/repositorio.py#L48-L53)
 
 ```python
     # ---- Delete (o banco recusa se algum processo usa a atividade: on delete restrict)
@@ -313,10 +312,10 @@ def salvar(id: str, nome: str = Form(""), descricao: str = Form("")):
 
 | Padrão | Onde eu uso |
 |---|---|
-| Singleton `Configuracao` | o menu e as rotas perguntam `Configuracao().tem_recurso(...)` |
+| Singleton `Configuracao` | o menu e as rotas perguntam `Configuracao().pode(papel, ...)` |
 | Singleton `BancoDeDados` | todos os repositórios |
 | Adapter `Pm4pyMineradorAdapter` | o Read do processo chama `minerador.descobrir_arestas(traces)` |
-| Variabilidade | `exigir_recurso("processos")` e `exigir_recurso("atividades")` no topo das rotas |
+| Variabilidade por papel | `exigir("processos")` e `exigir("atividades")` no topo das minhas rotas: só o Gestor entra |
 | Compactação | `RepositorioBase` e `templates/_componentes.html` |
 
 ## 5. Perguntas prováveis
@@ -327,6 +326,6 @@ def salvar(id: str, nome: str = Form(""), descricao: str = Form("")):
 
 **O que é o Adapter do PM4Py?** O app pede `descobrir_arestas(traces)` e recebe `Aresta`. O PM4Py quer uma tabela do pandas e devolve um dicionário. O `Pm4pyMineradorAdapter` traduz nos dois sentidos.
 
-**Onde está a variabilidade?** Em `driftor/config.py`: o dicionário `EDICOES` diz quais recursos cada edição tem, e a variável `EDICAO` escolhe a edição. O mesmo código sobe como Completa (`driftor-reuso`) e como Essencial (`driftor-reuso-essencial`).
+**Onde está a variabilidade?** No papel de quem entra. O dicionário `PAPEIS`, em `driftor/config.py`, diz o que o Gestor e o Técnico de manutenção podem fazer. A função `exigir`, em `driftor/telas.py`, trava cada rota, e o menu em `templates/base.html` só mostra o que o papel pode. Se o técnico digitar `/processos` no endereço, recebe a tela "Este perfil não tem acesso a esta tela" (403). Explicação completa em `defesa/padroes-de-projeto.md`, seção 5.
 
 **Qual técnica de compactação?** Extração para uma superclasse genérica e para macros de template. O que os quatro repositórios repetiam (listar, obter, obter-ou-erro, excluir) foi para `RepositorioBase`. O botão de excluir, o campo de renomear e a linha de tabela vazia foram para `_componentes.html`. Antes: commit `1f77872`, depois: `c13a62b`.

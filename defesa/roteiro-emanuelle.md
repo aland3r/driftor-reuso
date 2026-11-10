@@ -1,6 +1,6 @@
-# Roteiro da Emanuelle: Análise e Nota de drift
+# Roteiro da Emanuelle: Análise e Manutenção
 
-Prova de autoria da recuperação de Reuso (13/11). Os links apontam para o commit `48c729e` do repositório `driftor-reuso`.
+Prova de autoria da recuperação de Reuso (13/11). Os links apontam para o commit `2a5e9c6` do repositório `driftor-reuso`.
 
 ## Antes de começar: o mapa do código
 
@@ -13,23 +13,23 @@ O Driftor é **um programa só** (monólito) em Python. Cada CRUD é **uma pasta
 
 As regras ficam nas classes de `driftor/dominio.py`. As telas ficam em `driftor/templates/<pasta>/`.
 
-**Meus dois CRUDs:** `driftor/analises/` (Análise) e `driftor/notas/` (Nota de drift).
-**Minhas tabelas:** `analises`, `drifts` e `notas_drift`.
+**Meus dois CRUDs:** `driftor/analises/` (Análise) e `driftor/manutencoes/` (Manutenção).
+**Minhas tabelas:** `analises`, `drifts` e `manutencoes`.
 
 ```mermaid
 flowchart LR
     T["Tela (template HTML)"] -->|clique| R["rotas.py"]
-    R -->|regras| D["dominio.py (Analise, Drift, NotaDeDrift)"]
+    R -->|regras| D["dominio.py (Analise, Drift, Manutencao)"]
     R -->|SQL| P["repositorio.py"]
     P --> B["BancoDeDados (Singleton)"]
-    B --> PG[("Postgres: analises, drifts, notas_drift")]
+    B --> PG[("Postgres: analises, drifts, manutencoes")]
 ```
 
-**Percurso na tela.** Abrir **Processos** → processo **Torno 02** (já com o log carregado e mapeado). Descer até **Gerar análise de desvios**. Depois, **Análises** no menu e **Notas dos desvios**. Em cada CRUD, a ordem é Read, Create, Update e Delete.
+**Percurso na tela.** Entrar como **Gestor**. Abrir **Processos** → **Torno 02** (log já carregado e mapeado) e gerar a análise. Na análise, disparar a manutenção. Clicar em **Trocar perfil** e entrar como **Técnico de manutenção**: o aviso da manutenção nova aparece no topo. O técnico executa e conclui. Voltar como Gestor para ver o aviso de conclusão. Em cada CRUD, a ordem é Read, Create, Update e Delete.
 
 ## 1. As minhas tabelas
 
-📍 `driftor/schema.sql` · linhas 47–79 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/48c729e/driftor/schema.sql#L47-L79)
+📍 `driftor/schema.sql` · linhas 47–83 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/schema.sql#L47-L83)
 
 ```sql
 -- CRUD de Análise (Emanuelle)
@@ -42,7 +42,6 @@ create table if not exists analises (
     tratamento        text not null,               -- bruto | tratado
     total_observacoes integer not null,
     total_drifts      integer not null default 0,
-    total_notas       integer not null default 0,
     serie             text not null,               -- valores analisados, em JSON, para o gráfico
     criado_em         timestamptz not null default now()
 );
@@ -59,28 +58,33 @@ create table if not exists drifts (
     variacao_pct    double precision not null
 );
 
--- CRUD de Nota de drift (Emanuelle)
-create table if not exists notas_drift (
-    id            uuid primary key,
-    drift_id      uuid not null references drifts(id) on delete cascade,
-    texto         text not null,
-    criado_em     timestamptz not null default now(),
+-- CRUD de Manutenção (Emanuelle): o gestor dispara a partir de um desvio, o técnico conclui
+create table if not exists manutencoes (
+    id           uuid primary key,
+    analise_id   uuid not null references analises(id) on delete cascade,
+    drift_id     uuid references drifts(id) on delete set null,
+    descricao    text not null,
+    status       text not null default 'pendente',   -- pendente | concluida
+    observacoes  text not null default '',
+    criado_em    timestamptz not null default now(),
+    concluida_em timestamptz
+);
 ```
 
-> **Fala:** "Estas são as três tabelas dos meus CRUDs. Uma análise tem vários desvios (`drifts`), e cada desvio pode ter várias notas (`notas_drift`). O `on delete cascade` faz o banco apagar os desvios e as notas quando a análise é excluída."
+> **Fala:** "Estas são as três tabelas dos meus CRUDs. Uma análise tem vários desvios (`drifts`). A manutenção aponta para a análise e para o desvio que a motivou, e guarda o status e as observações do técnico. Se a análise for excluída, o `on delete cascade` apaga os desvios e as manutenções dela."
 
-## 2. CRUD de Análise
+## 2. CRUD de Análise (só o Gestor)
 
 ```mermaid
 sequenceDiagram
-    actor U as Usuário
+    actor G as Gestor
     participant T as Tela do processo
     participant R as analises/rotas.py
     participant D as dominio.py
     participant A as RiverAdwinAdapter
     participant P as RepositorioDeAnalises
     participant O as publicador_de_analise
-    U->>T: Gerar análise de desvios
+    G->>T: Gerar análise de desvios
     T->>R: POST /processos/{id}/analises
     R->>D: Analise.criar(...) e PontoDaSerie.serie_de_duracao(...)
     R->>A: detectar(valores, delta)
@@ -88,30 +92,30 @@ sequenceDiagram
     R->>D: analise.registrar_resultado(...)
     R->>P: inserir(analise)
     R->>O: notificar("analise_concluida")
-    R-->>U: tela da análise, com o aviso no topo
+    R-->>G: tela da análise, com o aviso no topo
 ```
 
 ### 2.1 Read: a lista de análises
 
-> **Fala:** "No menu, clico em Análises. A tela lista todas as análises com o processo, a série e o total de desvios e de notas."
+> **Fala:** "No menu, clico em Análises. A tela lista as análises com o processo, a série e o total de desvios."
 
-📍 `driftor/analises/rotas.py` · linhas 21–24 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/48c729e/driftor/analises/rotas.py#L21-L24)
+📍 `driftor/analises/rotas.py` · linhas 23–26 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/analises/rotas.py#L23-L26)
 
 ```python
 # ---- Read: todas as análises
-@rotas.get("/analises")
+@rotas.get("/analises", dependencies=so_gestor)
 def listar(request: Request):
     return tela(request, "analises/lista.html", analises=RepositorioDeAnalises().listar_resumo())
 ```
 
-📍 `driftor/analises/repositorio.py` · linhas 31–39 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/48c729e/driftor/analises/repositorio.py#L31-L39)
+📍 `driftor/analises/repositorio.py` · linhas 31–39 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/analises/repositorio.py#L31-L39)
 
 ```python
     def listar_resumo(self, processo_id: str | None = None) -> list[dict]:
         filtro = "where a.processo_id = :processo_id" if processo_id else ""
         return self.banco.consultar(
             f"""select a.id, a.nome, a.atividade, a.delta, a.tratamento, a.total_observacoes,
-                       a.total_drifts, a.total_notas, a.criado_em, p.nome as processo
+                       a.total_drifts, a.criado_em, p.nome as processo
                 from analises a join processos p on p.id = a.processo_id
                 {filtro} order by a.criado_em desc""",
             processo_id=processo_id,
@@ -120,13 +124,13 @@ def listar(request: Request):
 
 ### 2.2 Create: gerar a análise de desvios
 
-> **Fala:** "Na página do processo Torno 02, escolho a série Duração de Machine_Operating, δ 0,002, tratamento Bruto, e clico em Gerar análise de desvios. A tela da análise abre com 9 desvios e um aviso amarelo no topo."
+> **Fala:** "Na página do processo Torno 02, escolho a série Duração de Machine_Operating, δ 0,002, tratamento Bruto, e clico em Gerar análise de desvios. A tela da análise abre com 9 desvios e o aviso amarelo no topo."
 
-📍 `driftor/analises/rotas.py` · linhas 27–54 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/48c729e/driftor/analises/rotas.py#L27-L54)
+📍 `driftor/analises/rotas.py` · linhas 29–56 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/analises/rotas.py#L29-L56)
 
 ```python
 # ---- Create: botão "Gerar análise de desvios" na página do processo
-@rotas.post("/processos/{processo_id}/analises")
+@rotas.post("/processos/{processo_id}/analises", dependencies=so_gestor)
 def criar(
     processo_id: str,
     nome: str = Form(""),
@@ -155,11 +159,11 @@ def criar(
     return ir_para(f"/analises/{analise.id}")
 ```
 
-Em ordem: a linha 39 valida (processo mapeado, δ entre 0 e 1). A linha 41 monta a série: uma duração por trace. A linha 47 chama o **Adapter** do ADWIN. A linha 49 grava no banco, e a linha 50 avisa os **observadores**.
+Em ordem: valida o processo e o δ, monta a série (uma duração por trace), chama o **Adapter** do ADWIN (`detector().detectar`), grava no banco e avisa os **observadores** (`publicador_de_analise.notificar`).
 
 O INSERT nas duas tabelas:
 
-📍 `driftor/analises/repositorio.py` · linhas 45–60 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/48c729e/driftor/analises/repositorio.py#L45-L60)
+📍 `driftor/analises/repositorio.py` · linhas 45–60 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/analises/repositorio.py#L45-L60)
 
 ```python
     # ---- Create
@@ -182,7 +186,7 @@ O INSERT nas duas tabelas:
 
 As regras da classe `Analise`:
 
-📍 `driftor/dominio.py` · linhas 281–320 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/48c729e/driftor/dominio.py#L281-L320)
+📍 `driftor/dominio.py` · linhas 281–320 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/dominio.py#L281-L320)
 
 ```python
 class Analise:
@@ -229,24 +233,25 @@ class Analise:
 
 ### 2.3 Read: o detalhe da análise
 
-> **Fala:** "Esta é a tela da análise. O gráfico é a duração de Machine_Operating em cada trace, e cada linha vermelha é o início de um desvio. A tabela embaixo mostra a média antes e depois de cada desvio."
+> **Fala:** "O gráfico é a duração de Machine_Operating em cada trace, e cada linha vermelha é o início de um desvio. A tabela mostra a média antes e depois de cada desvio. Embaixo ficam o formulário de disparar manutenção e as manutenções desta análise."
 
-📍 `driftor/analises/rotas.py` · linhas 57–64 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/48c729e/driftor/analises/rotas.py#L57-L64)
+📍 `driftor/analises/rotas.py` · linhas 59–67 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/analises/rotas.py#L59-L67)
 
 ```python
-# ---- Read: detalhe com gráfico e desvios
-@rotas.get("/analises/{id}")
+# ---- Read: detalhe com gráfico e desvios (o técnico também vê, sem editar)
+@rotas.get("/analises/{id}", dependencies=[Depends(exigir("ver_analise"))])
 def ver(request: Request, id: str):
     repo = RepositorioDeAnalises()
     analise = repo.obter_ou_erro(id)
     processo = RepositorioDeProcessos().obter(analise.processo_id)
-    return tela(request, "analises/detalhe.html", analise=analise, processo=processo,
+    manutencoes = RepositorioDeManutencoes().listar_resumo(analise_id=id)
+    return tela(request, "analises/detalhe.html", analise=analise, processo=processo, manutencoes=manutencoes,
                 grafico=desenhar_grafico(repo.serie(id), [d.inicio_anomalia for d in analise.drifts]))
 ```
 
 O `obter_ou_erro` vem da classe `RepositorioBase` (compactação). A análise já chega com os desvios:
 
-📍 `driftor/analises/repositorio.py` · linhas 17–28 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/48c729e/driftor/analises/repositorio.py#L17-L28)
+📍 `driftor/analises/repositorio.py` · linhas 17–28 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/analises/repositorio.py#L17-L28)
 
 ```python
     def criar_objeto(self, linha: dict) -> Analise:
@@ -267,11 +272,11 @@ O `obter_ou_erro` vem da classe `RepositorioBase` (compactação). A análise j�
 
 > **Fala:** "Troco o nome no campo do topo e clico em Renomear."
 
-📍 `driftor/analises/rotas.py` · linhas 67–74 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/48c729e/driftor/analises/rotas.py#L67-L74)
+📍 `driftor/analises/rotas.py` · linhas 70–77 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/analises/rotas.py#L70-L77)
 
 ```python
 # ---- Update: renomear
-@rotas.post("/analises/{id}/renomear")
+@rotas.post("/analises/{id}/renomear", dependencies=so_gestor)
 def renomear(id: str, nome: str = Form("")):
     repo = RepositorioDeAnalises()
     analise = repo.obter_ou_erro(id)
@@ -280,7 +285,7 @@ def renomear(id: str, nome: str = Form("")):
     return ir_para(f"/analises/{id}")
 ```
 
-📍 `driftor/analises/repositorio.py` · linhas 62–63 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/48c729e/driftor/analises/repositorio.py#L62-L63)
+📍 `driftor/analises/repositorio.py` · linhas 62–63 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/analises/repositorio.py#L62-L63)
 
 ```python
     # ---- Update
@@ -289,13 +294,13 @@ def renomear(id: str, nome: str = Form("")):
 
 ### 2.5 Delete: excluir
 
-> **Fala:** "Clico em Excluir análise e confirmo. Volto para o processo e a análise sumiu da lista. Os desvios e as notas dela foram apagados junto, pelo `on delete cascade`."
+> **Fala:** "Clico em Excluir análise e confirmo. Volto para o processo e a análise sumiu. Os desvios e as manutenções dela foram apagados junto, pelo `on delete cascade`."
 
-📍 `driftor/analises/rotas.py` · linhas 77–83 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/48c729e/driftor/analises/rotas.py#L77-L83)
+📍 `driftor/analises/rotas.py` · linhas 80–86 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/analises/rotas.py#L80-L86)
 
 ```python
 # ---- Delete
-@rotas.post("/analises/{id}/excluir")
+@rotas.post("/analises/{id}/excluir", dependencies=so_gestor)
 def excluir(id: str):
     repo = RepositorioDeAnalises()
     analise = repo.obter_ou_erro(id)
@@ -305,7 +310,7 @@ def excluir(id: str):
 
 O `repo.excluir` é herdado de `RepositorioBase`:
 
-📍 `driftor/repositorio_base.py` · linhas 45–47 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/48c729e/driftor/repositorio_base.py#L45-L47)
+📍 `driftor/repositorio_base.py` · linhas 45–47 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/repositorio_base.py#L45-L47)
 
 ```python
     # ---- Delete
@@ -313,173 +318,267 @@ O `repo.excluir` é herdado de `RepositorioBase`:
         self.banco.executar(f"delete from {self.tabela} where id = :id", id=id)
 ```
 
-## 3. CRUD de Nota de drift
+## 3. CRUD de Manutenção (Gestor dispara, Técnico conclui)
 
 ```mermaid
 sequenceDiagram
-    actor U as Usuário
-    participant T as Tela de notas
-    participant R as notas/rotas.py
-    participant D as NotaDeDrift
-    participant P as RepositorioDeNotas
-    participant O as publicador_de_notas
-    U->>T: escolhe o desvio, escreve e salva
-    T->>R: POST /notas
-    R->>D: NotaDeDrift.criar(drift_id, texto)
-    R->>P: inserir(nota)
-    R->>O: notificar("nota_criada")
-    O-->>P: ContadorDeNotas atualiza analises.total_notas
-    R-->>U: lista de notas com o aviso "Nota salva."
+    actor G as Gestor
+    actor T as Técnico
+    participant R as manutencoes/rotas.py
+    participant D as Manutencao
+    participant P as RepositorioDeManutencoes
+    participant O as publicador_de_manutencao
+    G->>R: POST /analises/{id}/manutencoes (desvio, descrição)
+    R->>D: Manutencao.disparar(analise, drift_id, descricao)
+    R->>P: inserir(manutencao)
+    R->>O: notificar("manutencao_disparada")
+    O-->>T: aviso "Nova manutenção" na próxima tela do técnico
+    T->>R: POST /manutencoes/{id}/concluir (observações)
+    R->>D: manutencao.concluir(observacoes)
+    R->>P: atualizar(manutencao)
+    R->>O: notificar("manutencao_concluida")
+    O-->>G: aviso "Manutenção concluída" na próxima tela do gestor
 ```
 
-### 3.1 Read
+### 3.1 Create: o gestor dispara a manutenção
 
-> **Fala:** "Na análise, clico em Notas dos desvios. A tela mostra as notas de todos os desvios desta análise."
+> **Fala:** "Ainda como Gestor, na análise, escolho o Desvio 1, escrevo 'Verificar rolamento do eixo' e clico em Disparar manutenção. Ela aparece embaixo, em Manutenções desta análise, como pendente."
 
-📍 `driftor/notas/rotas.py` · linhas 23–28 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/48c729e/driftor/notas/rotas.py#L23-L28)
+📍 `driftor/manutencoes/rotas.py` · linhas 26–35 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/manutencoes/rotas.py#L26-L35)
 
 ```python
-# ---- Read: notas de todos os desvios de uma análise
-@rotas.get("/analises/{analise_id}/notas")
-def listar(request: Request, analise_id: str):
+# ---- Create: o gestor dispara a manutenção na tela da análise
+@rotas.post("/analises/{analise_id}/manutencoes", dependencies=[Depends(exigir("disparar_manutencao"))])
+def disparar(analise_id: str, drift_id: str = Form(""), descricao: str = Form("")):
     analise = RepositorioDeAnalises().obter_ou_erro(analise_id)
-    return tela(request, "notas/lista.html", analise=analise,
-                notas=RepositorioDeNotas().listar_da_analise(analise_id))
+    manutencao = Manutencao.disparar(analise, drift_id, descricao)
+    RepositorioDeManutencoes().inserir(manutencao)
+    publicador_de_manutencao.notificar("manutencao_disparada", {  # Observer: avisa o técnico
+        "mensagem": f"Nova manutenção: {manutencao.descricao} (análise “{analise.nome}”).",
+    })
+    return ir_para(f"/analises/{analise_id}")
 ```
 
-📍 `driftor/notas/repositorio.py` · linhas 19–25 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/48c729e/driftor/notas/repositorio.py#L19-L25)
+A regra fica na classe `Manutencao`: o desvio precisa ser desta análise e a descrição não pode ser vazia.
+
+📍 `driftor/dominio.py` · linhas 325–344 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/dominio.py#L325-L344)
 
 ```python
-    def listar_da_analise(self, analise_id: str) -> list[dict]:
+class Manutencao:
+    """Ordem de manutenção que o gestor dispara a partir de um desvio e o técnico conclui."""
+
+    id: str
+    analise_id: str
+    drift_id: str | None
+    descricao: str
+    status: str = "pendente"       # pendente -> concluida
+    observacoes: str = ""
+    criado_em: datetime | None = None
+    concluida_em: datetime | None = None
+
+    @staticmethod
+    def disparar(analise: Analise, drift_id: str | None, descricao: str) -> Manutencao:
+        if drift_id and drift_id not in {d.id for d in analise.drifts}:
+            raise ErroDeNegocio("Este desvio não pertence à análise.")
+        descricao = (descricao or "").strip()
+        if not descricao:
+            raise ErroDeNegocio("Descreva o que o técnico deve verificar.")
+        return Manutencao(novo_id(), analise.id, drift_id or None, descricao)
+```
+
+📍 `driftor/manutencoes/repositorio.py` · linhas 41–48 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/manutencoes/repositorio.py#L41-L48)
+
+```python
+    # ---- Create
+    def inserir(self, manutencao: Manutencao) -> None:
+        self.banco.executar(
+            """insert into manutencoes (id, analise_id, drift_id, descricao)
+               values (:id, :analise_id, :drift_id, :descricao)""",
+            id=manutencao.id, analise_id=manutencao.analise_id,
+            drift_id=manutencao.drift_id, descricao=manutencao.descricao,
+        )
+```
+
+### 3.2 Read: o técnico vê a manutenção
+
+> **Fala:** "Clico em Trocar perfil e entro como Técnico de manutenção. O menu agora só tem Manutenções, e o aviso 'Nova manutenção: Verificar rolamento do eixo' aparece no topo. A lista mostra a manutenção pendente."
+
+📍 `driftor/manutencoes/rotas.py` · linhas 20–23 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/manutencoes/rotas.py#L20-L23)
+
+```python
+# ---- Read: lista (gestor e técnico)
+@rotas.get("/manutencoes", dependencies=[Depends(exigir("manutencoes"))])
+def listar(request: Request):
+    return tela(request, "manutencoes/lista.html", manutencoes=RepositorioDeManutencoes().listar_resumo())
+```
+
+📍 `driftor/manutencoes/repositorio.py` · linhas 23–36 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/manutencoes/repositorio.py#L23-L36)
+
+```python
+    # ---- Read: a lista com o nome da análise, do processo e o número do desvio
+    def listar_resumo(self, analise_id: str | None = None) -> list[dict]:
+        filtro = "where m.analise_id = :analise_id" if analise_id else ""
         return self.banco.consultar(
-            """select n.id, n.drift_id, n.texto, n.atualizado_em, d.posicao
-               from notas_drift n join drifts d on d.id = n.drift_id
-               where d.analise_id = :analise_id order by d.posicao, n.criado_em""",
+            f"""select m.id, m.descricao, m.status, m.observacoes, m.criado_em, m.concluida_em,
+                       a.id as analise_id, a.nome as analise, p.nome as processo, d.posicao as desvio
+                from manutencoes m
+                join analises a on a.id = m.analise_id
+                join processos p on p.id = a.processo_id
+                left join drifts d on d.id = m.drift_id
+                {filtro}
+                order by (m.status = 'pendente') desc, m.criado_em desc""",
             analise_id=analise_id,
         )
 ```
 
-### 3.2 Create
+> **Fala:** "Clico em Executar. A tela mostra o desvio que motivou a manutenção e o link para a análise de origem."
 
-> **Fala:** "Escolho o Desvio 1, escrevo 'Troca do rolamento do eixo' e clico em Salvar nota. A nota aparece na lista e o aviso 'Nota salva.' aparece no topo."
-
-📍 `driftor/notas/rotas.py` · linhas 31–38 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/48c729e/driftor/notas/rotas.py#L31-L38)
+📍 `driftor/manutencoes/rotas.py` · linhas 38–44 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/manutencoes/rotas.py#L38-L44)
 
 ```python
-# ---- Create
-@rotas.post("/notas")
-def criar(drift_id: str = Form(""), texto: str = Form("")):
-    nota = NotaDeDrift.criar(drift_id, texto)
-    analise_id = _analise_do_drift(drift_id)
-    RepositorioDeNotas().inserir(nota)
-    publicador_de_notas.notificar("nota_criada", {"analise_id": analise_id, "mensagem": "Nota salva."})  # Observer
-    return ir_para(f"/analises/{analise_id}/notas")
+# ---- Read: detalhe (gestor e técnico)
+@rotas.get("/manutencoes/{id}", dependencies=[Depends(exigir("manutencoes"))])
+def ver(request: Request, id: str):
+    manutencao = RepositorioDeManutencoes().obter_ou_erro(id)
+    analise = RepositorioDeAnalises().obter_ou_erro(manutencao.analise_id)
+    drift = next((d for d in analise.drifts if d.id == manutencao.drift_id), None)
+    return tela(request, "manutencoes/detalhe.html", manutencao=manutencao, analise=analise, drift=drift)
 ```
 
-📍 `driftor/notas/repositorio.py` · linhas 27–32 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/48c729e/driftor/notas/repositorio.py#L27-L32)
+### 3.3 Update: o técnico conclui com observações
+
+> **Fala:** "Escrevo 'Rolamento trocado e folga ajustada' e clico em Concluir manutenção. Na lista, o status muda para concluída."
+
+📍 `driftor/manutencoes/rotas.py` · linhas 47–57 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/manutencoes/rotas.py#L47-L57)
 
 ```python
-    # ---- Create
-    def inserir(self, nota: NotaDeDrift) -> None:
+# ---- Update pelo técnico: concluir com observações
+@rotas.post("/manutencoes/{id}/concluir", dependencies=[Depends(exigir("concluir_manutencao"))])
+def concluir(id: str, observacoes: str = Form("")):
+    repo = RepositorioDeManutencoes()
+    manutencao = repo.obter_ou_erro(id)
+    manutencao.concluir(observacoes)
+    repo.atualizar(manutencao)
+    publicador_de_manutencao.notificar("manutencao_concluida", {  # Observer: avisa o gestor
+        "mensagem": f"Manutenção concluída pelo técnico: {manutencao.descricao}.",
+    })
+    return ir_para("/manutencoes")
+```
+
+📍 `driftor/dominio.py` · linhas 357–364 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/dominio.py#L357-L364)
+
+```python
+    def concluir(self, observacoes: str) -> None:
+        if not self.esta_pendente():
+            raise ErroDeNegocio("Esta manutenção já foi concluída.")
+        observacoes = (observacoes or "").strip()
+        if not observacoes:
+            raise ErroDeNegocio("Escreva as observações do que foi feito.")
+        self.status = "concluida"
+        self.observacoes = observacoes
+```
+
+📍 `driftor/manutencoes/repositorio.py` · linhas 50–58 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/manutencoes/repositorio.py#L50-L58)
+
+```python
+    # ---- Update (o gestor edita a descrição; o técnico conclui com observações)
+    def atualizar(self, manutencao: Manutencao) -> None:
         self.banco.executar(
-            "insert into notas_drift (id, drift_id, texto) values (:id, :drift_id, :texto)",
-            id=nota.id, drift_id=nota.drift_id, texto=nota.texto,
+            """update manutencoes set descricao = :descricao, status = :status, observacoes = :observacoes,
+                   concluida_em = case when :status = 'concluida' then coalesce(concluida_em, now()) end
+               where id = :id""",
+            id=manutencao.id, descricao=manutencao.descricao,
+            status=manutencao.status, observacoes=manutencao.observacoes,
         )
 ```
 
-📍 `driftor/dominio.py` · linhas 325–335 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/48c729e/driftor/dominio.py#L325-L335)
+O gestor também tem um Update: ele corrige a descrição enquanto a manutenção está pendente.
+
+📍 `driftor/manutencoes/rotas.py` · linhas 60–67 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/manutencoes/rotas.py#L60-L67)
 
 ```python
-class NotaDeDrift:
-    id: str
-    drift_id: str
-    texto: str
-
-    @staticmethod
-    def criar(drift_id: str, texto: str) -> NotaDeDrift:
-        texto = (texto or "").strip()
-        if not texto:
-            raise ErroDeNegocio("Escreva a nota antes de salvar.")
-        return NotaDeDrift(novo_id(), drift_id, texto)
+# ---- Update pelo gestor: corrigir a descrição enquanto está pendente
+@rotas.post("/manutencoes/{id}", dependencies=[Depends(exigir("disparar_manutencao"))])
+def editar(id: str, descricao: str = Form("")):
+    repo = RepositorioDeManutencoes()
+    manutencao = repo.obter_ou_erro(id)
+    manutencao.editar(descricao)
+    repo.atualizar(manutencao)
+    return ir_para(f"/manutencoes/{id}")
 ```
 
-### 3.3 Update
+### 3.4 Delete: só o gestor
 
-> **Fala:** "Clico em Editar na nota, mudo o texto e salvo."
+> **Fala:** "Volto como Gestor. O aviso 'Manutenção concluída pelo técnico' aparece no topo. Em Manutenções, abro uma manutenção e clico em Excluir. O técnico não tem esse botão."
 
-📍 `driftor/notas/rotas.py` · linhas 41–54 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/48c729e/driftor/notas/rotas.py#L41-L54)
-
-```python
-# ---- Update
-@rotas.get("/notas/{id}/editar")
-def editar(request: Request, id: str):
-    nota = RepositorioDeNotas().obter_ou_erro(id)
-    return tela(request, "notas/editar.html", nota=nota, analise_id=_analise_do_drift(nota.drift_id))
-
-
-@rotas.post("/notas/{id}")
-def salvar(id: str, texto: str = Form("")):
-    repo = RepositorioDeNotas()
-    nota = repo.obter_ou_erro(id)
-    nota.editar(texto)
-    repo.atualizar(nota)
-    return ir_para(f"/analises/{_analise_do_drift(nota.drift_id)}/notas")
-```
-
-📍 `driftor/notas/repositorio.py` · linhas 34–39 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/48c729e/driftor/notas/repositorio.py#L34-L39)
+📍 `driftor/manutencoes/rotas.py` · linhas 70–74 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/manutencoes/rotas.py#L70-L74)
 
 ```python
-    # ---- Update
-    def atualizar(self, nota: NotaDeDrift) -> None:
-        self.banco.executar(
-            "update notas_drift set texto = :texto, atualizado_em = now() where id = :id",
-            id=nota.id, texto=nota.texto,
-        )
-```
-
-### 3.4 Delete
-
-> **Fala:** "Clico em Excluir na nota e confirmo. A nota sai da lista e o total de notas da análise volta a zero."
-
-📍 `driftor/notas/rotas.py` · linhas 57–65 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/48c729e/driftor/notas/rotas.py#L57-L65)
-
-```python
-# ---- Delete
-@rotas.post("/notas/{id}/excluir")
+# ---- Delete pelo gestor
+@rotas.post("/manutencoes/{id}/excluir", dependencies=[Depends(exigir("disparar_manutencao"))])
 def excluir(id: str):
-    repo = RepositorioDeNotas()
-    nota = repo.obter_ou_erro(id)
-    analise_id = _analise_do_drift(nota.drift_id)
-    repo.excluir(id)
-    publicador_de_notas.notificar("nota_excluida", {"analise_id": analise_id, "mensagem": "Nota excluída."})  # Observer
-    return ir_para(f"/analises/{analise_id}/notas")
+    RepositorioDeManutencoes().excluir(id)
+    return ir_para("/manutencoes")
 ```
 
-## 4. Os padrões no meu código
+## 4. A variabilidade aparece no meu CRUD
 
-Todos os padrões estão explicados em `defesa/padroes-de-projeto.md`. Estes três aparecem nos meus CRUDs:
+A mesma tela de manutenção muda conforme o papel. Cada rota diz qual permissão exige, e o `PAPEIS` diz quem tem cada uma:
 
-| Padrão | Onde eu uso | Linha |
-|---|---|---|
-| Singleton `BancoDeDados` | todo repositório pega a mesma conexão | `repositorio_base.py`, `self.banco = BancoDeDados()` |
-| Adapter `RiverAdwinAdapter` | o Create da análise chama `detector.detectar(...)` | `analises/rotas.py`, linha 47 |
-| Observer exemplo 1 | o Create da análise chama `publicador_de_analise.notificar(...)` | `analises/rotas.py`, linha 50 |
-| Observer exemplo 2 | o Create e o Delete da nota chamam `publicador_de_notas.notificar(...)` | `notas/rotas.py` |
+| Ação | Permissão | Gestor | Técnico |
+|---|---|---|---|
+| Ver a lista e o detalhe | `manutencoes` | sim | sim |
+| Disparar, editar a descrição, excluir | `disparar_manutencao` | sim | não |
+| Concluir com observações | `concluir_manutencao` | não | sim |
+| Ver a análise de origem | `ver_analise` | sim | sim, sem renomear, excluir nem disparar |
 
-## 5. Perguntas prováveis
+📍 `driftor/config.py` · linhas 13–26 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/2a5e9c6/driftor/config.py#L13-L26)
 
-**Onde está o Create da análise?** Em `driftor/analises/rotas.py`, na função `criar`. Ela grava no banco pelo `RepositorioDeAnalises.inserir`, em `driftor/analises/repositorio.py`.
+```python
+PAPEIS = {
+    "gestor": {
+        "nome": "Gestor",
+        "descricao": "Mapeia os processos, gera as análises de desvio e dispara as manutenções.",
+        "inicio": "/processos",
+        "pode": {"processos", "atividades", "analises", "ver_analise", "manutencoes", "disparar_manutencao"},
+    },
+    "tecnico": {
+        "nome": "Técnico de manutenção",
+        "descricao": "Recebe as manutenções disparadas, executa e registra as observações.",
+        "inicio": "/manutencoes",
+        "pode": {"manutencoes", "ver_analise", "concluir_manutencao"},
+    },
+}
+```
+
+## 5. Os padrões no meu código
+
+Todos os padrões estão explicados em `defesa/padroes-de-projeto.md`. Estes aparecem nos meus CRUDs:
+
+| Padrão | Onde eu uso |
+|---|---|
+| Singleton `BancoDeDados` | todo repositório pega a mesma conexão (`self.banco = BancoDeDados()` em `repositorio_base.py`) |
+| Singleton `Configuracao` | `exigir(...)` pergunta `Configuracao().pode(papel, permissao)` antes de abrir a rota |
+| Adapter `RiverAdwinAdapter` | o Create da análise chama `detector().detectar(...)` |
+| Observer exemplo 1 | o Create da análise chama `publicador_de_analise.notificar("analise_concluida", ...)` |
+| Observer exemplo 2 | o Create e o Update da manutenção chamam `publicador_de_manutencao.notificar(...)` |
+
+## 6. Perguntas prováveis
+
+**Onde está o Create da manutenção?** Em `driftor/manutencoes/rotas.py`, na função `disparar`. Ela usa a regra `Manutencao.disparar` (em `dominio.py`) e grava pelo `RepositorioDeManutencoes.inserir`.
 
 **Onde conecta com o banco?** Em `driftor/banco.py`, na classe `BancoDeDados`. Os repositórios só chamam `consultar` e `executar` com o SQL.
 
 **Por que o `BancoDeDados` é um Singleton?** Para o app inteiro usar uma conexão só (um pool). Toda vez que alguém escreve `BancoDeDados()`, o `__new__` devolve o mesmo objeto.
 
-**O que é o Adapter aqui?** O ADWIN da biblioteca river recebe um valor por vez (`update`) e liga a flag `drift_detected`. O app quer outra coisa: passar a série inteira e receber a lista de desvios. O `RiverAdwinAdapter` faz essa tradução. Se trocar a biblioteca, só ele muda.
+**O que é o Adapter aqui?** O ADWIN da biblioteca river recebe um valor por vez (`update`) e liga a flag `drift_detected`. O app quer passar a série inteira e receber a lista de desvios. O `RiverAdwinAdapter` faz essa tradução. Se trocar a biblioteca, só ele muda.
 
-**O que é o Observer aqui?** O `publicador_de_analise` não sabe quem vai reagir. Em `main.py`, eu inscrevo o `AtualizadorDoProcesso` e o `AvisoNaTela`. Quando a análise termina, o `notificar` chama o `atualizar` de cada um. É o aviso amarelo que aparece no topo.
+**Como o técnico fica sabendo da manutenção?** Pelo Observer. Quando o gestor dispara, a rota chama `publicador_de_manutencao.notificar("manutencao_disparada", ...)`. Em `main.py`, a caixa de avisos do técnico está inscrita nesse publicador. Ela guarda a mensagem, e a próxima tela do técnico mostra o aviso no topo. Quem dispara não sabe quem vai receber.
 
-**Quantas tabelas?** São sete no total, em `driftor/schema.sql`. As minhas são `analises`, `drifts` e `notas_drift`.
+**Por que o gestor não recebe o aviso de "Nova manutenção"?** Cada `AvisoNaTela` só aceita os eventos do seu papel: a do técnico aceita `manutencao_disparada`, e a do gestor aceita `analise_concluida` e `manutencao_concluida`. Está em `driftor/observador.py`, no `avisos_por_papel`.
 
-**Por que a tela de análise some na edição Essencial?** Por causa da variabilidade: a edição Essencial não tem o recurso `analises`, então o `exigir_recurso("analises")` responde 404 e o menu esconde o link.
+**Onde está a variabilidade?** No papel. `PAPEIS`, em `driftor/config.py`, lista as permissões do Gestor e do Técnico. Cada rota tem `exigir("...")`, de `driftor/telas.py`. Se o técnico tentar abrir `/analises` pelo endereço, recebe 403.
 
-**O que acontece com as notas se eu excluir a análise?** O banco apaga os desvios e as notas junto, por causa do `on delete cascade` nas chaves estrangeiras.
+**O que acontece com as manutenções se eu excluir a análise?** O banco apaga os desvios e as manutenções junto, por causa do `on delete cascade`.
+
+**Dá para concluir sem observações?** Não. `Manutencao.concluir` recusa observações vazias e recusa concluir de novo uma manutenção já concluída. O erro aparece numa tela própria (422).
