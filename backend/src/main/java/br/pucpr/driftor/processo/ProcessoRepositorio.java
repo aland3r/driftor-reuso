@@ -1,6 +1,6 @@
 package br.pucpr.driftor.processo;
 
-import br.pucpr.driftor.padroes.singleton.BancoDeDados;
+import br.pucpr.driftor.compactacao.RepositorioBase;
 import br.pucpr.driftor.dominio.Evento;
 import br.pucpr.driftor.dominio.Processo;
 import br.pucpr.driftor.dominio.Trace;
@@ -12,26 +12,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-/** SQL do CRUD de Processo (tabelas processos e eventos). */
-public class ProcessoRepositorio {
+/** SQL do CRUD de Processo (tabelas processos e eventos). Listar, obter e excluir vêm de RepositorioBase. */
+public class ProcessoRepositorio extends RepositorioBase<Processo> {
 
-    private final BancoDeDados banco = BancoDeDados.getInstancia();
-
-    // ---- Read
-    public List<Processo> listar() {
-        return banco.consultar("select id, nome, arquivo, total_traces, total_eventos from processos order by nome", (linha, n) -> criarObjeto(linha));
+    public ProcessoRepositorio() {
+        super("processos", "id, nome, arquivo, total_traces, total_eventos", "nome");
     }
 
-    public Processo obter(UUID id) {
-        return banco.consultar("select id, nome, arquivo, total_traces, total_eventos from processos where id = ?", (linha, n) -> criarObjeto(linha), id).get(0);
-    }
-
-    // ---- Delete
-    public void excluir(UUID id) {
-        banco.executar("delete from processos where id = ?", id);
-    }
-
-    private Processo criarObjeto(ResultSet linha) throws SQLException {
+    @Override
+    protected Processo criarObjeto(ResultSet linha) throws SQLException {
         return new Processo(linha.getObject("id", UUID.class), linha.getString("nome"), linha.getString("arquivo"),
                 linha.getInt("total_traces"), linha.getInt("total_eventos"));
     }

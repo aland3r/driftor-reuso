@@ -1,6 +1,6 @@
 package br.pucpr.driftor.analise;
 
-import br.pucpr.driftor.padroes.singleton.BancoDeDados;
+import br.pucpr.driftor.compactacao.RepositorioBase;
 import br.pucpr.driftor.dominio.Analise;
 import br.pucpr.driftor.dominio.Drift;
 import java.sql.ResultSet;
@@ -10,27 +10,16 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-/** SQL do CRUD de Análise (tabelas analises e drifts). */
-public class AnaliseRepositorio {
+/** SQL do CRUD de Análise (tabelas analises e drifts). Listar, obter e excluir vêm de RepositorioBase. */
+public class AnaliseRepositorio extends RepositorioBase<Analise> {
 
-    private final BancoDeDados banco = BancoDeDados.getInstancia();
-
-    // ---- Read
-    public List<Analise> listar() {
-        return banco.consultar("select id, processo_id, nome, atividade, delta, total_observacoes from analises order by nome", (linha, n) -> criarObjeto(linha));
-    }
-
-    public Analise obter(UUID id) {
-        return banco.consultar("select id, processo_id, nome, atividade, delta, total_observacoes from analises where id = ?", (linha, n) -> criarObjeto(linha), id).get(0);
-    }
-
-    // ---- Delete
-    public void excluir(UUID id) {
-        banco.executar("delete from analises where id = ?", id);
+    public AnaliseRepositorio() {
+        super("analises", "id, processo_id, nome, atividade, delta, total_observacoes", "nome");
     }
 
     /** A análise vem com os seus desvios. */
-    private Analise criarObjeto(ResultSet linha) throws SQLException {
+    @Override
+    protected Analise criarObjeto(ResultSet linha) throws SQLException {
         Analise analise = new Analise(linha.getObject("id", UUID.class), linha.getObject("processo_id", UUID.class),
                 linha.getString("nome"), linha.getString("atividade"), linha.getDouble("delta"), linha.getInt("total_observacoes"));
         analise.setDrifts(banco.consultar(

@@ -1,6 +1,6 @@
 package br.pucpr.driftor.manutencao;
 
-import br.pucpr.driftor.padroes.singleton.BancoDeDados;
+import br.pucpr.driftor.compactacao.RepositorioBase;
 import br.pucpr.driftor.dominio.Manutencao;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,26 +8,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-/** SQL do CRUD de Manutenção. */
-public class ManutencaoRepositorio {
+/** SQL do CRUD de Manutenção. Listar, obter e excluir vêm de RepositorioBase. */
+public class ManutencaoRepositorio extends RepositorioBase<Manutencao> {
 
-    private final BancoDeDados banco = BancoDeDados.getInstancia();
-
-    // ---- Read
-    public List<Manutencao> listar() {
-        return banco.consultar("select id, analise_id, drift_id, descricao, status, observacoes from manutencoes order by status desc", (linha, n) -> criarObjeto(linha));
+    public ManutencaoRepositorio() {
+        super("manutencoes", "id, analise_id, drift_id, descricao, status, observacoes", "status desc");
     }
 
-    public Manutencao obter(UUID id) {
-        return banco.consultar("select id, analise_id, drift_id, descricao, status, observacoes from manutencoes where id = ?", (linha, n) -> criarObjeto(linha), id).get(0);
-    }
-
-    // ---- Delete
-    public void excluir(UUID id) {
-        banco.executar("delete from manutencoes where id = ?", id);
-    }
-
-    private Manutencao criarObjeto(ResultSet linha) throws SQLException {
+    @Override
+    protected Manutencao criarObjeto(ResultSet linha) throws SQLException {
         return new Manutencao(linha.getObject("id", UUID.class), linha.getObject("analise_id", UUID.class),
                 linha.getObject("drift_id", UUID.class), linha.getString("descricao"), linha.getString("status"),
                 linha.getString("observacoes"));
