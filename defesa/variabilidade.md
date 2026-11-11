@@ -1,6 +1,6 @@
 # Variabilidade por papel
 
-[← voltar](../README.md) · links fixos no commit `3e19e1d`
+[← defesa](README.md) · links fixos no commit `e994f19`
 
 O mesmo produto atende dois papéis: **Gestor** e **Técnico de manutenção**. A entrada é simulada, sem senha: a pessoa escolhe o papel, e toda chamada à API leva esse papel no cabeçalho `Papel`.
 
@@ -12,11 +12,32 @@ O mesmo produto atende dois papéis: **Gestor** e **Técnico de manutenção**. 
 | Manutenção | dispara e exclui | conclui |
 | Avisos (Observer) | análise e manutenção concluídas | manutenção nova |
 
-## 1. Onde a variação é definida
+## 1. Tela de entrada: o papel é escolhido
+
+O papel escolhido fica guardado no navegador:
+
+📍 `frontend/src/telas/Entrar.jsx` · linhas 6–6 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/e994f19/frontend/src/telas/Entrar.jsx#L6-L6)
+
+```jsx
+  const entrar = (chave) => { localStorage.setItem("papel", chave); navegar(papeis[chave].inicio); };
+```
+
+Toda chamada à API leva esse papel no cabeçalho `Papel`:
+
+📍 `frontend/src/api.js` · linhas 2–5 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/e994f19/frontend/src/api.js#L2-L5)
+
+```js
+export const papel = () => localStorage.getItem("papel");
+
+export async function api(metodo, url, corpo) {
+  const opcoes = { method: metodo, headers: { Papel: papel() } };
+```
+
+## 2. Onde a variação é definida
 
 As permissões de cada papel ficam na `Configuracao`. Mudar o que um papel pode é mudar só este trecho.
 
-📍 `singleton/Configuracao.java` · linhas 20–25 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/3e19e1d/backend/src/driftor/singleton/Configuracao.java#L20-L25)
+📍 `singleton/Configuracao.java` · linhas 20–25 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/e994f19/backend/src/driftor/singleton/Configuracao.java#L20-L25)
 
 ```java
     /** VARIABILIDADE por papel: o que cada perfil pode fazer no mesmo produto. */
@@ -27,11 +48,11 @@ As permissões de cada papel ficam na `Configuracao`. Mudar o que um papel pode 
                     Set.of("manutencoes", "ver_analise", "concluir_manutencao")));
 ```
 
-## 2. Onde a variação é aplicada
+## 3. Onde a variação é aplicada
 
 No back-end, cada operação chama `exigir` antes de fazer qualquer coisa:
 
-📍 `singleton/Configuracao.java` · linhas 43–47 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/3e19e1d/backend/src/driftor/singleton/Configuracao.java#L43-L47)
+📍 `singleton/Configuracao.java` · linhas 43–47 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/e994f19/backend/src/driftor/singleton/Configuracao.java#L43-L47)
 
 ```java
     public void exigir(String papel, String permissao) {
@@ -41,6 +62,6 @@ No back-end, cada operação chama `exigir` antes de fazer qualquer coisa:
     }
 ```
 
-Exemplo: [`ManutencaoController.java:44`](https://github.com/aland3r/driftor-reuso/blob/3e19e1d/backend/src/driftor/manutencao/ManutencaoController.java#L44)
+Exemplo: [`ManutencaoController.java:44`](https://github.com/aland3r/driftor-reuso/blob/e994f19/backend/src/driftor/manutencao/ManutencaoController.java#L44)
 
-No front, o menu mostra só o que o papel pode usar: [`main.jsx:29`](https://github.com/aland3r/driftor-reuso/blob/3e19e1d/frontend/src/main.jsx#L29). Os botões de gestor só aparecem para ele: [`Analise.jsx:15`](https://github.com/aland3r/driftor-reuso/blob/3e19e1d/frontend/src/telas/Analise.jsx#L15)
+No front, o menu mostra só o que o papel pode usar: [`main.jsx:29`](https://github.com/aland3r/driftor-reuso/blob/e994f19/frontend/src/main.jsx#L29). Os botões de gestor só aparecem para ele: [`Analise.jsx:15`](https://github.com/aland3r/driftor-reuso/blob/e994f19/frontend/src/telas/Analise.jsx#L15)

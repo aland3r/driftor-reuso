@@ -15,23 +15,15 @@ O fluxo: o gestor cria um processo e sobe o log `.xes`. As atividades e o grafo 
 
 ## Defesa
 
-| Tema | Explicação |
-|---|---|
-| Caminho de um CRUD, do botão ao banco | [defesa/cruds.md](defesa/cruds.md) |
-| Singleton | [defesa/singleton.md](defesa/singleton.md) |
-| Adapter | [defesa/adapter.md](defesa/adapter.md) |
-| Observer | [defesa/observer.md](defesa/observer.md) |
-| Variabilidade por papel | [defesa/variabilidade.md](defesa/variabilidade.md) |
-| Compactação de código (roteiro do vídeo) | [defesa/compactacao.md](defesa/compactacao.md) |
-| As 12 classes e as 6 tabelas | [defesa/classes-e-tabelas.md](defesa/classes-e-tabelas.md) |
+Tudo em [`defesa/`](defesa/README.md): os [4 CRUDs](defesa/cruds/README.md), os [padrões](defesa/padroes/) ([Singleton](defesa/padroes/singleton.md) · [Adapter](defesa/padroes/adapter.md) · [Observer](defesa/padroes/observer.md)), a [variabilidade](defesa/variabilidade.md), a [compactação](defesa/compactacao.md) e as [classes e tabelas](defesa/classes-e-tabelas.md). Cada arquivo mostra o caminho completo, da tela até o banco.
 
 ## Onde está cada item do enunciado
 
 | Item | Onde |
 |---|---|
-| 12 classes com atributos e métodos | pasta [`dominio/`](https://github.com/aland3r/driftor-reuso/tree/3e19e1d/backend/src/driftor/dominio) · [lista](defesa/classes-e-tabelas.md) |
-| 3 padrões, 2 exemplos de cada | [Singleton](defesa/singleton.md) · [Adapter](defesa/adapter.md) · [Observer](defesa/observer.md) |
-| 4 CRUDs com banco (Processo, Atividade, Análise, Manutenção) | [cruds.md](defesa/cruds.md) |
-| 3 tabelas ou mais | [schema.sql](https://github.com/aland3r/driftor-reuso/blob/3e19e1d/backend/src/schema.sql) (6 tabelas) |
+| 12 classes com atributos e métodos | pasta [`dominio/`](https://github.com/aland3r/driftor-reuso/tree/e994f19/backend/src/driftor/dominio) · [lista](defesa/classes-e-tabelas.md) |
+| 3 padrões, 2 exemplos de cada | [Singleton](defesa/padroes/singleton.md) · [Adapter](defesa/padroes/adapter.md) · [Observer](defesa/padroes/observer.md) |
+| 4 CRUDs com banco (Processo, Atividade, Análise, Manutenção) | [cruds/](defesa/cruds/README.md) |
+| 3 tabelas ou mais | [schema.sql](https://github.com/aland3r/driftor-reuso/blob/e994f19/backend/src/schema.sql) (6 tabelas) |
 | Variabilidade | [variabilidade.md](defesa/variabilidade.md) |
 | Compactação de código | [compactacao.md](defesa/compactacao.md) |
