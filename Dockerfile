@@ -10,7 +10,7 @@ RUN npx vite build
 FROM maven:3.9-eclipse-temurin-21 AS back
 WORKDIR /app/backend
 COPY backend ./
-COPY --from=front /app/backend/src/main/resources/static ./src/main/resources/static
+COPY --from=front /app/backend/static ./static
 RUN mvn -q -DskipTests package
 
 # 3. Imagem final: Java na porta 8080 e o motor Python na 8000 (só por dentro)

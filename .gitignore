@@ -2,4 +2,4 @@
 __pycache__/
 frontend/node_modules/
 backend/target/
-backend/src/main/resources/static/
+backend/static/
