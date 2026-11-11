@@ -1,6 +1,6 @@
 # Variabilidade por papel
 
-[← voltar](../README.md) · links fixos no commit `82162ab`
+[← voltar](../README.md) · links fixos no commit `f10116b`
 
 O mesmo produto atende dois papéis: **Gestor** e **Técnico de manutenção**. A entrada é simulada, sem senha: a pessoa escolhe o papel, e toda chamada à API leva esse papel no cabeçalho `Papel`.
 
@@ -16,7 +16,7 @@ O mesmo produto atende dois papéis: **Gestor** e **Técnico de manutenção**. 
 
 As permissões de cada papel ficam na `Configuracao`. Mudar o que um papel pode é mudar só este trecho.
 
-📍 `padroes/singleton/Configuracao.java` · linhas 20–25 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/82162ab/backend/src/main/java/br/pucpr/driftor/padroes/singleton/Configuracao.java#L20-L25)
+📍 `singleton/Configuracao.java` · linhas 20–25 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/f10116b/backend/src/driftor/singleton/Configuracao.java#L20-L25)
 
 ```java
     /** VARIABILIDADE por papel: o que cada perfil pode fazer no mesmo produto. */
@@ -31,7 +31,7 @@ As permissões de cada papel ficam na `Configuracao`. Mudar o que um papel pode 
 
 No back-end, cada operação chama `exigir` antes de fazer qualquer coisa:
 
-📍 `padroes/singleton/Configuracao.java` · linhas 43–47 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/82162ab/backend/src/main/java/br/pucpr/driftor/padroes/singleton/Configuracao.java#L43-L47)
+📍 `singleton/Configuracao.java` · linhas 43–47 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/f10116b/backend/src/driftor/singleton/Configuracao.java#L43-L47)
 
 ```java
     public void exigir(String papel, String permissao) {
@@ -41,6 +41,6 @@ No back-end, cada operação chama `exigir` antes de fazer qualquer coisa:
     }
 ```
 
-Exemplo: [`ManutencaoController.java:44`](https://github.com/aland3r/driftor-reuso/blob/82162ab/backend/src/main/java/br/pucpr/driftor/manutencao/ManutencaoController.java#L44)
+Exemplo: [`ManutencaoController.java:44`](https://github.com/aland3r/driftor-reuso/blob/f10116b/backend/src/driftor/manutencao/ManutencaoController.java#L44)
 
-No front, o menu mostra só o que o papel pode usar: [`main.jsx:29`](https://github.com/aland3r/driftor-reuso/blob/82162ab/frontend/src/main.jsx#L29). Os botões de gestor só aparecem para ele: [`Analise.jsx:15`](https://github.com/aland3r/driftor-reuso/blob/82162ab/frontend/src/telas/Analise.jsx#L15)
+No front, o menu mostra só o que o papel pode usar: [`main.jsx:29`](https://github.com/aland3r/driftor-reuso/blob/f10116b/frontend/src/main.jsx#L29). Os botões de gestor só aparecem para ele: [`Analise.jsx:15`](https://github.com/aland3r/driftor-reuso/blob/f10116b/frontend/src/telas/Analise.jsx#L15)

@@ -1,6 +1,6 @@
 # Singleton
 
-[← voltar](../README.md) · links fixos no commit `82162ab`
+[← voltar](../README.md) · links fixos no commit `f10116b`
 
 **O que é:** garante que uma classe tenha **uma única instância** e dá um ponto de acesso global a ela.
 
@@ -15,7 +15,7 @@
 
 Todos os repositórios chamam `BancoDeDados.getInstancia()` e recebem o mesmo objeto, com o mesmo pool de conexões.
 
-📍 `padroes/singleton/BancoDeDados.java` · linhas 16–30 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/82162ab/backend/src/main/java/br/pucpr/driftor/padroes/singleton/BancoDeDados.java#L16-L30)
+📍 `singleton/BancoDeDados.java` · linhas 16–30 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/f10116b/backend/src/driftor/singleton/BancoDeDados.java#L16-L30)
 
 ```java
 public class BancoDeDados {
@@ -35,7 +35,7 @@ public class BancoDeDados {
     }
 ```
 
-📍 `padroes/singleton/BancoDeDados.java` · linhas 32–37 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/82162ab/backend/src/main/java/br/pucpr/driftor/padroes/singleton/BancoDeDados.java#L32-L37)
+📍 `singleton/BancoDeDados.java` · linhas 32–37 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/f10116b/backend/src/driftor/singleton/BancoDeDados.java#L32-L37)
 
 ```java
     public static synchronized BancoDeDados getInstancia() {
@@ -46,8 +46,8 @@ public class BancoDeDados {
     }
 ```
 
-Onde é usado: [`RepositorioBase.java:14`](https://github.com/aland3r/driftor-reuso/blob/82162ab/backend/src/main/java/br/pucpr/driftor/compactacao/RepositorioBase.java#L14)
+Onde é usado: [`RepositorioBase.java:14`](https://github.com/aland3r/driftor-reuso/blob/f10116b/backend/src/driftor/compactacao/RepositorioBase.java#L14)
 
 ## Segundo exemplo
 
-`Configuracao`, com as regras de cada papel e o endereço do motor: [`Configuracao.java:35`](https://github.com/aland3r/driftor-reuso/blob/82162ab/backend/src/main/java/br/pucpr/driftor/padroes/singleton/Configuracao.java#L35)
+`Configuracao`, com as regras de cada papel e o endereço do motor: [`Configuracao.java:35`](https://github.com/aland3r/driftor-reuso/blob/f10116b/backend/src/driftor/singleton/Configuracao.java#L35)
