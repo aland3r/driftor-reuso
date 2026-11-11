@@ -1,6 +1,6 @@
 # CRUD de Processo
 
-[← CRUDs](README.md) · links fixos no commit `e994f19`
+[← CRUDs](README.md) · links fixos no commit `da31cd6`
 
 Telas **Processos** (lista) e **Processo** (detalhe).
 
@@ -8,7 +8,7 @@ Telas **Processos** (lista) e **Processo** (detalhe).
 
 **1. Tela:** o botão **Criar processo** manda o nome e abre o processo novo.
 
-📍 `frontend/src/telas/Processos.jsx` · linhas 13–17 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/e994f19/frontend/src/telas/Processos.jsx#L13-L17)
+📍 `frontend/src/telas/Processos.jsx` · linhas 13–17 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/da31cd6/frontend/src/telas/Processos.jsx#L13-L17)
 
 ```jsx
   const criar = async (e) => {
@@ -20,7 +20,7 @@ Telas **Processos** (lista) e **Processo** (detalhe).
 
 **2. Controller:** `POST /api/processos`.
 
-📍 `processo/ProcessoController.java` · linhas 31–38 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/e994f19/backend/src/driftor/processo/ProcessoController.java#L31-L38)
+📍 `processo/ProcessoController.java` · linhas 31–38 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/da31cd6/backend/src/driftor/processo/ProcessoController.java#L31-L38)
 
 ```java
     // ---- Create
@@ -35,7 +35,7 @@ Telas **Processos** (lista) e **Processo** (detalhe).
 
 **3. Domínio:**
 
-📍 `dominio/Processo.java` · linhas 21–23 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/e994f19/backend/src/driftor/dominio/Processo.java#L21-L23)
+📍 `dominio/Processo.java` · linhas 21–23 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/da31cd6/backend/src/driftor/dominio/Processo.java#L21-L23)
 
 ```java
     public static Processo criar(String nome) {
@@ -45,7 +45,7 @@ Telas **Processos** (lista) e **Processo** (detalhe).
 
 **4. Banco:**
 
-📍 `processo/ProcessoRepositorio.java` · linhas 28–31 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/e994f19/backend/src/driftor/processo/ProcessoRepositorio.java#L28-L31)
+📍 `processo/ProcessoRepositorio.java` · linhas 28–31 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/da31cd6/backend/src/driftor/processo/ProcessoRepositorio.java#L28-L31)
 
 ```java
     // ---- Create
@@ -58,7 +58,7 @@ Telas **Processos** (lista) e **Processo** (detalhe).
 
 **1. Tela:**
 
-📍 `frontend/src/telas/Processo.jsx` · linhas 17–17 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/e994f19/frontend/src/telas/Processo.jsx#L17-L17)
+📍 `frontend/src/telas/Processo.jsx` · linhas 17–17 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/da31cd6/frontend/src/telas/Processo.jsx#L17-L17)
 
 ```jsx
   const carregar = () => api("GET", "/processos/" + id).then(setDados);
@@ -66,7 +66,7 @@ Telas **Processos** (lista) e **Processo** (detalhe).
 
 **2. Controller:** `GET /api/processos/{id}`. Lê os traces do banco, pede as arestas ao minerador ([Adapter](../padroes/adapter.md)) e monta o grafo e as variantes.
 
-📍 `processo/ProcessoController.java` · linhas 40–48 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/e994f19/backend/src/driftor/processo/ProcessoController.java#L40-L48)
+📍 `processo/ProcessoController.java` · linhas 40–48 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/da31cd6/backend/src/driftor/processo/ProcessoController.java#L40-L48)
 
 ```java
     // ---- Read: detalhe com o grafo, as variantes e as análises
@@ -82,7 +82,7 @@ Telas **Processos** (lista) e **Processo** (detalhe).
 
 **3. Banco:** os eventos voltam ligados ao nome da atividade.
 
-📍 `processo/ProcessoRepositorio.java` · linhas 58–69 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/e994f19/backend/src/driftor/processo/ProcessoRepositorio.java#L58-L69)
+📍 `processo/ProcessoRepositorio.java` · linhas 58–69 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/da31cd6/backend/src/driftor/processo/ProcessoRepositorio.java#L58-L69)
 
 ```java
     // ---- Read: os traces voltam montados a partir dos eventos
@@ -105,7 +105,7 @@ A lista de processos (`GET /api/processos`) usa o `listar` herdado de `Repositor
 
 **1. Tela:** o botão **Carregar** envia o arquivo `.xes`.
 
-📍 `frontend/src/telas/Processo.jsx` · linhas 25–29 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/e994f19/frontend/src/telas/Processo.jsx#L25-L29)
+📍 `frontend/src/telas/Processo.jsx` · linhas 25–29 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/da31cd6/frontend/src/telas/Processo.jsx#L25-L29)
 
 ```jsx
   const carregarLog = async (e) => {
@@ -117,7 +117,7 @@ A lista de processos (`GET /api/processos`) usa o `listar` herdado de `Repositor
 
 **2. Controller:** `POST /api/processos/{id}/log`. O motor lê o arquivo e devolve os traces; o processo guarda os totais.
 
-📍 `processo/ProcessoController.java` · linhas 50–58 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/e994f19/backend/src/driftor/processo/ProcessoController.java#L50-L58)
+📍 `processo/ProcessoController.java` · linhas 50–58 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/da31cd6/backend/src/driftor/processo/ProcessoController.java#L50-L58)
 
 ```java
     // ---- Update: carregar o log (as atividades aparecem direto no grafo)
@@ -133,7 +133,7 @@ A lista de processos (`GET /api/processos`) usa o `listar` herdado de `Repositor
 
 **3. Banco:** cria as atividades que ainda não existem e grava os eventos ligados a elas.
 
-📍 `processo/ProcessoRepositorio.java` · linhas 40–56 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/e994f19/backend/src/driftor/processo/ProcessoRepositorio.java#L40-L56)
+📍 `processo/ProcessoRepositorio.java` · linhas 40–56 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/da31cd6/backend/src/driftor/processo/ProcessoRepositorio.java#L40-L56)
 
 ```java
     public void salvarLog(Processo processo, List<Trace> traces) {
@@ -157,13 +157,13 @@ A lista de processos (`GET /api/processos`) usa o `listar` herdado de `Repositor
 
 ## Update: renomear
 
-📍 `frontend/src/telas/Processo.jsx` · linhas 30–30 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/e994f19/frontend/src/telas/Processo.jsx#L30-L30)
+📍 `frontend/src/telas/Processo.jsx` · linhas 30–30 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/da31cd6/frontend/src/telas/Processo.jsx#L30-L30)
 
 ```jsx
   const renomear = async (nome) => { await api("PUT", "/processos/" + id, { nome }); carregar(); };
 ```
 
-📍 `processo/ProcessoController.java` · linhas 60–67 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/e994f19/backend/src/driftor/processo/ProcessoController.java#L60-L67)
+📍 `processo/ProcessoController.java` · linhas 60–67 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/da31cd6/backend/src/driftor/processo/ProcessoController.java#L60-L67)
 
 ```java
     // ---- Update: renomear
@@ -176,7 +176,7 @@ A lista de processos (`GET /api/processos`) usa o `listar` herdado de `Repositor
     }
 ```
 
-📍 `processo/ProcessoRepositorio.java` · linhas 33–37 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/e994f19/backend/src/driftor/processo/ProcessoRepositorio.java#L33-L37)
+📍 `processo/ProcessoRepositorio.java` · linhas 33–37 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/da31cd6/backend/src/driftor/processo/ProcessoRepositorio.java#L33-L37)
 
 ```java
     // ---- Update
@@ -188,13 +188,13 @@ A lista de processos (`GET /api/processos`) usa o `listar` herdado de `Repositor
 
 ## Delete: excluir
 
-📍 `frontend/src/telas/Processo.jsx` · linhas 31–31 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/e994f19/frontend/src/telas/Processo.jsx#L31-L31)
+📍 `frontend/src/telas/Processo.jsx` · linhas 31–31 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/da31cd6/frontend/src/telas/Processo.jsx#L31-L31)
 
 ```jsx
   const excluir = async () => { await api("DELETE", "/processos/" + id); navegar("/processos"); };
 ```
 
-📍 `processo/ProcessoController.java` · linhas 69–74 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/e994f19/backend/src/driftor/processo/ProcessoController.java#L69-L74)
+📍 `processo/ProcessoController.java` · linhas 69–74 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/da31cd6/backend/src/driftor/processo/ProcessoController.java#L69-L74)
 
 ```java
     // ---- Delete

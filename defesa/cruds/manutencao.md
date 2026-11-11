@@ -1,6 +1,6 @@
 # CRUD de Manutenção
 
-[← CRUDs](README.md) · links fixos no commit `e994f19`
+[← CRUDs](README.md) · links fixos no commit `da31cd6`
 
 O gestor dispara a manutenção na tela **Análise**. O técnico conclui na tela **Manutenção**.
 
@@ -8,7 +8,7 @@ O gestor dispara a manutenção na tela **Análise**. O técnico conclui na tela
 
 **1. Tela:** o botão **Disparar manutenção** de um desvio manda a descrição.
 
-📍 `frontend/src/telas/Analise.jsx` · linhas 19–23 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/e994f19/frontend/src/telas/Analise.jsx#L19-L23)
+📍 `frontend/src/telas/Analise.jsx` · linhas 19–23 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/da31cd6/frontend/src/telas/Analise.jsx#L19-L23)
 
 ```jsx
   const disparar = async (driftId) => {
@@ -20,7 +20,7 @@ O gestor dispara a manutenção na tela **Análise**. O técnico conclui na tela
 
 **2. Controller:** `POST /api/analises/{id}/manutencoes`. Grava e avisa o técnico ([Observer](../padroes/observer.md)).
 
-📍 `manutencao/ManutencaoController.java` · linhas 24–31 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/e994f19/backend/src/driftor/manutencao/ManutencaoController.java#L24-L31)
+📍 `manutencao/ManutencaoController.java` · linhas 24–31 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/da31cd6/backend/src/driftor/manutencao/ManutencaoController.java#L24-L31)
 
 ```java
     // ---- Create: o gestor dispara a partir de um desvio
@@ -35,7 +35,7 @@ O gestor dispara a manutenção na tela **Análise**. O técnico conclui na tela
 
 **3. Domínio:**
 
-📍 `dominio/Manutencao.java` · linhas 23–25 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/e994f19/backend/src/driftor/dominio/Manutencao.java#L23-L25)
+📍 `dominio/Manutencao.java` · linhas 23–25 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/da31cd6/backend/src/driftor/dominio/Manutencao.java#L23-L25)
 
 ```java
     public static Manutencao disparar(UUID analiseId, UUID driftId, String descricao) {
@@ -45,7 +45,7 @@ O gestor dispara a manutenção na tela **Análise**. O técnico conclui na tela
 
 **4. Banco:**
 
-📍 `manutencao/ManutencaoRepositorio.java` · linhas 34–38 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/e994f19/backend/src/driftor/manutencao/ManutencaoRepositorio.java#L34-L38)
+📍 `manutencao/ManutencaoRepositorio.java` · linhas 34–38 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/da31cd6/backend/src/driftor/manutencao/ManutencaoRepositorio.java#L34-L38)
 
 ```java
     // ---- Create
@@ -57,13 +57,13 @@ O gestor dispara a manutenção na tela **Análise**. O técnico conclui na tela
 
 ## Read: lista de manutenções
 
-📍 `frontend/src/telas/Manutencoes.jsx` · linhas 8–8 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/e994f19/frontend/src/telas/Manutencoes.jsx#L8-L8)
+📍 `frontend/src/telas/Manutencoes.jsx` · linhas 8–8 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/da31cd6/frontend/src/telas/Manutencoes.jsx#L8-L8)
 
 ```jsx
   const carregar = () => api("GET", "/manutencoes").then(setManutencoes);
 ```
 
-📍 `manutencao/ManutencaoController.java` · linhas 17–22 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/e994f19/backend/src/driftor/manutencao/ManutencaoController.java#L17-L22)
+📍 `manutencao/ManutencaoController.java` · linhas 17–22 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/da31cd6/backend/src/driftor/manutencao/ManutencaoController.java#L17-L22)
 
 ```java
     // ---- Read: lista (gestor e técnico)
@@ -76,13 +76,13 @@ O gestor dispara a manutenção na tela **Análise**. O técnico conclui na tela
 
 **Banco:** a lista junta o nome da análise, do processo e o número do desvio.
 
-📍 `manutencao/ManutencaoRepositorio.java` · linhas 25–32 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/e994f19/backend/src/driftor/manutencao/ManutencaoRepositorio.java#L25-L32)
+📍 `manutencao/ManutencaoRepositorio.java` · linhas 25–32 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/da31cd6/backend/src/driftor/manutencao/ManutencaoRepositorio.java#L25-L32)
 
 ```java
     // ---- Read: a lista com o nome da análise, do processo e o número do desvio
     public List<Map<String, Object>> listarResumo(UUID analiseId) {
         return banco.consultarLinhas("""
-                select m.id, m.descricao, m.status, a.id as analise_id, a.nome as analise, p.nome as processo, d.posicao as desvio
+                select m.id, m.drift_id, m.descricao, m.status, a.id as analise_id, a.nome as analise, p.nome as processo, d.posicao as desvio
                 from manutencoes m join analises a on a.id = m.analise_id join processos p on p.id = a.processo_id
                 join drifts d on d.id = m.drift_id
                 where ?::uuid is null or m.analise_id = ? order by m.status desc""", analiseId, analiseId);
@@ -93,7 +93,7 @@ O gestor dispara a manutenção na tela **Análise**. O técnico conclui na tela
 
 **1. Tela:** o botão **Marcar como concluída** manda as observações.
 
-📍 `frontend/src/telas/Manutencao.jsx` · linhas 14–18 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/e994f19/frontend/src/telas/Manutencao.jsx#L14-L18)
+📍 `frontend/src/telas/Manutencao.jsx` · linhas 14–18 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/da31cd6/frontend/src/telas/Manutencao.jsx#L14-L18)
 
 ```jsx
   const concluir = async (e) => {
@@ -105,7 +105,7 @@ O gestor dispara a manutenção na tela **Análise**. O técnico conclui na tela
 
 **2. Controller:** `PUT /api/manutencoes/{id}/concluir`. Grava e avisa o gestor ([Observer](../padroes/observer.md)).
 
-📍 `manutencao/ManutencaoController.java` · linhas 41–49 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/e994f19/backend/src/driftor/manutencao/ManutencaoController.java#L41-L49)
+📍 `manutencao/ManutencaoController.java` · linhas 41–49 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/da31cd6/backend/src/driftor/manutencao/ManutencaoController.java#L41-L49)
 
 ```java
     // ---- Update: o técnico conclui com as observações
@@ -121,7 +121,7 @@ O gestor dispara a manutenção na tela **Análise**. O técnico conclui na tela
 
 **3. Domínio:**
 
-📍 `dominio/Manutencao.java` · linhas 31–34 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/e994f19/backend/src/driftor/dominio/Manutencao.java#L31-L34)
+📍 `dominio/Manutencao.java` · linhas 31–34 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/da31cd6/backend/src/driftor/dominio/Manutencao.java#L31-L34)
 
 ```java
     public void concluir(String observacoes) {
@@ -132,7 +132,7 @@ O gestor dispara a manutenção na tela **Análise**. O técnico conclui na tela
 
 **4. Banco:**
 
-📍 `manutencao/ManutencaoRepositorio.java` · linhas 40–44 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/e994f19/backend/src/driftor/manutencao/ManutencaoRepositorio.java#L40-L44)
+📍 `manutencao/ManutencaoRepositorio.java` · linhas 40–44 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/da31cd6/backend/src/driftor/manutencao/ManutencaoRepositorio.java#L40-L44)
 
 ```java
     // ---- Update
@@ -144,13 +144,13 @@ O gestor dispara a manutenção na tela **Análise**. O técnico conclui na tela
 
 ## Delete: excluir (gestor)
 
-📍 `frontend/src/telas/Manutencoes.jsx` · linhas 10–10 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/e994f19/frontend/src/telas/Manutencoes.jsx#L10-L10)
+📍 `frontend/src/telas/Manutencoes.jsx` · linhas 10–10 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/da31cd6/frontend/src/telas/Manutencoes.jsx#L10-L10)
 
 ```jsx
   const excluir = async (id) => { await api("DELETE", "/manutencoes/" + id); carregar(); };
 ```
 
-📍 `manutencao/ManutencaoController.java` · linhas 51–56 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/e994f19/backend/src/driftor/manutencao/ManutencaoController.java#L51-L56)
+📍 `manutencao/ManutencaoController.java` · linhas 51–56 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/da31cd6/backend/src/driftor/manutencao/ManutencaoController.java#L51-L56)
 
 ```java
     // ---- Delete: só o gestor
