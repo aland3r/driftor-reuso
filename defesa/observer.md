@@ -1,6 +1,6 @@
 # Observer
 
-[← voltar](../README.md) · links fixos no commit `f10116b`
+[← voltar](../README.md) · links fixos no commit `3e19e1d`
 
 **O que é:** um mecanismo de **assinatura**. Vários objetos se inscrevem para ser avisados quando algo acontece em outro objeto.
 
@@ -11,7 +11,7 @@
 
 **Por que usamos:** quem publica o evento (o controller) não precisa saber quem quer ser avisado. Para acrescentar uma reação, basta inscrever outro observador.
 
-📍 `observer/Subject.java` · linhas 7–19 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/f10116b/backend/src/driftor/observer/Subject.java#L7-L19)
+📍 `observer/Subject.java` · linhas 7–19 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/3e19e1d/backend/src/driftor/observer/Subject.java#L7-L19)
 
 ```java
 public class Subject {
@@ -29,7 +29,7 @@ public class Subject {
 }
 ```
 
-📍 `observer/Observer.java` · linhas 4–6 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/f10116b/backend/src/driftor/observer/Observer.java#L4-L6)
+📍 `observer/Observer.java` · linhas 4–6 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/3e19e1d/backend/src/driftor/observer/Observer.java#L4-L6)
 
 ```java
 public interface Observer {
@@ -39,12 +39,12 @@ public interface Observer {
 
 ## Exemplo: análise concluída avisa o gestor
 
-1. **Observador concreto:** `AvisoNaTela`, a caixa de avisos de um papel. Ela só guarda os eventos que interessam a esse papel. [`AvisoNaTela.java:17`](https://github.com/aland3r/driftor-reuso/blob/f10116b/backend/src/driftor/observer/AvisoNaTela.java#L17)
-2. **Inscrição:** a caixa do gestor se inscreve no Subject `ANALISE`. [`Avisos.java:21`](https://github.com/aland3r/driftor-reuso/blob/f10116b/backend/src/driftor/observer/Avisos.java#L21)
-3. **Publicação:** ao terminar a análise, o controller notifica. [`AnaliseController.java:34`](https://github.com/aland3r/driftor-reuso/blob/f10116b/backend/src/driftor/analise/AnaliseController.java#L34)
-4. Na próxima tela, o React pede os avisos do papel e mostra o aviso no topo. [`AcessoController.java:20`](https://github.com/aland3r/driftor-reuso/blob/f10116b/backend/src/driftor/acesso/AcessoController.java#L20)
+1. **Observador concreto:** `AvisoNaTela`, a caixa de avisos de um papel. Ela só guarda os eventos que interessam a esse papel. [`AvisoNaTela.java:17`](https://github.com/aland3r/driftor-reuso/blob/3e19e1d/backend/src/driftor/observer/AvisoNaTela.java#L17)
+2. **Inscrição:** a caixa do gestor se inscreve no Subject `ANALISE`. [`Avisos.java:21`](https://github.com/aland3r/driftor-reuso/blob/3e19e1d/backend/src/driftor/observer/Avisos.java#L21)
+3. **Publicação:** ao terminar a análise, o controller notifica. [`AnaliseController.java:34`](https://github.com/aland3r/driftor-reuso/blob/3e19e1d/backend/src/driftor/analise/AnaliseController.java#L34)
+4. Na próxima tela, o React pede os avisos do papel e mostra o aviso no topo. [`AcessoController.java:20`](https://github.com/aland3r/driftor-reuso/blob/3e19e1d/backend/src/driftor/acesso/AcessoController.java#L20)
 
-📍 `observer/Avisos.java` · linhas 12–24 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/f10116b/backend/src/driftor/observer/Avisos.java#L12-L24)
+📍 `observer/Avisos.java` · linhas 12–24 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/3e19e1d/backend/src/driftor/observer/Avisos.java#L12-L24)
 
 ```java
     public static final Subject ANALISE = new Subject();
@@ -64,4 +64,4 @@ public interface Observer {
 
 ## Segundo exemplo
 
-Subject `MANUTENCAO`: quando o gestor dispara uma manutenção, o técnico é avisado; quando o técnico conclui, o gestor é avisado. [`ManutencaoController.java:30`](https://github.com/aland3r/driftor-reuso/blob/f10116b/backend/src/driftor/manutencao/ManutencaoController.java#L30) · [`ManutencaoController.java:48`](https://github.com/aland3r/driftor-reuso/blob/f10116b/backend/src/driftor/manutencao/ManutencaoController.java#L48)
+Subject `MANUTENCAO`: quando o gestor dispara uma manutenção, o técnico é avisado; quando o técnico conclui, o gestor é avisado. [`ManutencaoController.java:30`](https://github.com/aland3r/driftor-reuso/blob/3e19e1d/backend/src/driftor/manutencao/ManutencaoController.java#L30) · [`ManutencaoController.java:48`](https://github.com/aland3r/driftor-reuso/blob/3e19e1d/backend/src/driftor/manutencao/ManutencaoController.java#L48)

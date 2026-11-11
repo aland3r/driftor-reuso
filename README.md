@@ -3,7 +3,6 @@
 **🌐 Site em produção: [driftor-reuso.fly.dev](https://driftor-reuso.fly.dev)**. Entre como Gestor ou Técnico de manutenção, sem senha. Cada commit na `main` publica uma nova versão.
 
 **Grupo:** Alander Menezes Arantes de Ávila e Emanuelle Skolut Jose.
-**CRUDs:** Alander, Processo e Atividade; Emanuelle, Análise e Manutenção. Os dois respondem por todos.
 
 ## Como funciona
 
@@ -30,9 +29,9 @@ O fluxo: o gestor cria um processo e sobe o log `.xes`. As atividades e o grafo 
 
 | Item | Onde |
 |---|---|
-| 12 classes com atributos e métodos | pasta [`dominio/`](https://github.com/aland3r/driftor-reuso/tree/f10116b/backend/src/driftor/dominio) · [lista](defesa/classes-e-tabelas.md) |
+| 12 classes com atributos e métodos | pasta [`dominio/`](https://github.com/aland3r/driftor-reuso/tree/3e19e1d/backend/src/driftor/dominio) · [lista](defesa/classes-e-tabelas.md) |
 | 3 padrões, 2 exemplos de cada | [Singleton](defesa/singleton.md) · [Adapter](defesa/adapter.md) · [Observer](defesa/observer.md) |
-| 2 CRUDs por integrante, com banco | [cruds.md](defesa/cruds.md) |
-| 3 tabelas ou mais | [schema.sql](https://github.com/aland3r/driftor-reuso/blob/f10116b/backend/src/schema.sql) (6 tabelas) |
+| 4 CRUDs com banco (Processo, Atividade, Análise, Manutenção) | [cruds.md](defesa/cruds.md) |
+| 3 tabelas ou mais | [schema.sql](https://github.com/aland3r/driftor-reuso/blob/3e19e1d/backend/src/schema.sql) (6 tabelas) |
 | Variabilidade | [variabilidade.md](defesa/variabilidade.md) |
 | Compactação de código | [compactacao.md](defesa/compactacao.md) |

@@ -1,6 +1,6 @@
 # Adapter
 
-[← voltar](../README.md) · links fixos no commit `f10116b`
+[← voltar](../README.md) · links fixos no commit `3e19e1d`
 
 **O que é:** permite que objetos com **interfaces incompatíveis** trabalhem juntos. O Adapter fica no meio e traduz uma interface para a outra.
 
@@ -16,7 +16,7 @@
 
 **Target:** o app quer passar a série e receber onde cada desvio começa.
 
-📍 `adapter/DetectorDeDrift.java` · linhas 7–10 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/f10116b/backend/src/driftor/adapter/DetectorDeDrift.java#L7-L10)
+📍 `adapter/DetectorDeDrift.java` · linhas 7–10 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/3e19e1d/backend/src/driftor/adapter/DetectorDeDrift.java#L7-L10)
 
 ```java
 public interface DetectorDeDrift {
@@ -27,7 +27,7 @@ public interface DetectorDeDrift {
 
 **Adapter:** transforma a série em uma lista de números, chama o ADWIN no motor e devolve só os inícios.
 
-📍 `adapter/AdwinDetectorAdapter.java` · linhas 13–24 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/f10116b/backend/src/driftor/adapter/AdwinDetectorAdapter.java#L13-L24)
+📍 `adapter/AdwinDetectorAdapter.java` · linhas 13–24 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/3e19e1d/backend/src/driftor/adapter/AdwinDetectorAdapter.java#L13-L24)
 
 ```java
 public class AdwinDetectorAdapter implements DetectorDeDrift {
@@ -44,8 +44,8 @@ public class AdwinDetectorAdapter implements DetectorDeDrift {
 }
 ```
 
-**Client:** o controller da Análise usa o Target: [`AnaliseController.java:32`](https://github.com/aland3r/driftor-reuso/blob/f10116b/backend/src/driftor/analise/AnaliseController.java#L32)
+**Client:** o controller da Análise usa o Target: [`AnaliseController.java:32`](https://github.com/aland3r/driftor-reuso/blob/3e19e1d/backend/src/driftor/analise/AnaliseController.java#L32)
 
 ## Segundo exemplo
 
-`MineradorDeGrafo` (Target) e `Pm4pyMineradorAdapter` (Adapter), usados para montar o grafo do processo: [`Pm4pyMineradorAdapter.java:14`](https://github.com/aland3r/driftor-reuso/blob/f10116b/backend/src/driftor/adapter/Pm4pyMineradorAdapter.java#L14) · uso em [`ProcessoController.java:45`](https://github.com/aland3r/driftor-reuso/blob/f10116b/backend/src/driftor/processo/ProcessoController.java#L45)
+`MineradorDeGrafo` (Target) e `Pm4pyMineradorAdapter` (Adapter), usados para montar o grafo do processo: [`Pm4pyMineradorAdapter.java:14`](https://github.com/aland3r/driftor-reuso/blob/3e19e1d/backend/src/driftor/adapter/Pm4pyMineradorAdapter.java#L14) · uso em [`ProcessoController.java:45`](https://github.com/aland3r/driftor-reuso/blob/3e19e1d/backend/src/driftor/processo/ProcessoController.java#L45)
