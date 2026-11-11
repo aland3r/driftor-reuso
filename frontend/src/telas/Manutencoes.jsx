@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { api, papel } from "../api";
 import { BotaoExcluir, Tabela } from "../componentes";
+import { Status } from "./Processos";
 
 export default function Manutencoes() {
   const [manutencoes, setManutencoes] = useState([]);
@@ -17,7 +18,7 @@ export default function Manutencoes() {
           {(m) => (
             <tr key={m.id}>
               <td><Link to={"/manutencoes/" + m.id}>{m.descricao}</Link></td><td>{m.analise}</td>
-              <td className="num">{m.desvio}</td><td>{m.status}</td>
+              <td className="num">{m.desvio}</td><td><Status valor={m.status} /></td>
               {/* VARIABILIDADE: o técnico executa, o gestor exclui */}
               <td className="acoes">
                 {papel() === "tecnico" && m.status === "pendente" && <Link className="btn btn-sm btn-primary" to={"/manutencoes/" + m.id}>Executar</Link>}

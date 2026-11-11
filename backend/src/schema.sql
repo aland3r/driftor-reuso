@@ -10,8 +10,7 @@ create table if not exists processos (
 
 create table if not exists atividades (
     id        uuid primary key,
-    nome      text not null unique,
-    descricao text not null default ''
+    nome text not null unique
 );
 
 create table if not exists eventos (

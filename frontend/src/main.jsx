@@ -24,7 +24,10 @@ function Layout() {
   return (
     <>
       <header className="app-header">
-        <span className="logo-word">Driftor</span>
+        <NavLink to="/" className="logo">
+          <svg width="28" height="28" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#202b3a" /><path d="M6 21h6l3-8 4 12 3-6h4" fill="none" stroke="#4d8fc0" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" /><circle cx="19" cy="25" r="2.6" fill="#f59e0b" /></svg>
+          <span className="logo-word">Driftor</span>
+        </NavLink>
         {/* VARIABILIDADE: o menu mostra só o que o papel pode usar */}
         {meu && <nav className="app-nav">{MENU.filter((m) => meu.pode.includes(m[2])).map(([rota, rotulo]) => <NavLink key={rota} to={rota}>{rotulo}</NavLink>)}</nav>}
         {meu && <div className="app-actions">{meu.nome}<NavLink className="btn btn-sm" to="/entrar">Trocar perfil</NavLink></div>}

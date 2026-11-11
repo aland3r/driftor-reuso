@@ -71,20 +71,53 @@ input[type=file].field { padding: 6px 8px; }
 .grafico polyline { fill: none; stroke: var(--accent); stroke-width: 1.4; vector-effect: non-scaling-stroke; }
 .grafico line { stroke: var(--red); stroke-width: 1.5; stroke-dasharray: 4 3; vector-effect: non-scaling-stroke; }
 
-/* entrada */
-.entrada { max-width: 1040px; margin: 0 auto; padding: 72px 24px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 56px; align-items: center; }
-.entrada h1 { font-size: clamp(28px, 4vw, 40px); line-height: 1.12; letter-spacing: -0.025em; margin-bottom: 16px; text-wrap: balance; }
-.perfis { display: flex; flex-direction: column; gap: 12px; }
-.perfil-cartao { width: 100%; display: grid; grid-template-columns: 1fr auto; gap: 14px; align-items: center; padding: 16px 18px; text-align: left; border-radius: 8px; border: 1px solid var(--line-strong); background: var(--surface); color: var(--text); font: inherit; cursor: pointer; transition: border-color .15s, background .15s; }
-.perfil-cartao:hover { border-color: rgba(245,158,11,0.6); background: var(--raised); }
-.perfil-cartao strong { display: block; font-size: var(--fs-lg); font-weight: 600; }
-.perfil-cartao .seta { color: var(--amber-soft); font-family: var(--mono); }
-
 @media (max-width: 760px) {
   .app-header { gap: 12px; padding: 0 16px; }
   .logo-word { display: none; }
   main { padding: 20px 16px 48px; }
-  .entrada { grid-template-columns: 1fr; gap: 32px; padding: 40px 16px; }
+  .hero, .passos { grid-template-columns: 1fr; gap: 28px; }
   .tabela .opcional { display: none; }
 }
 .ok { color: var(--green); font-weight: 600; white-space: nowrap; }
+
+/* landing */
+.logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.landing { max-width: 1080px; margin: 0 auto; padding: 48px 0 24px; }
+.hero { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 48px; align-items: center; }
+.hero h1 { font-size: clamp(28px, 4vw, 42px); line-height: 1.12; letter-spacing: -0.025em; margin-bottom: 16px; text-wrap: balance; }
+.hero p { margin: 0 0 28px; font-size: var(--fs-lg); line-height: 1.65; color: var(--text-soft); max-width: 52ch; }
+.arte { width: 100%; height: auto; border-radius: 12px; background: var(--surface); border: 1px solid var(--line); padding: 8px; font-family: var(--mono); }
+.perfis { display: flex; flex-direction: column; gap: 10px; max-width: 420px; }
+.perfil-cartao { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; text-align: left; border-radius: 8px; border: 1px solid var(--line-strong); background: var(--surface); color: var(--text); font: inherit; cursor: pointer; transition: border-color .15s, background .15s; }
+.perfil-cartao:hover { border-color: rgba(245,158,11,0.6); background: var(--raised); }
+.perfil-cartao strong { font-size: var(--fs-lg); font-weight: 600; }
+.perfil-cartao .seta { color: var(--amber-soft); font-family: var(--mono); }
+.passos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; margin-top: 64px; padding: 28px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.passos h2 { margin: 12px 0 6px; }
+.passos p { margin: 0; color: var(--text-muted); font-size: var(--fs-md); line-height: 1.6; }
+.passo { display: inline-flex; width: 26px; height: 26px; align-items: center; justify-content: center; border-radius: 50%; border: 1px solid rgba(77,143,192,0.5); color: var(--accent-pale); font-family: var(--mono); font-size: var(--fs-xs); }
+.rodape { padding: 24px 0; color: var(--text-dim); font-size: var(--fs-xs); }
+
+/* painel do gestor */
+.numeros { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 16px; }
+.numeros div { padding: 14px 18px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); color: var(--text-muted); }
+.numeros b { display: block; font-size: 26px; font-weight: 650; color: var(--text); font-family: var(--mono); }
+.cartoes { list-style: none; margin: 0 0 16px; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 14px; }
+.cartao { position: relative; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); transition: border-color .15s, transform .15s; }
+.cartao:hover { border-color: rgba(255,255,255,0.16); transform: translateY(-1px); }
+.cartao a { display: flex; flex-direction: column; gap: 2px; padding: 0 0 12px; text-decoration: none; color: var(--text); }
+.cartao a strong, .cartao a span { padding: 0 12px; }
+.cartao a span { font-size: var(--fs-xs); color: var(--text-muted); }
+.cartao .btn { position: absolute; top: 8px; right: 8px; opacity: 0; }
+.cartao:hover .btn { opacity: 1; }
+.miniatura { width: 100%; aspect-ratio: 3 / 1; background: #1e2836; border-radius: 10px 10px 0 0; border-bottom: 1px solid var(--line); margin-bottom: 8px; }
+.miniatura rect { fill: var(--raised); stroke: rgba(77,143,192,0.5); }
+.miniatura rect.forte { stroke: var(--accent); }
+.miniatura path { stroke: var(--text-dim); fill: none; }
+.selo { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: var(--fs-xs); font-weight: 600; white-space: nowrap; }
+.selo.aguardando { color: var(--amber); background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.3); }
+.selo.ok { color: var(--green); background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.3); }
+.numeros .aguardando { color: var(--amber); }
+.numeros .ok { color: var(--green); }
+.page-head .form-linha { flex-wrap: nowrap; min-width: 380px; }
+.perfis .label { margin: 0 0 2px; font-size: var(--fs-xs); }

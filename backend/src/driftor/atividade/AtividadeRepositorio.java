@@ -10,23 +10,21 @@ import java.util.UUID;
 public class AtividadeRepositorio extends RepositorioBase<Atividade> {
 
     public AtividadeRepositorio() {
-        super("atividades", "id, nome, descricao", "nome");
+        super("atividades", "id, nome", "nome");
     }
 
     @Override
     protected Atividade criarObjeto(ResultSet linha) throws SQLException {
-        return new Atividade(linha.getObject("id", UUID.class), linha.getString("nome"), linha.getString("descricao"));
+        return new Atividade(linha.getObject("id", UUID.class), linha.getString("nome"));
     }
 
     // ---- Create
     public void inserir(Atividade atividade) {
-        banco.executar("insert into atividades (id, nome, descricao) values (?, ?, ?)",
-                atividade.getId(), atividade.getNome(), atividade.getDescricao());
+        banco.executar("insert into atividades (id, nome) values (?, ?)", atividade.getId(), atividade.getNome());
     }
 
     // ---- Update
     public void atualizar(Atividade atividade) {
-        banco.executar("update atividades set nome = ?, descricao = ? where id = ?",
-                atividade.getNome(), atividade.getDescricao(), atividade.getId());
+        banco.executar("update atividades set nome = ? where id = ?", atividade.getNome(), atividade.getId());
     }
 }

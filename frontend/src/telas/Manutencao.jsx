@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { api, papel } from "../api";
+import { Status } from "./Processos";
 
 export default function Manutencao() {
   const { id } = useParams();
@@ -20,7 +21,7 @@ export default function Manutencao() {
   return (
     <>
       <div className="page-head">
-        <div><h1>{manutencao.descricao}</h1><div className="meta">{manutencao.status} · Análise <Link to={"/analises/" + analise.id}>{analise.nome}</Link></div></div>
+        <div><h1>{manutencao.descricao}</h1><div className="meta"><Status valor={manutencao.status} /> · Análise <Link to={"/analises/" + analise.id}>{analise.nome}</Link></div></div>
       </div>
       {/* VARIABILIDADE: só o técnico conclui */}
       {manutencao.status === "pendente" && papel() === "tecnico" ? (

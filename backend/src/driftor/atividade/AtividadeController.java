@@ -24,15 +24,15 @@ public class AtividadeController {
     @PostMapping
     public void criar(@RequestHeader("Papel") String papel, @RequestBody Map<String, String> corpo) {
         Configuracao.getInstancia().exigir(papel, "atividades");
-        repositorio.inserir(Atividade.criar(corpo.get("nome"), corpo.get("descricao")));
+        repositorio.inserir(Atividade.criar(corpo.get("nome")));
     }
 
     // ---- Update
     @PutMapping("/{id}")
-    public void editar(@RequestHeader("Papel") String papel, @PathVariable UUID id, @RequestBody Map<String, String> corpo) {
+    public void renomear(@RequestHeader("Papel") String papel, @PathVariable UUID id, @RequestBody Map<String, String> corpo) {
         Configuracao.getInstancia().exigir(papel, "atividades");
         Atividade atividade = repositorio.obter(id);
-        atividade.editar(corpo.get("nome"), corpo.get("descricao"));
+        atividade.renomear(corpo.get("nome"));
         repositorio.atualizar(atividade);
     }
 

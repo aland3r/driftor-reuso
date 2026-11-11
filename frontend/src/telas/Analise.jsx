@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { api, papel } from "../api";
 import { BotaoExcluir, FormRenomear, Tabela } from "../componentes";
+import { Status } from "./Processos";
 
 export default function Analise() {
   const { id } = useParams();
@@ -57,7 +58,7 @@ export default function Analise() {
       <section className="secao">
         <h2>Manutenções desta análise</h2>
         <Tabela colunas={["DESCRIÇÃO", "DESVIO", "STATUS"]} linhas={manutencoes} vazio="Nenhuma manutenção disparada.">
-          {(m) => <tr key={m.id}><td><Link to={"/manutencoes/" + m.id}>{m.descricao}</Link></td><td className="num">{m.desvio}</td><td>{m.status}</td></tr>}
+          {(m) => <tr key={m.id}><td><Link to={"/manutencoes/" + m.id}>{m.descricao}</Link></td><td className="num">{m.desvio}</td><td><Status valor={m.status} /></td></tr>}
         </Tabela>
       </section>
     </>
