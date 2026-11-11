@@ -18,8 +18,11 @@ export default function Manutencoes() {
             <tr key={m.id}>
               <td><Link to={"/manutencoes/" + m.id}>{m.descricao}</Link></td><td>{m.analise}</td>
               <td className="num">{m.desvio}</td><td>{m.status}</td>
-              {/* VARIABILIDADE: só o gestor exclui */}
-              <td className="acoes">{papel() === "gestor" && <BotaoExcluir aoExcluir={() => excluir(m.id)} />}</td>
+              {/* VARIABILIDADE: o técnico executa, o gestor exclui */}
+              <td className="acoes">
+                {papel() === "tecnico" && m.status === "pendente" && <Link className="btn btn-sm btn-primary" to={"/manutencoes/" + m.id}>Executar</Link>}
+                {papel() === "gestor" && <BotaoExcluir aoExcluir={() => excluir(m.id)} />}
+              </td>
             </tr>
           )}
         </Tabela>

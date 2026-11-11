@@ -47,7 +47,9 @@ export default function Analise() {
           {(d) => (
             <tr key={d.id}>
               <td className="num">{d.posicao}</td><td>{d.resumo}</td>
-              <td className="acoes">{gestor && <button className="btn btn-sm" onClick={() => disparar(d.id)}>Disparar manutenção</button>}</td>
+              <td className="acoes">{gestor && (manutencoes.some((m) => m.drift_id === d.id)
+                ? <span className="ok">✓ Manutenção disparada</span>
+                : <button className="btn btn-sm" onClick={() => disparar(d.id)}>Disparar manutenção</button>)}</td>
             </tr>
           )}
         </Tabela>

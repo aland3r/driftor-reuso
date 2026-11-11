@@ -87,3 +87,4 @@ input[type=file].field { padding: 6px 8px; }
   .entrada { grid-template-columns: 1fr; gap: 32px; padding: 40px 16px; }
   .tabela .opcional { display: none; }
 }
+.ok { color: var(--green); font-weight: 600; white-space: nowrap; }

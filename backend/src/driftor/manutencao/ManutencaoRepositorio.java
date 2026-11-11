@@ -25,7 +25,7 @@ public class ManutencaoRepositorio extends RepositorioBase<Manutencao> {
     // ---- Read: a lista com o nome da análise, do processo e o número do desvio
     public List<Map<String, Object>> listarResumo(UUID analiseId) {
         return banco.consultarLinhas("""
-                select m.id, m.descricao, m.status, a.id as analise_id, a.nome as analise, p.nome as processo, d.posicao as desvio
+                select m.id, m.drift_id, m.descricao, m.status, a.id as analise_id, a.nome as analise, p.nome as processo, d.posicao as desvio
                 from manutencoes m join analises a on a.id = m.analise_id join processos p on p.id = a.processo_id
                 join drifts d on d.id = m.drift_id
                 where ?::uuid is null or m.analise_id = ? order by m.status desc""", analiseId, analiseId);
