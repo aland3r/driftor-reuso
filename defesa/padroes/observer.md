@@ -1,6 +1,6 @@
 # Observer
 
-[← defesa](../README.md) · links fixos no commit `da31cd6`
+[← defesa](../README.md) · links fixos no commit `21ee145`
 
 **O que é:** um mecanismo de **assinatura**. Vários objetos se inscrevem para ser avisados quando algo acontece em outro.
 
@@ -12,13 +12,13 @@
 
 **1. Inscrição:** ao subir o app, a caixa de avisos do técnico se inscreve no Subject `MANUTENCAO`.
 
-📍 `observer/Avisos.java` · linhas 13–13 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/da31cd6/backend/src/driftor/observer/Avisos.java#L13-L13)
+📍 `observer/Avisos.java` · linhas 13–13 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/21ee145/backend/src/driftor/observer/Avisos.java#L13-L13)
 
 ```java
     public static final Subject MANUTENCAO = new Subject();
 ```
 
-📍 `observer/Avisos.java` · linhas 20–24 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/da31cd6/backend/src/driftor/observer/Avisos.java#L20-L24)
+📍 `observer/Avisos.java` · linhas 20–24 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/21ee145/backend/src/driftor/observer/Avisos.java#L20-L24)
 
 ```java
     public static void inscrever() {
@@ -30,7 +30,7 @@
 
 **2. Tela do gestor:** o botão **Disparar manutenção** chama a API.
 
-📍 `frontend/src/telas/Analise.jsx` · linhas 19–23 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/da31cd6/frontend/src/telas/Analise.jsx#L19-L23)
+📍 `frontend/src/telas/Analise.jsx` · linhas 20–24 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/21ee145/frontend/src/telas/Analise.jsx#L20-L24)
 
 ```jsx
   const disparar = async (driftId) => {
@@ -42,7 +42,7 @@
 
 **3. Controller:** grava e publica o evento.
 
-📍 `manutencao/ManutencaoController.java` · linhas 24–31 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/da31cd6/backend/src/driftor/manutencao/ManutencaoController.java#L24-L31)
+📍 `manutencao/ManutencaoController.java` · linhas 24–31 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/21ee145/backend/src/driftor/manutencao/ManutencaoController.java#L24-L31)
 
 ```java
     // ---- Create: o gestor dispara a partir de um desvio
@@ -57,7 +57,7 @@
 
 **4. Subject:** avisa todos os inscritos.
 
-📍 `observer/Subject.java` · linhas 7–19 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/da31cd6/backend/src/driftor/observer/Subject.java#L7-L19)
+📍 `observer/Subject.java` · linhas 7–19 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/21ee145/backend/src/driftor/observer/Subject.java#L7-L19)
 
 ```java
 public class Subject {
@@ -77,7 +77,7 @@ public class Subject {
 
 **5. Observador concreto:** a caixa do técnico guarda a mensagem, porque `manutencao_disparada` é um evento dele.
 
-📍 `observer/AvisoNaTela.java` · linhas 17–21 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/da31cd6/backend/src/driftor/observer/AvisoNaTela.java#L17-L21)
+📍 `observer/AvisoNaTela.java` · linhas 17–21 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/21ee145/backend/src/driftor/observer/AvisoNaTela.java#L17-L21)
 
 ```java
     public void atualizar(String evento, String mensagem) {
@@ -89,13 +89,13 @@ public class Subject {
 
 **6. Tela do técnico:** a cada troca de tela, o React pede os avisos do papel e mostra no topo.
 
-📍 `frontend/src/main.jsx` · linhas 21–21 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/da31cd6/frontend/src/main.jsx#L21-L21)
+📍 `frontend/src/main.jsx` · linhas 21–21 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/21ee145/frontend/src/main.jsx#L21-L21)
 
 ```jsx
   useEffect(() => { if (papel()) api("GET", "/avisos").then(setAvisos); }, [local]);  // Observer: avisos do papel
 ```
 
-📍 `acesso/AcessoController.java` · linhas 18–21 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/da31cd6/backend/src/driftor/acesso/AcessoController.java#L18-L21)
+📍 `acesso/AcessoController.java` · linhas 18–21 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/21ee145/backend/src/driftor/acesso/AcessoController.java#L18-L21)
 
 ```java
     @GetMapping("/api/avisos")
@@ -106,4 +106,4 @@ public class Subject {
 
 ## Segundo exemplo
 
-Subject `ANALISE`: quando uma análise termina, o gestor é avisado. [`AnaliseController.java:34`](https://github.com/aland3r/driftor-reuso/blob/da31cd6/backend/src/driftor/analise/AnaliseController.java#L34) · inscrição em [`Avisos.java:21`](https://github.com/aland3r/driftor-reuso/blob/da31cd6/backend/src/driftor/observer/Avisos.java#L21)
+Subject `ANALISE`: quando uma análise termina, o gestor é avisado. [`AnaliseController.java:34`](https://github.com/aland3r/driftor-reuso/blob/21ee145/backend/src/driftor/analise/AnaliseController.java#L34) · inscrição em [`Avisos.java:21`](https://github.com/aland3r/driftor-reuso/blob/21ee145/backend/src/driftor/observer/Avisos.java#L21)

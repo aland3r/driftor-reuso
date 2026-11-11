@@ -21,9 +21,9 @@ Tudo em [`defesa/`](defesa/README.md): os [4 CRUDs](defesa/cruds/README.md), os 
 
 | Item | Onde |
 |---|---|
-| 12 classes com atributos e métodos | pasta [`dominio/`](https://github.com/aland3r/driftor-reuso/tree/da31cd6/backend/src/driftor/dominio) · [lista](defesa/classes-e-tabelas.md) |
+| 12 classes com atributos e métodos | pasta [`dominio/`](https://github.com/aland3r/driftor-reuso/tree/21ee145/backend/src/driftor/dominio) · [lista](defesa/classes-e-tabelas.md) |
 | 3 padrões, 2 exemplos de cada | [Singleton](defesa/padroes/singleton.md) · [Adapter](defesa/padroes/adapter.md) · [Observer](defesa/padroes/observer.md) |
 | 4 CRUDs com banco (Processo, Atividade, Análise, Manutenção) | [cruds/](defesa/cruds/README.md) |
-| 3 tabelas ou mais | [schema.sql](https://github.com/aland3r/driftor-reuso/blob/da31cd6/backend/src/schema.sql) (6 tabelas) |
+| 3 tabelas ou mais | [schema.sql](https://github.com/aland3r/driftor-reuso/blob/21ee145/backend/src/schema.sql) (6 tabelas) |
 | Variabilidade | [variabilidade.md](defesa/variabilidade.md) |
 | Compactação de código | [compactacao.md](defesa/compactacao.md) |
