@@ -1,6 +1,6 @@
 # Compactação de código
 
-[← defesa](README.md) · links fixos no commit `21ee145`
+[← defesa](README.md) · links fixos no commit `bee4987`
 
 **Técnica:** extrair para uma **superclasse** o código que se repetia em várias classes (Extract Superclass / Pull Up Method). As subclasses herdam e ficam só com o que é delas.
 
@@ -9,7 +9,7 @@
 - **Antes:** commit [`a7fd19b`](https://github.com/aland3r/driftor-reuso/blob/a7fd19b/backend/src/main/java/br/pucpr/driftor/atividade/AtividadeRepositorio.java)
 - **Depois:** commit [`82162ab`](https://github.com/aland3r/driftor-reuso/commit/82162ab)
 
-📍 `compactacao/RepositorioBase.java` · linhas 13–40 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/21ee145/backend/src/driftor/compactacao/RepositorioBase.java#L13-L40)
+📍 `compactacao/RepositorioBase.java` · [linhas 13–40](https://github.com/aland3r/driftor-reuso/blob/bee4987/backend/src/driftor/compactacao/RepositorioBase.java#L13-L40)
 
 ```java
 public abstract class RepositorioBase<T> {
@@ -44,7 +44,7 @@ public abstract class RepositorioBase<T> {
 
 Uma subclasse, depois da compactação:
 
-📍 `atividade/AtividadeRepositorio.java` · linhas 10–19 · [abrir no GitHub](https://github.com/aland3r/driftor-reuso/blob/21ee145/backend/src/driftor/atividade/AtividadeRepositorio.java#L10-L19)
+📍 `atividade/AtividadeRepositorio.java` · [linhas 10–19](https://github.com/aland3r/driftor-reuso/blob/bee4987/backend/src/driftor/atividade/AtividadeRepositorio.java#L10-L19)
 
 ```java
 public class AtividadeRepositorio extends RepositorioBase<Atividade> {
@@ -59,9 +59,9 @@ public class AtividadeRepositorio extends RepositorioBase<Atividade> {
     }
 ```
 
-## Roteiro do vídeo (até 3 minutos, não listado no YouTube)
+## Na defesa
 
-1. Abrir o commit **antes** (`a7fd19b`) em `AtividadeRepositorio.java` e `ProcessoRepositorio.java`. Mostrar que os dois têm `listar`, `obter` e `excluir` iguais, só com outra tabela.
-2. Abrir o diff do commit **depois** (`82162ab`). Mostrar que esses métodos saíram dos quatro repositórios.
-3. Abrir `RepositorioBase.java` e explicar: a tabela, as colunas e a ordem vêm pelo construtor, e `criarObjeto` é o único método que cada repositório escreve.
-4. No site, criar, renomear e excluir uma atividade para mostrar que continua funcionando.
+1. Mostrar o **antes** (`a7fd19b`): `AtividadeRepositorio` e `ProcessoRepositorio` com `listar`, `obter` e `excluir` iguais, só com outra tabela.
+2. Mostrar o **depois** (`82162ab`): esses métodos saíram dos quatro repositórios e foram para `RepositorioBase`.
+3. Explicar `RepositorioBase`: a tabela, as colunas e a ordem chegam pelo construtor, e `criarObjeto` é o único método que cada repositório escreve.
+4. Mostrar a herança: `class AtividadeRepositorio extends RepositorioBase<Atividade>`.
