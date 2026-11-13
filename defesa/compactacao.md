@@ -1,6 +1,6 @@
 # Compactação de código
 
-[← defesa](README.md) · links fixos no commit `e17947a`
+[← defesa](README.md) · links fixos no commit `dcd0d79`
 
 **Técnica:** extrair para uma **superclasse** o código que se repetia em várias classes (Extract Superclass / Pull Up Method). As subclasses herdam e ficam só com o que é delas.
 
@@ -9,7 +9,7 @@
 - **Antes:** commit [`a7fd19b`](https://github.com/aland3r/driftor-reuso/blob/a7fd19b/backend/src/main/java/br/pucpr/driftor/atividade/AtividadeRepositorio.java)
 - **Depois:** commit [`82162ab`](https://github.com/aland3r/driftor-reuso/commit/82162ab)
 
-📍 `compactacao/RepositorioBase.java` · [linhas 13–41](https://github.com/aland3r/driftor-reuso/blob/e17947a/backend/src/driftor/compactacao/RepositorioBase.java#L13-L41)
+📍 `compactacao/RepositorioBase.java` · [linhas 17–45](https://github.com/aland3r/driftor-reuso/blob/dcd0d79/backend/src/driftor/compactacao/RepositorioBase.java#L17-L45)
 
 ```java
 public abstract class RepositorioBase<T> {
@@ -45,7 +45,7 @@ public abstract class RepositorioBase<T> {
 
 Uma subclasse, depois da compactação:
 
-📍 `atividade/AtividadeRepositorio.java` · [linhas 11–21](https://github.com/aland3r/driftor-reuso/blob/e17947a/backend/src/driftor/atividade/AtividadeRepositorio.java#L11-L21)
+📍 `atividade/AtividadeRepositorio.java` · [linhas 11–21](https://github.com/aland3r/driftor-reuso/blob/dcd0d79/backend/src/driftor/atividade/AtividadeRepositorio.java#L11-L21)
 
 ```java
 public class AtividadeRepositorio extends RepositorioBase<Atividade> {

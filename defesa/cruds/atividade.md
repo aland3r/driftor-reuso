@@ -1,6 +1,6 @@
 # CRUD de Atividade
 
-[← CRUDs](README.md) · links fixos no commit `e17947a`
+[← CRUDs](README.md) · links fixos no commit `dcd0d79`
 
 Tela **Atividades**. As atividades também são criadas sozinhas quando um log é carregado (ver [Processo](processo.md#update-carregar-o-log)).
 
@@ -8,7 +8,7 @@ Tela **Atividades**. As atividades também são criadas sozinhas quando um log �
 
 **1. Tela:** o botão **Criar atividade** manda o nome.
 
-📍 `frontend/src/telas/Atividades.jsx` · [linhas 11–16](https://github.com/aland3r/driftor-reuso/blob/e17947a/frontend/src/telas/Atividades.jsx#L11-L16)
+📍 `frontend/src/telas/Atividades.jsx` · [linhas 11–16](https://github.com/aland3r/driftor-reuso/blob/dcd0d79/frontend/src/telas/Atividades.jsx#L11-L16)
 
 ```jsx
   const criar = async (e) => {
@@ -21,7 +21,7 @@ Tela **Atividades**. As atividades também são criadas sozinhas quando um log �
 
 **2. Controller:** recebe `POST /api/atividades`, confere o papel, cria o objeto e manda gravar.
 
-📍 `atividade/AtividadeController.java` · [linhas 23–28](https://github.com/aland3r/driftor-reuso/blob/e17947a/backend/src/driftor/atividade/AtividadeController.java#L23-L28)
+📍 `atividade/AtividadeController.java` · [linhas 23–28](https://github.com/aland3r/driftor-reuso/blob/dcd0d79/backend/src/driftor/atividade/AtividadeController.java#L23-L28)
 
 ```java
     // ---- Create
@@ -34,7 +34,7 @@ Tela **Atividades**. As atividades também são criadas sozinhas quando um log �
 
 **3. Domínio:** `Atividade.criar` gera o id e limpa os espaços.
 
-📍 `dominio/Atividade.java` · [linhas 14–16](https://github.com/aland3r/driftor-reuso/blob/e17947a/backend/src/driftor/dominio/Atividade.java#L14-L16)
+📍 `dominio/Atividade.java` · [linhas 14–16](https://github.com/aland3r/driftor-reuso/blob/dcd0d79/backend/src/driftor/dominio/Atividade.java#L14-L16)
 
 ```java
     public static Atividade criar(String nome) {
@@ -44,7 +44,7 @@ Tela **Atividades**. As atividades também são criadas sozinhas quando um log �
 
 **4. Banco:**
 
-📍 `atividade/AtividadeRepositorio.java` · [linhas 23–26](https://github.com/aland3r/driftor-reuso/blob/e17947a/backend/src/driftor/atividade/AtividadeRepositorio.java#L23-L26)
+📍 `atividade/AtividadeRepositorio.java` · [linhas 23–26](https://github.com/aland3r/driftor-reuso/blob/dcd0d79/backend/src/driftor/atividade/AtividadeRepositorio.java#L23-L26)
 
 ```java
     // ---- Create
@@ -57,7 +57,7 @@ Tela **Atividades**. As atividades também são criadas sozinhas quando um log �
 
 **1. Tela:** ao abrir a tela, carrega a lista.
 
-📍 `frontend/src/telas/Atividades.jsx` · [linhas 8–8](https://github.com/aland3r/driftor-reuso/blob/e17947a/frontend/src/telas/Atividades.jsx#L8-L8)
+📍 `frontend/src/telas/Atividades.jsx` · [linhas 8–8](https://github.com/aland3r/driftor-reuso/blob/dcd0d79/frontend/src/telas/Atividades.jsx#L8-L8)
 
 ```jsx
   const carregar = () => api("GET", "/atividades").then(setAtividades);
@@ -65,7 +65,7 @@ Tela **Atividades**. As atividades também são criadas sozinhas quando um log �
 
 **2. Controller:** `GET /api/atividades`.
 
-📍 `atividade/AtividadeController.java` · [linhas 16–21](https://github.com/aland3r/driftor-reuso/blob/e17947a/backend/src/driftor/atividade/AtividadeController.java#L16-L21)
+📍 `atividade/AtividadeController.java` · [linhas 16–21](https://github.com/aland3r/driftor-reuso/blob/dcd0d79/backend/src/driftor/atividade/AtividadeController.java#L16-L21)
 
 ```java
     // ---- Read
@@ -78,7 +78,7 @@ Tela **Atividades**. As atividades também são criadas sozinhas quando um log �
 
 **3. Banco:** o `listar` é herdado de `RepositorioBase` (compactação).
 
-📍 `compactacao/RepositorioBase.java` · [linhas 29–31](https://github.com/aland3r/driftor-reuso/blob/e17947a/backend/src/driftor/compactacao/RepositorioBase.java#L29-L31)
+📍 `compactacao/RepositorioBase.java` · [linhas 33–35](https://github.com/aland3r/driftor-reuso/blob/dcd0d79/backend/src/driftor/compactacao/RepositorioBase.java#L33-L35)
 
 ```java
     public List<T> listar() {
@@ -90,7 +90,7 @@ Tela **Atividades**. As atividades também são criadas sozinhas quando um log �
 
 **1. Tela:** o botão **Renomear** da linha manda o nome novo.
 
-📍 `frontend/src/telas/Atividades.jsx` · [linhas 17–22](https://github.com/aland3r/driftor-reuso/blob/e17947a/frontend/src/telas/Atividades.jsx#L17-L22)
+📍 `frontend/src/telas/Atividades.jsx` · [linhas 17–22](https://github.com/aland3r/driftor-reuso/blob/dcd0d79/frontend/src/telas/Atividades.jsx#L17-L22)
 
 ```jsx
   const renomear = async (e, id) => {
@@ -103,7 +103,7 @@ Tela **Atividades**. As atividades também são criadas sozinhas quando um log �
 
 **2. Controller:** `PUT /api/atividades/{id}`. Busca a atividade, aplica a mudança e grava.
 
-📍 `atividade/AtividadeController.java` · [linhas 30–37](https://github.com/aland3r/driftor-reuso/blob/e17947a/backend/src/driftor/atividade/AtividadeController.java#L30-L37)
+📍 `atividade/AtividadeController.java` · [linhas 30–37](https://github.com/aland3r/driftor-reuso/blob/dcd0d79/backend/src/driftor/atividade/AtividadeController.java#L30-L37)
 
 ```java
     // ---- Update
@@ -118,7 +118,7 @@ Tela **Atividades**. As atividades também são criadas sozinhas quando um log �
 
 **3. Domínio:**
 
-📍 `dominio/Atividade.java` · [linhas 18–20](https://github.com/aland3r/driftor-reuso/blob/e17947a/backend/src/driftor/dominio/Atividade.java#L18-L20)
+📍 `dominio/Atividade.java` · [linhas 18–20](https://github.com/aland3r/driftor-reuso/blob/dcd0d79/backend/src/driftor/dominio/Atividade.java#L18-L20)
 
 ```java
     public void renomear(String novoNome) {
@@ -128,7 +128,7 @@ Tela **Atividades**. As atividades também são criadas sozinhas quando um log �
 
 **4. Banco:**
 
-📍 `atividade/AtividadeRepositorio.java` · [linhas 28–31](https://github.com/aland3r/driftor-reuso/blob/e17947a/backend/src/driftor/atividade/AtividadeRepositorio.java#L28-L31)
+📍 `atividade/AtividadeRepositorio.java` · [linhas 28–31](https://github.com/aland3r/driftor-reuso/blob/dcd0d79/backend/src/driftor/atividade/AtividadeRepositorio.java#L28-L31)
 
 ```java
     // ---- Update
@@ -141,7 +141,7 @@ Tela **Atividades**. As atividades também são criadas sozinhas quando um log �
 
 **1. Tela:**
 
-📍 `frontend/src/telas/Atividades.jsx` · [linhas 23–23](https://github.com/aland3r/driftor-reuso/blob/e17947a/frontend/src/telas/Atividades.jsx#L23-L23)
+📍 `frontend/src/telas/Atividades.jsx` · [linhas 23–23](https://github.com/aland3r/driftor-reuso/blob/dcd0d79/frontend/src/telas/Atividades.jsx#L23-L23)
 
 ```jsx
   const excluir = async (id) => { await api("DELETE", "/atividades/" + id); carregar(); };
@@ -149,7 +149,7 @@ Tela **Atividades**. As atividades também são criadas sozinhas quando um log �
 
 **2. Controller:** `DELETE /api/atividades/{id}`.
 
-📍 `atividade/AtividadeController.java` · [linhas 39–44](https://github.com/aland3r/driftor-reuso/blob/e17947a/backend/src/driftor/atividade/AtividadeController.java#L39-L44)
+📍 `atividade/AtividadeController.java` · [linhas 39–44](https://github.com/aland3r/driftor-reuso/blob/dcd0d79/backend/src/driftor/atividade/AtividadeController.java#L39-L44)
 
 ```java
     // ---- Delete
@@ -162,7 +162,7 @@ Tela **Atividades**. As atividades também são criadas sozinhas quando um log �
 
 **3. Banco:** o `excluir` é herdado de `RepositorioBase`. Os eventos dessa atividade saem junto (`on delete cascade`).
 
-📍 `compactacao/RepositorioBase.java` · [linhas 38–40](https://github.com/aland3r/driftor-reuso/blob/e17947a/backend/src/driftor/compactacao/RepositorioBase.java#L38-L40)
+📍 `compactacao/RepositorioBase.java` · [linhas 42–44](https://github.com/aland3r/driftor-reuso/blob/dcd0d79/backend/src/driftor/compactacao/RepositorioBase.java#L42-L44)
 
 ```java
     public void excluir(UUID id) {
