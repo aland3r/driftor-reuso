@@ -1,6 +1,6 @@
 # Defesa
 
-[← repositório](../README.md) · links fixos no commit `dcd0d79`
+[← repositório](../README.md) · links fixos no commit `7c48276`
 
 | Tema | Arquivo |
 |---|---|

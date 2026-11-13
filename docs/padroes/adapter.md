@@ -1,6 +1,6 @@
 # Adapter
 
-[← defesa](../README.md) · links fixos no commit `dcd0d79`
+[← docs](../README.md) · links fixos no commit `7c48276`
 
 **O que é:** permite que objetos com **interfaces incompatíveis** trabalhem juntos. O Adapter fica no meio e traduz de uma para a outra.
 
@@ -12,7 +12,7 @@
 
 **1. Tela:** o botão **Gerar análise de desvios** chama a API.
 
-📍 `frontend/src/telas/Processo.jsx` · [linhas 32–36](https://github.com/aland3r/driftor-reuso/blob/dcd0d79/frontend/src/telas/Processo.jsx#L32-L36)
+📍 `frontend/src/telas/Processo.jsx` · [linhas 32–36](https://github.com/aland3r/driftor-reuso/blob/7c48276/frontend/src/telas/Processo.jsx#L32-L36)
 
 ```jsx
   const gerarAnalise = async (e) => {
@@ -24,13 +24,13 @@
 
 **2. Client (controller):** usa o detector pela interface, sem saber que é o ADWIN.
 
-📍 `analise/AnaliseController.java` · [linhas 21–21](https://github.com/aland3r/driftor-reuso/blob/dcd0d79/backend/src/driftor/analise/AnaliseController.java#L21-L21)
+📍 `analise/AnaliseController.java` · [linhas 21–21](https://github.com/aland3r/driftor-reuso/blob/7c48276/backend/src/driftor/analise/AnaliseController.java#L21-L21)
 
 ```java
     private final DetectorDeDrift detector = new AdwinDetectorAdapter();
 ```
 
-📍 `analise/AnaliseController.java` · [linhas 32–32](https://github.com/aland3r/driftor-reuso/blob/dcd0d79/backend/src/driftor/analise/AnaliseController.java#L32-L32)
+📍 `analise/AnaliseController.java` · [linhas 32–32](https://github.com/aland3r/driftor-reuso/blob/7c48276/backend/src/driftor/analise/AnaliseController.java#L32-L32)
 
 ```java
         analise.registrarResultado(valores, detector.detectar(serie, analise.getDelta()));  // Adapter
@@ -38,7 +38,7 @@
 
 **3. Target:** o que o app espera: passar a série e receber onde cada desvio começa.
 
-📍 `adapter/DetectorDeDrift.java` · [linhas 7–10](https://github.com/aland3r/driftor-reuso/blob/dcd0d79/backend/src/driftor/adapter/DetectorDeDrift.java#L7-L10)
+📍 `adapter/DetectorDeDrift.java` · [linhas 7–10](https://github.com/aland3r/driftor-reuso/blob/7c48276/backend/src/driftor/adapter/DetectorDeDrift.java#L7-L10)
 
 ```java
 public interface DetectorDeDrift {
@@ -49,7 +49,7 @@ public interface DetectorDeDrift {
 
 **4. Adapter:** transforma a série em uma lista de números, chama o ADWIN (Adaptee) no motor e devolve só os inícios.
 
-📍 `adapter/AdwinDetectorAdapter.java` · [linhas 13–24](https://github.com/aland3r/driftor-reuso/blob/dcd0d79/backend/src/driftor/adapter/AdwinDetectorAdapter.java#L13-L24)
+📍 `adapter/AdwinDetectorAdapter.java` · [linhas 13–24](https://github.com/aland3r/driftor-reuso/blob/7c48276/backend/src/driftor/adapter/AdwinDetectorAdapter.java#L13-L24)
 
 ```java
 public class AdwinDetectorAdapter implements DetectorDeDrift {
@@ -68,4 +68,4 @@ public class AdwinDetectorAdapter implements DetectorDeDrift {
 
 ## Segundo exemplo
 
-`MineradorDeGrafo` (Target) e `Pm4pyMineradorAdapter` (Adapter), usados ao abrir o processo para montar o grafo: [`Pm4pyMineradorAdapter.java:14`](https://github.com/aland3r/driftor-reuso/blob/dcd0d79/backend/src/driftor/adapter/Pm4pyMineradorAdapter.java#L14) · uso em [`ProcessoController.java:45`](https://github.com/aland3r/driftor-reuso/blob/dcd0d79/backend/src/driftor/processo/ProcessoController.java#L45)
+`MineradorDeGrafo` (Target) e `Pm4pyMineradorAdapter` (Adapter), usados ao abrir o processo para montar o grafo: [`Pm4pyMineradorAdapter.java:14`](https://github.com/aland3r/driftor-reuso/blob/7c48276/backend/src/driftor/adapter/Pm4pyMineradorAdapter.java#L14) · uso em [`ProcessoController.java:45`](https://github.com/aland3r/driftor-reuso/blob/7c48276/backend/src/driftor/processo/ProcessoController.java#L45)

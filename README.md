@@ -15,15 +15,15 @@ O fluxo: o gestor cria um processo e sobe o log `.xes`. As atividades e o grafo 
 
 ## Defesa
 
-Tudo em [`defesa/`](defesa/README.md): os [4 CRUDs](defesa/cruds/README.md), os [padrões](defesa/padroes/) ([Singleton](defesa/padroes/singleton.md) · [Adapter](defesa/padroes/adapter.md) · [Observer](defesa/padroes/observer.md)), a [variabilidade](defesa/variabilidade.md), a [compactação](defesa/compactacao.md) e as [classes e tabelas](defesa/classes-e-tabelas.md). Cada arquivo mostra o caminho completo, da tela até o banco.
+Tudo em [`docs/`](docs/README.md): os [4 CRUDs](docs/cruds/README.md), os [padrões](docs/padroes/) ([Singleton](docs/padroes/singleton.md) · [Adapter](docs/padroes/adapter.md) · [Observer](docs/padroes/observer.md)), a [variabilidade](docs/variabilidade.md), a [compactação](docs/compactacao.md) e as [classes e tabelas](docs/classes-e-tabelas.md). Cada arquivo mostra o caminho completo, da tela até o banco.
 
 ## Onde está cada item do enunciado
 
 | Item | Onde |
 |---|---|
-| 12 classes com atributos e métodos | pasta [`dominio/`](https://github.com/aland3r/driftor-reuso/tree/dcd0d79/backend/src/driftor/dominio) · [lista](defesa/classes-e-tabelas.md) |
-| 3 padrões, 2 exemplos de cada | [Singleton](defesa/padroes/singleton.md) · [Adapter](defesa/padroes/adapter.md) · [Observer](defesa/padroes/observer.md) |
-| 4 CRUDs com banco (Processo, Atividade, Análise, Manutenção) | [cruds/](defesa/cruds/README.md) |
-| 3 tabelas ou mais | [schema.sql](https://github.com/aland3r/driftor-reuso/blob/dcd0d79/backend/src/schema.sql) (6 tabelas) |
-| Variabilidade | [variabilidade.md](defesa/variabilidade.md) |
-| Compactação de código | [compactacao.md](defesa/compactacao.md) |
+| 12 classes com atributos e métodos | pasta [`dominio/`](https://github.com/aland3r/driftor-reuso/tree/7c48276/backend/src/driftor/dominio) · [lista](docs/classes-e-tabelas.md) |
+| 3 padrões, 2 exemplos de cada | [Singleton](docs/padroes/singleton.md) · [Adapter](docs/padroes/adapter.md) · [Observer](docs/padroes/observer.md) |
+| 4 CRUDs com banco (Processo, Atividade, Análise, Manutenção) | [cruds/](docs/cruds/README.md) |
+| 3 tabelas ou mais | [schema.sql](https://github.com/aland3r/driftor-reuso/blob/7c48276/backend/src/schema.sql) (6 tabelas) |
+| Variabilidade | [variabilidade.md](docs/variabilidade.md) |
+| Compactação de código | [compactacao.md](docs/compactacao.md) |

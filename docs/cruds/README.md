@@ -1,6 +1,6 @@
 # CRUDs
 
-[← defesa](../README.md) · links fixos no commit `dcd0d79`
+[← docs](../README.md) · links fixos no commit `7c48276`
 
 Cada arquivo mostra as 4 operações de um CRUD, da tela até o SQL.
 
@@ -20,7 +20,7 @@ Cada arquivo mostra as 4 operações de um CRUD, da tela até o SQL.
 
 A função `api`, usada por todas as telas:
 
-📍 `frontend/src/api.js` · [linhas 4–14](https://github.com/aland3r/driftor-reuso/blob/dcd0d79/frontend/src/api.js#L4-L14)
+📍 `frontend/src/api.js` · [linhas 4–14](https://github.com/aland3r/driftor-reuso/blob/7c48276/frontend/src/api.js#L4-L14)
 
 ```js
 export async function api(metodo, url, corpo) {
