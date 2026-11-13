@@ -16,7 +16,8 @@ export default function Atividades() {
   };
   const renomear = async (e, id) => {
     e.preventDefault();
-    await api("PUT", "/atividades/" + id, Object.fromEntries(new FormData(e.target)));
+    await api("PUT", "/atividades/" + id,  // vai para o AtividadeController (PUT); api() manda o papel no cabeçalho
+      Object.fromEntries(new FormData(e.target)));
     carregar();
   };
   const excluir = async (id) => { await api("DELETE", "/atividades/" + id); carregar(); };

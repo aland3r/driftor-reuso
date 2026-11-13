@@ -16,22 +16,22 @@ public class AtividadeController {
     // ---- Read
     @GetMapping
     public List<Atividade> listar(@RequestHeader("Papel") String papel) {
-        Configuracao.getInstancia().exigir(papel, "atividades");
-        return repositorio.listar();
+        Configuracao.getInstancia().exigir(papel, "atividades");  // SINGLETON (Configuracao) + VARIABILIDADE: sem permissão, 403
+        return repositorio.listar();  // herdado de RepositorioBase
     }
 
     // ---- Create
     @PostMapping
     public void criar(@RequestHeader("Papel") String papel, @RequestBody Map<String, String> corpo) {
-        Configuracao.getInstancia().exigir(papel, "atividades");
+        Configuracao.getInstancia().exigir(papel, "atividades");  // SINGLETON (Configuracao) + VARIABILIDADE: sem permissão, 403
         repositorio.inserir(Atividade.criar(corpo.get("nome")));
     }
 
     // ---- Update
     @PutMapping("/{id}")
     public void renomear(@RequestHeader("Papel") String papel, @PathVariable UUID id, @RequestBody Map<String, String> corpo) {
-        Configuracao.getInstancia().exigir(papel, "atividades");
-        Atividade atividade = repositorio.obter(id);
+        Configuracao.getInstancia().exigir(papel, "atividades");  // SINGLETON (Configuracao) + VARIABILIDADE: sem permissão, 403
+        Atividade atividade = repositorio.obter(id);  // obter é herdado de RepositorioBase (compactação)
         atividade.renomear(corpo.get("nome"));
         repositorio.atualizar(atividade);
     }
@@ -39,7 +39,7 @@ public class AtividadeController {
     // ---- Delete
     @DeleteMapping("/{id}")
     public void excluir(@RequestHeader("Papel") String papel, @PathVariable UUID id) {
-        Configuracao.getInstancia().exigir(papel, "atividades");
-        repositorio.excluir(id);
+        Configuracao.getInstancia().exigir(papel, "atividades");  // SINGLETON (Configuracao) + VARIABILIDADE: sem permissão, 403
+        repositorio.excluir(id);  // herdado de RepositorioBase
     }
 }

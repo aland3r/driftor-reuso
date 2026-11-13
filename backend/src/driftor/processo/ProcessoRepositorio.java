@@ -13,9 +13,11 @@ import java.util.Map;
 import java.util.UUID;
 
 /** SQL do CRUD de Processo (tabelas processos e eventos). Listar, obter e excluir vêm de RepositorioBase. */
+// COMPACTAÇÃO: "extends RepositorioBase" faz esta classe herdar listar, obter e excluir; aqui ficam só o SQL próprio (inserir, atualizar...)
 public class ProcessoRepositorio extends RepositorioBase<Processo> {
 
     public ProcessoRepositorio() {
+        // informa a tabela, as colunas e a ordem que os métodos herdados usam
         super("processos", "id, nome, arquivo, total_traces, total_eventos", "nome");
     }
 

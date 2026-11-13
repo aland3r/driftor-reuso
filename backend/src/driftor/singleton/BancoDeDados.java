@@ -14,10 +14,12 @@ import org.springframework.jdbc.core.RowMapper;
  * Todos os repositórios usam BancoDeDados.getInstancia() e recebem o mesmo objeto.
  */
 public class BancoDeDados {
+    // SINGLETON (1/3): campo estático que guarda a única instância
     private static BancoDeDados instancia;
 
     private final JdbcTemplate jdbc;
 
+    // SINGLETON (2/3): construtor privado, ninguém de fora consegue fazer new BancoDeDados()
     private BancoDeDados() {
         URI url = URI.create(Configuracao.getInstancia().getUrlDoBanco());  // postgresql://usuario:senha@host:porta/banco
         String[] usuario = url.getUserInfo().split(":", 2);
@@ -29,6 +31,7 @@ public class BancoDeDados {
         jdbc = new JdbcTemplate(conexoes);
     }
 
+    // SINGLETON (3/3): cria na primeira chamada e devolve sempre a mesma; synchronized evita duas criações ao mesmo tempo
     public static synchronized BancoDeDados getInstancia() {
         if (instancia == null) {
             instancia = new BancoDeDados();

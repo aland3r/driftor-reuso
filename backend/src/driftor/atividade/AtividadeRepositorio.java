@@ -7,9 +7,11 @@ import java.sql.SQLException;
 import java.util.UUID;
 
 /** SQL do CRUD de Atividade. Listar, obter e excluir vêm de RepositorioBase. */
+// COMPACTAÇÃO: "extends RepositorioBase" faz esta classe herdar listar, obter e excluir; aqui ficam só o SQL próprio (inserir, atualizar...)
 public class AtividadeRepositorio extends RepositorioBase<Atividade> {
 
     public AtividadeRepositorio() {
+        // informa a tabela, as colunas e a ordem que os métodos herdados usam
         super("atividades", "id, nome", "nome");
     }
 

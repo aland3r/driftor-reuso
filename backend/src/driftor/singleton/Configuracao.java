@@ -32,6 +32,7 @@ public class Configuracao {
                 .baseUrl(System.getenv().getOrDefault("MOTOR_URL", "http://localhost:8000")).build();
     }
 
+    // mesmo mecanismo do BancoDeDados: campo estático + construtor privado + getInstancia()
     public static synchronized Configuracao getInstancia() {
         if (instancia == null) {
             instancia = new Configuracao();

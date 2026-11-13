@@ -11,6 +11,7 @@ import java.util.UUID;
  * Cada repositório só diz a sua tabela, as suas colunas e como uma linha vira objeto.
  */
 public abstract class RepositorioBase<T> {
+    // SINGLETON em uso: todo repositório herda este campo e usa o mesmo BancoDeDados
     protected final BancoDeDados banco = BancoDeDados.getInstancia();
     private final String tabela;
     private final String colunas;

@@ -11,9 +11,11 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 /** SQL do CRUD de Análise (tabelas analises e drifts). Listar, obter e excluir vêm de RepositorioBase. */
+// COMPACTAÇÃO: "extends RepositorioBase" faz esta classe herdar listar, obter e excluir; aqui ficam só o SQL próprio (inserir, atualizar...)
 public class AnaliseRepositorio extends RepositorioBase<Analise> {
 
     public AnaliseRepositorio() {
+        // informa a tabela, as colunas e a ordem que os métodos herdados usam
         super("analises", "id, processo_id, nome, atividade, delta, total_observacoes", "nome");
     }
 

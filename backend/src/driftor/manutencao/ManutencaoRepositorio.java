@@ -9,9 +9,11 @@ import java.util.Map;
 import java.util.UUID;
 
 /** SQL do CRUD de Manutenção. Listar, obter e excluir vêm de RepositorioBase. */
+// COMPACTAÇÃO: "extends RepositorioBase" faz esta classe herdar listar, obter e excluir; aqui ficam só o SQL próprio (inserir, atualizar...)
 public class ManutencaoRepositorio extends RepositorioBase<Manutencao> {
 
     public ManutencaoRepositorio() {
+        // informa a tabela, as colunas e a ordem que os métodos herdados usam
         super("manutencoes", "id, analise_id, drift_id, descricao, status, observacoes", "status desc");
     }
 
